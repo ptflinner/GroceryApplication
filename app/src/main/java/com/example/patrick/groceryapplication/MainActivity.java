@@ -10,10 +10,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import com.google.android.gms.auth.api.Auth;
-
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
 
     private GoogleApiClient mGoogleApiClient;
     private final String TAG="MainActivity";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
