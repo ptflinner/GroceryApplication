@@ -1,4 +1,5 @@
 package com.example.patrick.groceryapplication;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +15,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -40,11 +43,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        signInButton = (SignInButton) findViewById(R.id.sign_in_button);
-        signInButton.setOnClickListener(this);
-
-        signInButton.setVisibility(View.VISIBLE);
-
         //Sets up Google Sign In
         GoogleSignInOptions gso=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -59,6 +57,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         //Initialize Firebase
         firebaseAuth=FirebaseAuth.getInstance();
 
+        silentLogin();
+
+        signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+        signInButton.setOnClickListener(this);
+
+        signInButton.setVisibility(View.VISIBLE);
     }
 
     private void handleFireBaseAuthResult(AuthResult authResult){
@@ -127,5 +131,36 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         //Something borked
         Log.d(TAG,"onConnectionFailed: "+connectionResult);
         Toast.makeText(this,"Google Play Services error.",Toast.LENGTH_SHORT).show();
+    }
+
+    private void silentLogin(){
+        OptionalPendingResult<GoogleSignInResult> pendingResult=Auth.GoogleSignInApi.silentSignIn(googleApiClient);
+        if(pendingResult!=null){
+            handlePendingResult(pendingResult);
+        }
+
+    }
+
+    private void handlePendingResult(OptionalPendingResult<GoogleSignInResult> pendingResult){
+        if(pendingResult.isDone()){
+            GoogleSignInResult signInResult=pendingResult.get();
+            silentSignInCompleted(signInResult);
+        }
+        else{
+            pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
+                    silentSignInCompleted(googleSignInResult);
+                }
+            });
+        }
+    }
+
+    private void silentSignInCompleted(GoogleSignInResult signInResult){
+        GoogleSignInAccount signInAccount=signInResult.getSignInAccount();
+        if(signInAccount!=null){
+            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+            finish();
+        }
     }
 }
