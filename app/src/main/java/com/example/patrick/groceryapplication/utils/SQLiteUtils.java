@@ -10,7 +10,6 @@ import android.util.Log;
  *
  */
 
-import java.util.Calendar;
 
 public class SQLiteUtils {
 
@@ -20,22 +19,23 @@ public class SQLiteUtils {
     //taking the name, quantity, price, picture, and status of the item being inserting
     //the new item would be inserted into the list table
     //added TAG see debugger
-    private long addItem(SQLiteDatabase db,String name, int quantity, int price, String status, String picture, String category){
+    public long addItem(SQLiteDatabase db,String name, int quantity, int price, String picture, String category, String status){
         ContentValues value = new ContentValues();
         Log.d(TAG, " - Updating item: " + name);
         value.put(Contract.TABLE_ITEM.COLUMN_NAME_ITEM_NAME, name);
         value.put(Contract.TABLE_ITEM.COLUMN_NAME_QUANTITY, quantity);
         value.put(Contract.TABLE_ITEM.COLUMN_NAME_PRICE, price);
-        value.put(Contract.TABLE_ITEM.COLUMN_NAME_CATEGORY,category);
         value.put(Contract.TABLE_ITEM.COLUMN_NAME_PICTURE, picture);
+        value.put(Contract.TABLE_ITEM.COLUMN_NAME_CATEGORY, category);
         value.put(Contract.TABLE_ITEM.COLUMN_NAME_PURCHASE_STATUS, status);
-        return db.insert(Contract.TABLE_ITEM.TABLE_NAME, null,value);
+        return db.insert(Contract.TABLE_ITEM.TABLE_NAME,null,value);
+
     }
 
     //adding a new list into the database
     //taking the name of the list and the category for the list and inserting
     //it into the table name list
-    private long addList(SQLiteDatabase db, String category, String name){
+    public long addList(SQLiteDatabase db, String name, String category){
         ContentValues value = new ContentValues();
         Log.d(TAG, " - Updating item: " + name);
         value.put(Contract.TABLE_LIST.COLUMN_NAME_LIST_NAME,name);
@@ -44,7 +44,7 @@ public class SQLiteUtils {
     }
 
     //update item by grabbing its id and updating the items properties and its assigned id
-    private int updateItem(SQLiteDatabase db, String name, int quantity, int price, String status, String picture,String category, long id){
+    public int updateItem(SQLiteDatabase db, String name, int quantity, int price, String status, String picture,String category, long id){
         Log.d(TAG, " - Updating item: " + id);
         ContentValues value = new ContentValues();
         value.put(Contract.TABLE_ITEM.COLUMN_NAME_ITEM_NAME, name);
@@ -57,7 +57,7 @@ public class SQLiteUtils {
     }
 
     //update list grabbing the list properties and its assigned id
-    private int updateList(SQLiteDatabase db, String category, String name, long id){
+    public int updateList(SQLiteDatabase db, String category, String name, long id){
         ContentValues value = new ContentValues();
         Log.d(TAG, " - Updating list: " + id);
         value.put(Contract.TABLE_LIST.COLUMN_NAME_LIST_NAME,name);
@@ -66,13 +66,13 @@ public class SQLiteUtils {
     }
 
     //grabs all items
-    private Cursor getAllItems(SQLiteDatabase db) {
+    public Cursor getAllItems(SQLiteDatabase db) {
         Log.d(TAG, "- Getting all items");
         return db.query(Contract.TABLE_ITEM.TABLE_NAME,null,null,null,null,null,Contract.TABLE_ITEM.COLUMN_NAME_ITEM_NAME);
     }
 
     //grabs all list
-    private Cursor getAllList(SQLiteDatabase db) {
+    public Cursor getAllList(SQLiteDatabase db) {
         Log.d(TAG, "- Getting all list");
         return db.query(Contract.TABLE_LIST.TABLE_NAME, null, null,null,null,Contract.TABLE_LIST.COLUMN_NAME_LIST_NAME, Contract.TABLE_LIST.COLUMN_NAME_LIST_CATEGORY);
 
@@ -84,11 +84,11 @@ public class SQLiteUtils {
      * TAG included
      *
      */
-    private boolean removeItem(SQLiteDatabase db,long id){
+    public boolean removeItem(SQLiteDatabase db,long id){
         Log.d(TAG, " - Deleting item with id:" + id);
         return db.delete(Contract.TABLE_ITEM.TABLE_NAME, Contract.TABLE_ITEM._ID + "=" + id, null) > 0;
     }
-    private boolean removeList(SQLiteDatabase db, long id){
+    public boolean removeList(SQLiteDatabase db, long id){
         Log.d(TAG, " - Deleting List with id:" + id);
         return db.delete(Contract.TABLE_LIST.TABLE_NAME, Contract.TABLE_LIST._ID + "=" + id, null) > 0;
     }
