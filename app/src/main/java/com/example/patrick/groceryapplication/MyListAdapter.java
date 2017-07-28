@@ -41,7 +41,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ItemHolder
 
     @Override
     public void onBindViewHolder(ItemHolder holder, int position) {
-        holder.bind(position);
+        holder.bind(holder, position);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ItemHolder
     class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView title;
         TextView category;
-
+        long id;
         ItemHolder(View view){
             super(view);
             title = (TextView) view.findViewById(R.id.my_list_title);
@@ -64,11 +64,12 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ItemHolder
             view.setOnClickListener(this);
         }
 
-        public void bind(int pos){
+        public void bind(ItemHolder holder, int pos){
+            id = cursor.getLong(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_ID));
             cursor.moveToPosition(pos);
-            title.setText(cursor.getString(cursor.getColumnIndex(Contract.COLUMN_NAME_LIST_NAME)))
-            category.setText(cursor.getString(cursor.getColumnIndex(Contract.COLUMN_NAME_LIST_CATEGORY)));
-            //
+            title.setText(cursor.getString(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_LIST_NAME)))
+            category.setText(cursor.getString(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_LIST_CATEGORY)));
+            holder.itemView.setTag(id);
 
         }
 

@@ -40,8 +40,8 @@ public class MyListItemAdapter extends RecyclerView.Adapter<MyListItemAdapter.Gr
     }
 
     @Override
-    public void onBindViewHolder(GroceryItemHolder holder, int position, List<Object> payloads) {
-        super.onBindViewHolder(holder, position, payloads);
+    public void onBindViewHolder(int position) {
+        super.onBindViewHolder(position);
     }
 
     @Override
@@ -49,12 +49,13 @@ public class MyListItemAdapter extends RecyclerView.Adapter<MyListItemAdapter.Gr
         return cursor.getCount();
     }
 
-    class GroceryItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class GroceryItemHolder extends RecyclerView.ViewHolder {
         ImageView image;
         TextView name;
         TextView quantity;
         CheckBox checkBox;
 
+        long id;
         GroceryItemHolder(View view){
             super(view);
 
@@ -67,9 +68,10 @@ public class MyListItemAdapter extends RecyclerView.Adapter<MyListItemAdapter.Gr
 
         public void bind(int pos){
             cursor.moveToPosition(pos);
-
-            name.setText(cursor.getString(cursor.getColumnIndex(Contract.COLUMN_NAME_ITEM_NAME)));
-            quantity.setText(cursor.getInt(cursor.getColumnIndex(Contract.COLUMN_NAME_QUANTITY)));
+            id = cursor.getLong(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_ITEM_ID));
+            name.setText(cursor.getString(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_ITEM_NAME)));
+            quantity.setText(cursor.getInt(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_QUANTITY)));
+            //image code is supposed to be here
 
         }
 
