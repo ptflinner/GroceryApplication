@@ -27,13 +27,21 @@ public class DBHelper extends SQLiteOpenHelper{
 		}
 
 		//creates table for the items and the list creating the join between both
+		/*
+		* Change (1)
+		* made price into a double and change the column id
+		* Change (2)
+		* update the reference list to link both tables ides to query with the
+		* reference list
+		*
+		* */
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			String table_item_query = "CREATE TABLE " + Contract.TABLE_ITEM.TABLE_NAME
-					+ " (" + Contract.TABLE_ITEM._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					+ " (" + Contract.TABLE_ITEM.COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 					Contract.TABLE_ITEM.COLUMN_NAME_ITEM_NAME + " TEXT NOT NULL, " +
 					Contract.TABLE_ITEM.COLUMN_NAME_QUANTITY + " INTEGER, " +
-					Contract.TABLE_ITEM.COLUMN_NAME_PRICE + " INTEGER, " +
+					Contract.TABLE_ITEM.COLUMN_NAME_PRICE + " DOUBLE, " +
 					Contract.TABLE_ITEM.COLUMN_NAME_PICTURE + " TEXT NOT NULL, " +
 					Contract.TABLE_ITEM.COLUMN_NAME_CATEGORY + " TEXT NOT NULL, " +
 					Contract.TABLE_ITEM.COLUMN_NAME_PURCHASE_STATUS + " TEXT NOT NULL" +
@@ -42,7 +50,7 @@ public class DBHelper extends SQLiteOpenHelper{
 			db.execSQL(table_item_query);
 
 			String table_list_query = "CREATE TABLE " + Contract.TABLE_LIST.TABLE_NAME +
-					" (" + Contract.TABLE_LIST._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					" (" + Contract.TABLE_LIST.COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 					Contract.TABLE_LIST.COLUMN_NAME_LIST_NAME + " TEXT NOT NULL, " +
 					Contract.TABLE_LIST.COLUMN_NAME_LIST_CATEGORY + " TEXT NOT NULL " +
                     "); ";
@@ -53,9 +61,9 @@ public class DBHelper extends SQLiteOpenHelper{
                     + Contract.TABLE_COMPLETED_LIST.COLUMN_NAME_LIST_ID + " INTEGER,"
                     + Contract.TABLE_COMPLETED_LIST.COLUMN_NAME_ITEM_ID + " INTEGER,"
                     + " FOREIGN KEY(" + Contract.TABLE_COMPLETED_LIST.COLUMN_NAME_LIST_ID + ") "
-                    + " REFERENCES " + Contract.TABLE_LIST.TABLE_NAME + " (" + Contract.TABLE_LIST._ID + "),"
+                    + " REFERENCES " + Contract.TABLE_LIST.TABLE_NAME + " (" + Contract.TABLE_LIST.COLUMN_NAME_ID + "),"
                     + " FOREIGN KEY(" + Contract.TABLE_COMPLETED_LIST.COLUMN_NAME_ITEM_ID + ") "
-                    + " REFERENCES " + Contract.TABLE_ITEM.TABLE_NAME + " (" + Contract.TABLE_ITEM._ID + ")); ";
+                    + " REFERENCES " + Contract.TABLE_ITEM.TABLE_NAME + " (" + Contract.TABLE_ITEM.COLUMN_NAME_ID + ")); ";
             Log.d(TAG, " - Merging both tables execSQL " + reference_list_to_item);
             db.execSQL(reference_list_to_item);
 
