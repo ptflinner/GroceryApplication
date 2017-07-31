@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.example.jose.sqlitedemo.data;
+package com.example.patrick.groceryapplication.utils;
 import android.provider.BaseColumns;
 /**
  * @author Jose

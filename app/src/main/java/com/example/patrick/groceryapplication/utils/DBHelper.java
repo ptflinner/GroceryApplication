@@ -1,4 +1,5 @@
-package com.example.jose.sqlitedemo.data;
+package com.example.patrick.groceryapplication.utils;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
