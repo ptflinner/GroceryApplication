@@ -10,5 +10,12 @@
     <string name="desc_google_icon">Google Logo</string>
     <string name="title_text">Google Sign-In\nQuickstart</string>
     <string name="sign_in">Sign in</string>
+
+    <string name="my_lists">My Lists</string>
+    <string name="group_lists">Group Lists</string>
+    <string name="featured_lists">Featured Lists</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
 

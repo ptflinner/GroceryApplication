@@ -1,7 +1,14 @@
 package com.example.patrick.groceryapplication;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+
 import android.os.Bundle;
 import android.util.Log;
 
@@ -11,8 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import android.view.Menu;
-import android.view.MenuItem;
+import com.example.patrick.groceryapplication.fragments.*;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -23,7 +29,8 @@ import com.google.firebase.auth.FirebaseAuth;
 public class MainActivity extends AppCompatActivity {
 
     private GoogleApiClient mGoogleApiClient;
-    private final String TAG="MainActivity";
+    private BottomNavigationView mBottomNavView;
+    private static final String TAG="MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +63,40 @@ public class MainActivity extends AppCompatActivity {
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
         mGoogleApiClient.connect();
+
+        mBottomNavView=(BottomNavigationView) findViewById(R.id.bottom_navigation);
+
+        mBottomNavView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener(){
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment frag=null;
+                switch(item.getItemId()){
+                    case R.id.my_list:
+                        frag=MyListFragment.newInstance();
+                        break;
+                    case R.id.group_list:
+                        frag=GroupListFragment.newInstance();
+                        break;
+                    case R.id.featured_list:
+                        frag=FeaturedListFragment.newInstance();
+                        break;
+                    default:
+                        Log.e(TAG,"Navigation Error Occurred");
+                        Log.e(TAG,"Navigation ID:" +item.getItemId());
+                    }
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame_layout, frag);
+                transaction.commit();
+                return true;
+            }
+        });
+
+        //Manually displaying the first fragment - one time only
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_layout, MyListFragment.newInstance());
+        transaction.commit();
     }
 
     @Override
