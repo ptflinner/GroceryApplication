@@ -5,16 +5,9 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -38,10 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private GoogleApiClient mGoogleApiClient;
     private BottomNavigationView mBottomNavView;
     private static final String TAG="MainActivity";
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
-    private String[] drawerItems;
-    private ActionBarDrawerToggle mActionToggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,31 +64,6 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         mGoogleApiClient.connect();
 
-        mDrawerLayout=(DrawerLayout) findViewById(R.id.navigation_drawer);
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        mDrawerList=(ListView) findViewById(R.id.left_drawer);
-        drawerItems=getResources().getStringArray(R.array.drawer_items);
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,R.layout.drawer_list,drawerItems));
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
-        mActionToggle=new ActionBarDrawerToggle(this,
-                mDrawerLayout,
-                R.string.open,
-                R.string.close
-        ){
-            public void onDrawerClosed(View view) {
-                getActionBar().setTitle(getTitle());
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle(getTitle());
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-        };
         mBottomNavView=(BottomNavigationView) findViewById(R.id.bottom_navigation);
         mBottomNavView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener(){
@@ -140,26 +105,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        boolean drawerOpen=mDrawerLayout.isDrawerOpen(mDrawerList);
-        menu.findItem(R.id.sign_out).setVisible(!drawerOpen);
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int itemThatWasClickedId=item.getItemId();
-        if(mActionToggle.onOptionsItemSelected(item)){
+        int itemThatWasClicked=item.getItemId();
+        if(itemThatWasClicked==R.id.sign_out){
+            signOutOfGoogle();
             return true;
         }
 
-        switch (item.getItemId()){
-            case R.id.sign_out:
-                signOutOfGoogle();
-                break;
-            default:
-                return onOptionsItemSelected(item);
-        }
         return onOptionsItemSelected(item);
     }
 
@@ -176,16 +128,4 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void selectItem(int pos){
-        if(pos==1){
-            signOutOfGoogle();
-        }
-    }
-    private class DrawerItemClickListener implements ListView.OnItemClickListener{
-
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
-            selectItem(pos);
-        }
-    }
 }
