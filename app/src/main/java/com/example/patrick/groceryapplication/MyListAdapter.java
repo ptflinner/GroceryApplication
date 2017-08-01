@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.patrick.groceryapplication.utils.Contract;
+
 
 /**
  * Created by Barry on 7/26/2017.
@@ -65,10 +67,10 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ItemHolder
         }
 
         public void bind(ItemHolder holder, int pos){
-            id = cursor.getLong(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_ID));
+            id = cursor.getLong(cursor.getColumnIndex(Contract.TABLE_LIST.COLUMN_NAME_ID));
             cursor.moveToPosition(pos);
-            title.setText(cursor.getString(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_LIST_NAME)))
-            category.setText(cursor.getString(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_LIST_CATEGORY)));
+            title.setText(cursor.getString(cursor.getColumnIndex(Contract.TABLE_LIST.COLUMN_NAME_LIST_NAME)));
+            category.setText(cursor.getString(cursor.getColumnIndex(Contract.TABLE_LIST.COLUMN_NAME_LIST_CATEGORY)));
             holder.itemView.setTag(id);
 
         }
