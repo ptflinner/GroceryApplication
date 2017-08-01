@@ -50,18 +50,6 @@ public class MainActivity extends AppCompatActivity {
         databaseReference.setValue(user);
 
         Log.d(TAG,"In Main" + user.toString());
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String value=dataSnapshot.getValue(String.class);
-                Log.d(TAG,"Value is: "+value);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG,"Failed to read value. ", databaseError.toException());
-            }
-        });
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -72,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         mGoogleApiClient.connect();
 
         mBottomNavView=(BottomNavigationView) findViewById(R.id.bottom_navigation);
-
         mBottomNavView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener(){
 
@@ -99,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        loadUserInformation();
 
         //Manually displaying the first fragment - one time only
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -145,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadUserInformation(){
         // Load Character from Database
-        String firebaseUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final String firebaseUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         setUserReference(FirebaseDatabase.getInstance().getReference("userList").child(firebaseUid));
 
         userReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -154,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
 
                 } else {
-                    User userToAdd=new User();
+                    User userToAdd=new User(firebaseUid,"John Doe","02/21/1992","California");
                     userReference.setValue(userToAdd);
                 }
             }
