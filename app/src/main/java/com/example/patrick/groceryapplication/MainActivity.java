@@ -1,5 +1,6 @@
 package com.example.patrick.groceryapplication;
 
+import com.example.patrick.groceryapplication.models.*;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -31,18 +32,19 @@ public class MainActivity extends AppCompatActivity {
     private GoogleApiClient mGoogleApiClient;
     private BottomNavigationView mBottomNavView;
     private static final String TAG="MainActivity";
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        user = new User("2","John Doe", "01/01/2001","Los Angeles");
         FirebaseDatabase mFirebaseDatabase=FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference=mFirebaseDatabase.getReference("message");
+        DatabaseReference databaseReference=mFirebaseDatabase.getReference("users");
 
-        databaseReference.setValue("Hello, Database");
+        databaseReference.setValue(user);
 
-        Log.d(TAG,"In Main");
+        Log.d(TAG,"In Main" + user.toString());
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
