@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         mGoogleApiClient.connect();
 
         mBottomNavView=(BottomNavigationView) findViewById(R.id.bottom_navigation);
-
         mBottomNavView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener(){
 
@@ -107,11 +106,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int itemThatWasClickedId=item.getItemId();
-        if(itemThatWasClickedId==R.id.sign_out){
+        int itemThatWasClicked=item.getItemId();
+        if(itemThatWasClicked==R.id.sign_out){
             signOutOfGoogle();
             return true;
         }
+
         return onOptionsItemSelected(item);
     }
 
@@ -127,4 +127,5 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
 }
