@@ -1,0 +1,46 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="layout.Featured">
+
+    <TextView
+        android:id="@+id/featured_title_view"
+        android:layout_width="0dp"
+        android:layout_height="495dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toRightOf="@+id/featured_image_view"
+        android:text="This is the Title"
+        tools:layout_editor_absoluteY="8dp" />
+
+    <ImageView
+        android:id="@+id/featured_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxHeight="110dp"
+        android:maxWidth="140dp"
+        android:src="@mipmap/ic_launcher"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <TextView
+        android:id="@+id/featured_recipe_view"
+        android:layout_width="308dp"
+        android:layout_height="64dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toRightOf="@+id/featured_image_view"
+        android:text="This is the Title"
+        tools:layout_editor_absoluteY="8dp" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="308dp"
+        android:layout_height="65dp"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        tools:layout_editor_absoluteX="56dp"
+        tools:layout_editor_absoluteY="72dp" />
+
+</android.support.constraint.ConstraintLayout>
