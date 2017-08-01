@@ -5,4 +5,7 @@ package com.example.patrick.groceryapplication.models;
  */
 
 public class User {
+    public User(){
+
+    }
 }

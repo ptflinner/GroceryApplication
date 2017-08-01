@@ -1,6 +1,7 @@
 package com.example.patrick.groceryapplication;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -11,7 +12,9 @@ import android.view.MenuItem;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.patrick.groceryapplication.models.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private GoogleApiClient mGoogleApiClient;
     private BottomNavigationView mBottomNavView;
     private static final String TAG="MainActivity";
-
+    private DatabaseReference userReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,5 +129,35 @@ public class MainActivity extends AppCompatActivity {
                         finish();
                     }
                 });
+    }
+
+    public DatabaseReference getUserReference() {
+        return userReference;
+    }
+
+    public void setUserReference(DatabaseReference userReference) {
+        this.userReference = userReference;
+    }
+
+    private void loadUserInformation(){
+        // Load Character from Database
+        String firebaseUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        setUserReference(FirebaseDatabase.getInstance().getReference("userList").child(firebaseUid));
+
+        userReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+
+                } else {
+                    User userToAdd=new User();
+                    userReference.setValue(userToAdd);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 }
