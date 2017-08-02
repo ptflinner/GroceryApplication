@@ -29,5 +29,15 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <!--item fragment -->
+    <string name="scan">scan </string>
+    <string-array name="categories_array">
+        <item>All</item>
+        <item>Dairy</item>
+        <item>Meat</item>
+        <item>Vegetables</item>
+        <item>Fruits</item>
+        <item>Junk Food</item>
+    </string-array>
 </resources>
 
