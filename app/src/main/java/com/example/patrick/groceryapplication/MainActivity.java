@@ -1,6 +1,15 @@
 package com.example.patrick.groceryapplication;
 
+import com.example.patrick.groceryapplication.models.*;
 import android.content.Intent;
+import android.os.Handler;
+
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Handler;
+
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -12,6 +21,9 @@ import android.view.MenuItem;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.patrick.groceryapplication.models.User;
+import com.example.patrick.groceryapplication.utils.DBHelper;
+import com.example.patrick.groceryapplication.utils.SQLiteUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,35 +38,42 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     private GoogleApiClient mGoogleApiClient;
     private BottomNavigationView mBottomNavView;
     private static final String TAG="MainActivity";
+    private SQLiteDatabase db;
+    private DBHelper helper;
+    private Cursor cursor;
+    private DatabaseReference userReference;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        helper = new DBHelper(this);
+        db = helper.getWritableDatabase();
+        insertDummy();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(db != null){
+
+            db.close();
+        }
+        if(cursor != null){
+            cursor.close();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        FirebaseDatabase mFirebaseDatabase=FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference=mFirebaseDatabase.getReference("message");
-
-        databaseReference.setValue("Hello, Database");
-
-        Log.d(TAG,"In Main");
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String value=dataSnapshot.getValue(String.class);
-                Log.d(TAG,"Value is: "+value);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG,"Failed to read value. ", databaseError.toException());
-            }
-        });
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -92,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        loadUserInformation();
+
         //Manually displaying the first fragment - one time only
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout, MyListFragment.newInstance());
@@ -126,6 +147,49 @@ public class MainActivity extends AppCompatActivity {
                         finish();
                     }
                 });
+    }
+
+    public void setUserReference(DatabaseReference userReference) {
+        this.userReference = userReference;
+    }
+
+    private void loadUserInformation() {
+        // Load Character from Database
+        final String firebaseUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        setUserReference(FirebaseDatabase.getInstance().getReference("userList").child(firebaseUid));
+
+        userReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<String> groupLists = new ArrayList<String>();
+                groupLists.add("39291d");
+                groupLists.add("3923423123d");
+                groupLists.add("124125511d");
+                if (dataSnapshot.exists()) {
+                    User userToAdd = new User(firebaseUid, "John Doe", "02/21/1992", "California", groupLists);
+                    userReference.setValue(userToAdd);
+                } else {
+                    User userToAdd = new User(firebaseUid, "John Doe", "02/21/1992", "California", groupLists);
+                    userReference.setValue(userToAdd);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+    
+    private void insertDummy(){
+        SQLiteUtils add = new SQLiteUtils();
+
+        add.addItem(db, "apples", 2, 12, "Purchased", "Immage", "Fruits");
+        add.addList(db, "My List", "gaylist");
+        add.addList(db, "My List1", "gaylist1");
+        add.addList(db, "My List2", "gaylist2");
+        add.addList(db, "My List3", "gaylist3");
+        add.addList(db, "My List4", "gaylist4");
+        add.addMyList(db,1,1);
     }
 
 }
