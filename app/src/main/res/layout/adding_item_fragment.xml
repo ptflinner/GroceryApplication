@@ -41,6 +41,21 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:hint="price placeholder"/>
+
+    <!-- stores -->
+    <EditText
+        android:id="@+id/item_store"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:hint="price placeholder"/>
+    <!-- picture -->
+    <EditText
+        android:id="@+id/item_picture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:hint="camera placeholder"/>
     <!-- barcode -->
     <Button
         android:id="@+id/scan_button"
@@ -50,9 +65,6 @@
         android:text="@string/scan" />
     <!-- android:onClick="scanNow"-->
 
-
-    <!-- stores -->
-    <!-- picture -->
     <!-- Add -->
     <Button
         android:id="@+id/add"
@@ -81,4 +93,3 @@
         app:layout_constraintRight_toRightOf="parent" />
 
 </LinearLayout>
-

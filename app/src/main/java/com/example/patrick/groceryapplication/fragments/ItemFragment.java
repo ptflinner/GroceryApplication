@@ -26,6 +26,8 @@ public class ItemFragment extends DialogFragment {
     private EditText price;
     private Button bar_code;
     private Spinner item_spinner;
+    private EditText store;
+    private EditText camera;
     private Button add;
     private final String TAG = "itemFragment";
     private String toast;
@@ -34,7 +36,7 @@ public class ItemFragment extends DialogFragment {
 
     public interface OnDialogCloseListener{
 
-        void closeDialog(String name, String quantity, String price);
+        void closeDialog(String toString, String s, String name, String quantity, String price);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
@@ -42,6 +44,8 @@ public class ItemFragment extends DialogFragment {
         name = (EditText) view.findViewById(R.id.itemName);
         quantity = (EditText) view.findViewById(R.id.itemQuantity);
         price = (EditText) view.findViewById(R.id.item_price);
+        store = (EditText) view.findViewById(R.id.item_store);
+        camera = (EditText) view.findViewById(R.id.item_picture);
 
         item_spinner = (Spinner) view.findViewById(R.id.categories_item_spinner);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this.getActivity(),R.array.categories_array,android.R.layout.simple_spinner_item);
@@ -58,7 +62,8 @@ public class ItemFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 OnDialogCloseListener activity = (OnDialogCloseListener) getActivity();
-                activity.closeDialog(name.getText().toString(),quantity.getText().toString(),price.getText().toString());
+                activity.closeDialog(name.getText().toString(),quantity.getText().toString(),price.getText().toString(),
+                        store.getText().toString(),camera.getText().toString());
                 ItemFragment.this.dismiss();
             }
         });
