@@ -3,6 +3,9 @@ package com.example.patrick.groceryapplication;
 import com.example.patrick.groceryapplication.models.*;
 import android.content.Intent;
 import android.os.Handler;
+
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -13,9 +16,10 @@ import android.view.MenuItem;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.patrick.groceryapplication.models.User;
+import com.example.patrick.groceryapplication.utils.DBHelper;
+import com.example.patrick.groceryapplication.utils.SQLiteUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,8 +42,30 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView mBottomNavView;
     private static final String TAG="MainActivity";
     private DatabaseReference userReference;
+    private User user;
+    private SQLiteDatabase db;
+    private DBHelper helper;
+    private Cursor cursor;
 
-    User user;
+    @Override
+    protected void onStart() {
+        super.onStart();
+        helper = new DBHelper(this);
+        db = helper.getWritableDatabase();
+        insertDummy();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(db != null){
+            db.close();
+        }
+        if(cursor != null){
+            cursor.close();
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-
     public DatabaseReference getUserReference() {
         return userReference;
     }
@@ -129,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         this.userReference = userReference;
     }
 
-    private void loadUserInformation(){
+    private void loadUserInformation() {
         // Load Character from Database
         final String firebaseUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         setUserReference(FirebaseDatabase.getInstance().getReference("userList").child(firebaseUid));
@@ -137,15 +162,15 @@ public class MainActivity extends AppCompatActivity {
         userReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<String> groupLists=new ArrayList<String>();
+                ArrayList<String> groupLists = new ArrayList<String>();
                 groupLists.add("39291d");
                 groupLists.add("3923423123d");
                 groupLists.add("124125511d");
                 if (dataSnapshot.exists()) {
-                    User userToAdd=new User(firebaseUid,"John Doe","02/21/1992","California",groupLists);
+                    User userToAdd = new User(firebaseUid, "John Doe", "02/21/1992", "California", groupLists);
                     userReference.setValue(userToAdd);
                 } else {
-                    User userToAdd=new User(firebaseUid,"John Doe","02/21/1992","California",groupLists);
+                    User userToAdd = new User(firebaseUid, "John Doe", "02/21/1992", "California", groupLists);
                     userReference.setValue(userToAdd);
                 }
             }
@@ -154,5 +179,16 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+    }
+    private void insertDummy(){
+        SQLiteUtils add = new SQLiteUtils();
+
+        add.addItem(db, "apples", 2, 12, "Purchased", "Immage", "Fruits");
+        add.addList(db, "My List", "gaylist");
+        add.addList(db, "My List1", "gaylist1");
+        add.addList(db, "My List2", "gaylist2");
+        add.addList(db, "My List3", "gaylist3");
+        add.addList(db, "My List4", "gaylist4");
+        add.addMyList(db,1,1);
     }
 }
