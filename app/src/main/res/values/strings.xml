@@ -11,6 +11,16 @@
     <string name="title_text">Google Sign-In\nQuickstart</string>
     <string name="sign_in">Sign in</string>
 
+    <string-array name="categories_array">
+        <item>All Lists</item>
+        <item>Weekly Groceries</item>
+        <item>Pharmacy Items</item>
+        <item>Office Supplies</item>
+        <item>Errands</item>
+        <item>Recipes</item>
+        <item>Holiday Dinner</item>
+    </string-array>
+
     <string name="my_lists">My Lists</string>
     <string name="group_lists">Group Lists</string>
     <string name="featured_lists">Featured Lists</string>
