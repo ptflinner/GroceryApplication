@@ -8,6 +8,11 @@
     android:padding="10dp"
     android:weightSum="1"
     tools:context="com.example.patrick.groceryapplication.fragments.ItemFragment">
+    <!-- categories -->
+    <Spinner
+        android:id="@+id/categories_item_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="48dp" />
     <!-- name of the item-->
     <!--    <TextView
             android:layout_width="wrap_content"
@@ -17,20 +22,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:hint="Enter item name" />
-    <!-- quantity -->
-    <Spinner
-        android:id="@+id/categories_item_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="48dp" />
+        android:hint="item name placeholder" />
 
+
+    <!-- quantity -->
     <EditText
         android:id="@+id/itemQuantity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:hint="item quqantity placeholder" />
+
+
+    <!-- price -->
+    <EditText
+        android:id="@+id/item_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:layout_weight=".1"
-        android:hint="Enter amount of item" />
+        android:hint="price placeholder"/>
     <!-- barcode -->
     <Button
         android:id="@+id/scan_button"
@@ -39,6 +49,17 @@
         android:layout_centerHorizontal="true"
         android:text="@string/scan" />
     <!-- android:onClick="scanNow"-->
+
+
+    <!-- stores -->
+    <!-- picture -->
+    <!-- Add -->
+    <Button
+        android:id="@+id/add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="Add" />
     <TextureView
         android:id="@+id/scan_format"
         android:layout_width="wrap_content"
@@ -58,20 +79,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
-    <!-- price -->
-    <EditText
-        android:id="@+id/item_price"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <!-- categories -->
-    <!-- stores -->
-    <!-- picture -->
-    <!-- Add -->
 
-
-    <Button
-        android:id="@+id/add"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Add" />
 </LinearLayout>
+
