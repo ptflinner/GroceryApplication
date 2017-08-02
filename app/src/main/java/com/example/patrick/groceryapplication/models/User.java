@@ -1,5 +1,8 @@
 package com.example.patrick.groceryapplication.models;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 /**
  * Created by Jose
  */
@@ -8,15 +11,17 @@ public class User {
     private String name;
     private String dob;
     private String location;
-
+    private ArrayList<String> groupLists;
     public User() {
     }
 
-    public User(String id,String name, String dob, String location) {
+    public User(String id,String name, String dob, String location,ArrayList<String> groupLists) {
         this.id = id;
         this.name = name;
         this.dob = dob;
         this.location = location;
+        this.groupLists=groupLists;
+
     }
 
     public String getId() {
@@ -49,6 +54,22 @@ public class User {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public void setUser(User user){
+        this.id = user.getId();
+        this.name = user.getName();
+        this.dob = user.getDob();
+        this.location = user.getLocation();
+        this.groupLists=user.getGroupLists();
+    }
+
+    public ArrayList<String> getGroupLists() {
+        return groupLists;
+    }
+
+    public void setGroupLists(ArrayList<String> groupLists) {
+        this.groupLists = groupLists;
     }
 }
 

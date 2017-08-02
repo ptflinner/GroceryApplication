@@ -30,6 +30,8 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     private GoogleApiClient mGoogleApiClient;
@@ -43,13 +45,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        user = new User("2","John Doe", "01/01/2001","Los Angeles");
-        FirebaseDatabase mFirebaseDatabase=FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference=mFirebaseDatabase.getReference("users");
-
-        databaseReference.setValue(user);
-
-        Log.d(TAG,"In Main" + user.toString());
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -140,10 +135,15 @@ public class MainActivity extends AppCompatActivity {
         userReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<String> groupLists=new ArrayList<String>();
+                groupLists.add("39291d");
+                groupLists.add("3923423123d");
+                groupLists.add("124125511d");
                 if (dataSnapshot.exists()) {
-
+                    User userToAdd=new User(firebaseUid,"John Doe","02/21/1992","California",groupLists);
+                    userReference.setValue(userToAdd);
                 } else {
-                    User userToAdd=new User(firebaseUid,"John Doe","02/21/1992","California");
+                    User userToAdd=new User(firebaseUid,"John Doe","02/21/1992","California",groupLists);
                     userReference.setValue(userToAdd);
                 }
             }
