@@ -1,6 +1,8 @@
 package com.example.patrick.groceryapplication;
 
+import com.example.patrick.groceryapplication.models.*;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -11,7 +13,9 @@ import android.view.MenuItem;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.patrick.groceryapplication.models.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,35 +30,21 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     private GoogleApiClient mGoogleApiClient;
     private BottomNavigationView mBottomNavView;
     private static final String TAG="MainActivity";
+    private DatabaseReference userReference;
+
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        FirebaseDatabase mFirebaseDatabase=FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference=mFirebaseDatabase.getReference("message");
-
-        databaseReference.setValue("Hello, Database");
-
-        Log.d(TAG,"In Main");
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String value=dataSnapshot.getValue(String.class);
-                Log.d(TAG,"Value is: "+value);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG,"Failed to read value. ", databaseError.toException());
-            }
-        });
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -92,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        loadUserInformation();
+
         //Manually displaying the first fragment - one time only
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout, MyListFragment.newInstance());
@@ -128,4 +120,39 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+
+    public DatabaseReference getUserReference() {
+        return userReference;
+    }
+
+    public void setUserReference(DatabaseReference userReference) {
+        this.userReference = userReference;
+    }
+
+    private void loadUserInformation(){
+        // Load Character from Database
+        final String firebaseUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        setUserReference(FirebaseDatabase.getInstance().getReference("userList").child(firebaseUid));
+
+        userReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<String> groupLists=new ArrayList<String>();
+                groupLists.add("39291d");
+                groupLists.add("3923423123d");
+                groupLists.add("124125511d");
+                if (dataSnapshot.exists()) {
+                    User userToAdd=new User(firebaseUid,"John Doe","02/21/1992","California",groupLists);
+                    userReference.setValue(userToAdd);
+                } else {
+                    User userToAdd=new User(firebaseUid,"John Doe","02/21/1992","California",groupLists);
+                    userReference.setValue(userToAdd);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
 }
