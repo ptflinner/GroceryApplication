@@ -67,8 +67,8 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ItemHolder
         }
 
         public void bind(ItemHolder holder, int pos){
-            id = cursor.getLong(cursor.getColumnIndex(Contract.TABLE_LIST.COLUMN_NAME_ID));
             cursor.moveToPosition(pos);
+            id = cursor.getLong(cursor.getColumnIndex(Contract.TABLE_LIST.COLUMN_NAME_ID));
             title.setText(cursor.getString(cursor.getColumnIndex(Contract.TABLE_LIST.COLUMN_NAME_LIST_NAME)));
             category.setText(cursor.getString(cursor.getColumnIndex(Contract.TABLE_LIST.COLUMN_NAME_LIST_CATEGORY)));
             holder.itemView.setTag(id);
