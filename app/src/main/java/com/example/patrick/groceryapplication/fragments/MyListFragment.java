@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -20,7 +21,7 @@ import com.example.patrick.groceryapplication.utils.Contract;
 import com.example.patrick.groceryapplication.utils.DBHelper;
 import com.example.patrick.groceryapplication.utils.SQLiteUtils;
 
-public class MyListFragment extends Fragment {
+public class MyListFragment extends Fragment implements MyListAdapter.ItemClickListener {
 
     private RecyclerView myListRecyclerView;
     private FloatingActionButton fab;
@@ -91,6 +92,8 @@ public class MyListFragment extends Fragment {
 
             @Override
             public void onItemClick(Cursor cursor, int clickedItemIndex) {
+
+
             }
 
         });
@@ -110,4 +113,8 @@ public class MyListFragment extends Fragment {
                 Contract.TABLE_LIST.COLUMN_NAME_LIST_CATEGORY);
 
     }
+
+
+
+
 }

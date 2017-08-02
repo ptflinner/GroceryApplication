@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         if(db != null){
+
             db.close();
         }
         if(cursor != null){
