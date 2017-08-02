@@ -6,6 +6,10 @@ import android.os.Handler;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Handler;
+
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -41,11 +45,10 @@ public class MainActivity extends AppCompatActivity {
     private GoogleApiClient mGoogleApiClient;
     private BottomNavigationView mBottomNavView;
     private static final String TAG="MainActivity";
-    private DatabaseReference userReference;
-    private User user;
     private SQLiteDatabase db;
     private DBHelper helper;
     private Cursor cursor;
+    private DatabaseReference userReference;
 
     @Override
     protected void onStart() {
@@ -59,13 +62,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         if(db != null){
+
             db.close();
         }
         if(cursor != null){
             cursor.close();
         }
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,10 +149,6 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    public DatabaseReference getUserReference() {
-        return userReference;
-    }
-
     public void setUserReference(DatabaseReference userReference) {
         this.userReference = userReference;
     }
@@ -180,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    
     private void insertDummy(){
         SQLiteUtils add = new SQLiteUtils();
 
@@ -191,4 +191,5 @@ public class MainActivity extends AppCompatActivity {
         add.addList(db, "My List4", "gaylist4");
         add.addMyList(db,1,1);
     }
+
 }

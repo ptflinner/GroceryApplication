@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1"
+    tools:context="layout.AddPersonalList">
+
+    <EditText
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".1"
+        android:layout_gravity="right"
+        android:paddingBottom="3dp"
+        android:hint="Enter a Title for Your Personal List" />
+    <Spinner
+        android:id="@+id/categories_spinner"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight=".1"/>
+
+    <Button
+        android:id="@+id/add"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".1"
+        android:layout_marginTop="100dp"
+        android:text="Add" />
+
+</LinearLayout>

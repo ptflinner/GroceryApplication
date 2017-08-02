@@ -4,6 +4,7 @@ package com.example.patrick.groceryapplication;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ItemHolder
         View view = inflater.inflate(R.layout.my_lists, parent, false);
         ItemHolder viewHolder = new ItemHolder(view);
 
+
         return viewHolder;
     }
 
@@ -67,8 +69,8 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ItemHolder
         }
 
         public void bind(ItemHolder holder, int pos){
-            id = cursor.getLong(cursor.getColumnIndex(Contract.TABLE_LIST.COLUMN_NAME_ID));
             cursor.moveToPosition(pos);
+            id = cursor.getLong(cursor.getColumnIndex(Contract.TABLE_LIST.COLUMN_NAME_ID));
             title.setText(cursor.getString(cursor.getColumnIndex(Contract.TABLE_LIST.COLUMN_NAME_LIST_NAME)));
             category.setText(cursor.getString(cursor.getColumnIndex(Contract.TABLE_LIST.COLUMN_NAME_LIST_CATEGORY)));
             holder.itemView.setTag(id);
@@ -79,6 +81,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ItemHolder
         public void onClick(View v) {
             int pos = getAdapterPosition();
             listener.onItemClick(cursor, pos);
+
         }
     }
 
