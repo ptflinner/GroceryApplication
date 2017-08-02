@@ -10,7 +10,6 @@
     <string name="desc_google_icon">Google Logo</string>
     <string name="title_text">Google Sign-In\nQuickstart</string>
     <string name="sign_in">Sign in</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string-array name="categories_array">
         <item>All Lists</item>
@@ -21,5 +20,24 @@
         <item>Recipes</item>
         <item>Holiday Dinner</item>
     </string-array>
+
+    <string name="my_lists">My Lists</string>
+    <string name="group_lists">Group Lists</string>
+    <string name="featured_lists">Featured Lists</string>
+
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+    <string-array name="drawer_items">
+        <item>Sign Out</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>
 
