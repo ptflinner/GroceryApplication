@@ -115,6 +115,8 @@ public class MyListFragment extends Fragment implements MyListAdapter.ItemClickL
     }
 
 
+    @Override
+    public void onItemClick(Cursor cursor, int clickedItemIndex) {
 
-
+    }
 }
