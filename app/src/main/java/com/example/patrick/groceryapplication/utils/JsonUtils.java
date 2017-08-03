@@ -16,6 +16,10 @@ public class JsonUtils {
 
     private final static String RN_DIVIDER="";
     private final static String RN_NAME="";
+    private final static String RN_CATEGORY="";
+    private final static String RN_COUNT="";
+    private final static String RN_DESCRIPTION="";
+
 
 
     public static String[] getStringFromJson(String listJsonString)throws JSONException{
@@ -46,8 +50,11 @@ public class JsonUtils {
             JSONObject shoppingItems=shoppingArray.getJSONObject(i);
 
             String itemName=shoppingItems.getString(RN_NAME);
+            String itemCategory=shoppingItems.getString(RN_CATEGORY);
+            String itemCount=shoppingItems.getString(RN_COUNT);
+            String itemDescription=shoppingItems.getString(RN_DESCRIPTION);
 
-            parsedShoppingList.add(new Item(itemName));
+            parsedShoppingList.add(new Item(itemName,itemCategory,itemCount,itemDescription));
         }
         return parsedShoppingList;
     }

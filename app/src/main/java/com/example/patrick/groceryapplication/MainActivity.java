@@ -6,10 +6,8 @@ import android.os.Handler;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Handler;
 
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -20,7 +18,9 @@ import android.view.MenuItem;
 
 import android.os.Bundle;
 import android.util.Log;
-
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import com.example.patrick.groceryapplication.models.User;
 import com.example.patrick.groceryapplication.utils.DBHelper;
 import com.example.patrick.groceryapplication.utils.SQLiteUtils;
@@ -28,7 +28,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import com.example.patrick.groceryapplication.fragments.*;
 import com.google.android.gms.auth.api.Auth;
@@ -37,8 +36,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -74,6 +76,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        final FirebaseDatabase mFirebaseDatabase=FirebaseDatabase.getInstance();
+        //final DatabaseReference databaseReference=mFirebaseDatabase.getReference("groups");
+
+//        databaseReference.push().setValue(list);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -118,6 +124,38 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.frame_layout, MyListFragment.newInstance());
         transaction.commit();
     }
+
+    /*
+    *
+    * @Parameters firebase db
+    * GroupList object takes the @Parameters
+    * String List Name, ArrayList Items, String Description from the text fields the user inputs
+    *
+    * */
+//    public void firebaseGroupAdd(FirebaseDatabase fdb){
+//        DatabaseReference groupRef = fdb.getReference("groupList");
+//        ArrayList<String> itemsArr = new ArrayList<>();
+//        itemsArr.add(item.getText().toString());
+//        GroupList groupList = new GroupList(name.getText().toString(), description.getText().toString(),itemsArr);
+//        Log.d(TAG, "Loggin into db " + groupList);
+//
+//        groupRef.push().setValue(groupList);
+//    }
+    /*
+    *
+    *
+    *
+    *   Replace char witht he user values then for the update we can use a map or a has table
+    *   but we can just use any adding method !Beware watch what method you use dont delete all the data!
+        char extraItem;
+     public void firebaseAddingMoreItems(FirebaseDatabase fdb){
+       DatabaseReference itemRef = fdb.getReference("groupList").child("items");
+         ArrayList<String> extraItems = new ArrayList<>();
+         extraItems.add(extraItems.toString());
+         itemRef.update().setValue();
+
+     }
+*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
