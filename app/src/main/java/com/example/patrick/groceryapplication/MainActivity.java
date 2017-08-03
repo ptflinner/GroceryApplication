@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -112,14 +113,17 @@ public class MainActivity extends AppCompatActivity {
     *
     *
     *
-    *
-    *
-    *
-    *
-    *
-    *
-    *
-    * */
+    *   Replace char witht he user values then for the update we can use a map or a has table
+    *   but we can just use any adding method !Beware watch what method you use dont delete all the data!
+        char extraItem;
+     public void firebaseAddingMoreItems(FirebaseDatabase fdb){
+       DatabaseReference itemRef = fdb.getReference("groupList").child("items");
+         ArrayList<String> extraItems = new ArrayList<>();
+         extraItems.add(extraItems.toString());
+         itemRef.update().setValue();
+
+     }
+*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
