@@ -69,11 +69,15 @@ public class MyListItemAdapter extends RecyclerView.Adapter<MyListItemAdapter.Gr
         }
 
         public void bind(GroceryItemHolder holder, int pos){
-            cursor.moveToPosition(pos);
-            id = cursor.getLong(cursor.getColumnIndex(Contract.TABLE_ITEM.COLUMN_NAME_ID));
-            name.setText(cursor.getString(cursor.getColumnIndex(Contract.TABLE_ITEM.COLUMN_NAME_ITEM_NAME)));
-            quantity.setText(cursor.getInt(cursor.getColumnIndex(Contract.TABLE_ITEM.COLUMN_NAME_QUANTITY)));
+//            cursor.moveToPosition(pos);
+//            id = cursor.getLong(cursor.getColumnIndex(Contract.TABLE_ITEM.COLUMN_NAME_ID));
+//            name.setText(cursor.getString(cursor.getColumnIndex(Contract.TABLE_ITEM.COLUMN_NAME_ITEM_NAME)));
+//            quantity.setText(cursor.getInt(cursor.getColumnIndex(Contract.TABLE_ITEM.COLUMN_NAME_QUANTITY)));
             //image code is supposed to be here
+
+            name.setText("gaaaaaaaaaaaaaaaaaaaaay");
+            quantity.setText( ""+ 21);
+
 
         }
 

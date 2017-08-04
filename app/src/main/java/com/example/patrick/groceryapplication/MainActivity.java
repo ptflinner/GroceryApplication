@@ -1,5 +1,4 @@
 package com.example.patrick.groceryapplication;
-
 import com.example.patrick.groceryapplication.models.*;
 import android.content.Intent;
 import android.database.Cursor;
@@ -155,6 +154,8 @@ public class MainActivity extends AppCompatActivity {
         add.addList(db, "My List4", "gaylist4");
         add.addMyList(db, 1, 1);
     }
+
+
     public DatabaseReference getUserReference() {
         return userReference;
     }
@@ -185,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });}
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+    }
 }

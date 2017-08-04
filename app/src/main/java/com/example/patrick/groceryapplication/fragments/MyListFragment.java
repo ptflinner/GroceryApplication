@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,7 +30,7 @@ public class MyListFragment extends Fragment implements MyListAdapter.ItemClickL
     private Cursor cursor;
     private SQLiteDatabase db;
     private MyListAdapter adapter;
-    private final String TAG = "mainactivity";
+    private final String TAG = "myListFRAGMENT";
 
     public MyListFragment(){}
 
@@ -60,7 +61,7 @@ public class MyListFragment extends Fragment implements MyListAdapter.ItemClickL
             }
         });
 
-        myListRecyclerView=(RecyclerView) view.findViewById(R.id.recycler_view);
+        myListRecyclerView=(RecyclerView) view.findViewById(R.id.recycler_view_my_list);
         myListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         // Inflate the layout for this fragment
         return view;
@@ -92,8 +93,12 @@ public class MyListFragment extends Fragment implements MyListAdapter.ItemClickL
 
             @Override
             public void onItemClick(Cursor cursor, int clickedItemIndex) {
-
-
+                Log.d(TAG, "" + clickedItemIndex);
+                Fragment myListItems =MyListItemFragment.newInstance(clickedItemIndex);
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame_layout, myListItems);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
 
         });
@@ -117,6 +122,14 @@ public class MyListFragment extends Fragment implements MyListAdapter.ItemClickL
 
     @Override
     public void onItemClick(Cursor cursor, int clickedItemIndex) {
-
+        Log.d(TAG, "" + clickedItemIndex);
+        Fragment MyListItems = new MyListItemFragment();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        Log.d(TAG, "before transaction replace");
+        transaction.replace(R.id.recycler_view_my_list, MyListItems);
+        Log.d(TAG, "before transaction addToBackStacck");
+        transaction.addToBackStack(null);
+        Log.d(TAG, "before transaction commit");
+        transaction.commit();
     }
 }
