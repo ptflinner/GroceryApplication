@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,15 +27,16 @@ public class GroupItemFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view=inflater.inflate(R.layout.fragment_group_item, container, false);
-        fab=(FloatingActionButton) view.findViewById(R.id.fab_my_list);
+        fab=(FloatingActionButton) view.findViewById(R.id.fab_group_item);
 
         fab.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
-//            FragmentManager fm = getSupportFragmentManager();
-//            AddMyListFragment frag = new AddMyListFragment();
-//            frag.show(fm, "addMyListFragment");
+    //            FragmentManager fm = getSupportFragmentManager();
+    //            AddMyListFragment frag = new AddMyListFragment();
+    //            frag.show(fm, "addMyListFragment");
+                Log.v("RABBLE","RABBLE");
             }
         });
 

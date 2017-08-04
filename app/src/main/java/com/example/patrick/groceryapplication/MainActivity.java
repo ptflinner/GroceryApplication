@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         helper = new DBHelper(this);
         db = helper.getWritableDatabase();
+
         insertDummy();
     }
 
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final FirebaseDatabase mFirebaseDatabase=FirebaseDatabase.getInstance();
+//        firebaseGroupAdd(mFirebaseDatabase);
         //final DatabaseReference databaseReference=mFirebaseDatabase.getReference("groups");
 
 //        databaseReference.push().setValue(list);
@@ -129,15 +131,16 @@ public class MainActivity extends AppCompatActivity {
     * String List Name, ArrayList Items, String Description from the text fields the user inputs
     *
     * */
-//    public void firebaseGroupAdd(FirebaseDatabase fdb){
-//        DatabaseReference groupRef = fdb.getReference("groupList");
-//        ArrayList<String> itemsArr = new ArrayList<>();
-//        itemsArr.add(item.getText().toString());
-//        GroupList groupList = new GroupList(name.getText().toString(), description.getText().toString(),itemsArr);
-//        Log.d(TAG, "Loggin into db " + groupList);
-//
-//        groupRef.push().setValue(groupList);
-//    }
+    public void firebaseGroupAdd(FirebaseDatabase fdb){
+        DatabaseReference groupRef = fdb.getReference("groupList");
+        ArrayList<Item> itemsArr = new ArrayList<>();
+//        itemsArr.add(new Item("Hamburger Patty","Meat","8","It is hamburger meat"));
+//        itemsArr.add(new Item("Hamburger Buns","Wheat","8","It is a hamburger bun"));
+//        itemsArr.add(new Item("Slammers Gift Card","Monetary","1","It is a gift card"));
+        GroupList groupList = new GroupList("Barbeque","Fun night cooking meat",itemsArr);
+
+        groupRef.push().setValue(groupList);
+    }
     /*
     *
     *

@@ -12,12 +12,12 @@ public class GroupList {
 
     private String name = "";
     private String description = "";
-    private ArrayList<String> items;
+    private ArrayList<Item> items;
 
     public GroupList() {
     }
 
-    public GroupList(String name, String description, ArrayList<String> items) {
+    public GroupList(String name, String description, ArrayList<Item> items) {
         this.name = name;
         this.description = description;
         this.items = items;
@@ -39,11 +39,11 @@ public class GroupList {
         this.description = description;
     }
 
-    public ArrayList<String> getItems() {
+    public ArrayList<Item> getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<String> items) {
+    public void setItems(ArrayList<Item> items) {
         this.items = items;
     }
 }
