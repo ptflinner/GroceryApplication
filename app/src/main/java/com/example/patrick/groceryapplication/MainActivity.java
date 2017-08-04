@@ -2,12 +2,10 @@ package com.example.patrick.groceryapplication;
 
 import com.example.patrick.groceryapplication.models.*;
 import android.content.Intent;
-import android.os.Handler;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -18,9 +16,6 @@ import android.view.MenuItem;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import com.example.patrick.groceryapplication.models.User;
 import com.example.patrick.groceryapplication.utils.DBHelper;
 import com.example.patrick.groceryapplication.utils.SQLiteUtils;
@@ -39,8 +34,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     private DBHelper helper;
     private Cursor cursor;
     private DatabaseReference userReference;
+    private User user;
+    private ArrayList<String> userGroupLists;
+    private ArrayList<GroupList> userGroups;
 
     @Override
     protected void onStart() {
@@ -187,15 +184,12 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    public void setUserReference(DatabaseReference userReference) {
-        this.userReference = userReference;
-    }
+
 
     private void loadUserInformation() {
         // Load Character from Database
         final String firebaseUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        setUserReference(FirebaseDatabase.getInstance().getReference("userList").child(firebaseUid));
-
+        userReference=(FirebaseDatabase.getInstance().getReference("userList").child(firebaseUid));
         userReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -204,8 +198,7 @@ public class MainActivity extends AppCompatActivity {
                 groupLists.add("3923423123d");
                 groupLists.add("124125511d");
                 if (dataSnapshot.exists()) {
-                    User userToAdd = new User(firebaseUid, "John Doe", "02/21/1992", "California", groupLists);
-                    userReference.setValue(userToAdd);
+                    user=(dataSnapshot.getValue(User.class));
                 } else {
                     User userToAdd = new User(firebaseUid, "John Doe", "02/21/1992", "California", groupLists);
                     userReference.setValue(userToAdd);
@@ -219,15 +212,19 @@ public class MainActivity extends AppCompatActivity {
     }
     
     private void insertDummy(){
-        SQLiteUtils add = new SQLiteUtils();
+//        SQLiteUtils add = new SQLiteUtils();
+//
+//        add.addItem(db, "apples", 2, 12, "Purchased", "Immage", "Fruits");
+//        add.addList(db, "My List", "gaylist");
+//        add.addList(db, "My List1", "gaylist1");
+//        add.addList(db, "My List2", "gaylist2");
+//        add.addList(db, "My List3", "gaylist3");
+//        add.addList(db, "My List4", "gaylist4");
+//        add.addMyList(db,1,1);
+    }
 
-        add.addItem(db, "apples", 2, 12, "Purchased", "Immage", "Fruits");
-        add.addList(db, "My List", "gaylist");
-        add.addList(db, "My List1", "gaylist1");
-        add.addList(db, "My List2", "gaylist2");
-        add.addList(db, "My List3", "gaylist3");
-        add.addList(db, "My List4", "gaylist4");
-        add.addMyList(db,1,1);
+    public User getUser() {
+        return user;
     }
 
 }
