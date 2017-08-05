@@ -1,7 +1,9 @@
 package com.example.patrick.groceryapplication.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +19,8 @@ public class AddPersonalList extends DialogFragment {
     private Spinner categoriesSpinner;
     private Button add;
     private final String TAG = "AddPersonalList";
+    public static final int REQUEST_CODE = 1;
 
-    public AddPersonalList(){}
-
-    static AddPersonalList newInstance(){
-        AddPersonalList list = new AddPersonalList();
-        Bundle args = new Bundle();
-
-        return list;
-    }
 
     public interface OnDialogCloseListener{
         void closeDialog(String title, String categoriesSpinner);
@@ -46,8 +41,14 @@ public class AddPersonalList extends DialogFragment {
         add.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                OnDialogCloseListener activity = (OnDialogCloseListener) getActivity();
-                activity.closeDialog(title.getText().toString(), categoriesSpinner.getSelectedItem().toString());
+                Intent intent = new Intent();
+                Bundle args = new Bundle();
+                args.putString("title", title.getText().toString());
+                args.putString("category", categoriesSpinner.getSelectedItem().toString());
+
+                intent.putExtra("args", args);
+                getTargetFragment().onActivityResult(
+                        getTargetRequestCode(), REQUEST_CODE, intent);
                 AddPersonalList.this.dismiss();
             }
         });

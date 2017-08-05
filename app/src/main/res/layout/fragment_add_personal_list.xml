@@ -9,22 +9,21 @@
     <EditText
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight=".1"
+        android:layout_height="100dp"
         android:layout_gravity="right"
         android:paddingBottom="3dp"
         android:hint="Enter a Title for Your Personal List" />
     <Spinner
         android:id="@+id/categories_spinner"
-        android:layout_height="0dp"
+        android:layout_height="100dp"
         android:layout_width="match_parent"
-        android:layout_weight=".1"/>
+        />
 
     <Button
         android:id="@+id/add"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight=".1"
+        android:layout_height="110dp"
+
         android:layout_marginTop="100dp"
         android:text="Add" />
 

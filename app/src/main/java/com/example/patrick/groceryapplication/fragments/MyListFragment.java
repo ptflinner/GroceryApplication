@@ -1,6 +1,7 @@
 package com.example.patrick.groceryapplication.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ public class MyListFragment extends Fragment {
     private SQLiteDatabase db;
     private MyListAdapter adapter;
     private final String TAG = "myListFRAGMENT";
+    private final static int REQUEST_CODE = 1;
 
     public MyListFragment(){}
 
@@ -56,8 +58,10 @@ public class MyListFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-
-                Log.d(TAG, "hey im faaabulous");
+                FragmentManager fm = getFragmentManager();
+                AddPersonalList frag = new AddPersonalList();
+                frag.setTargetFragment(MyListFragment.this, REQUEST_CODE);
+                frag.show(fm, "addPersonalList");
             }
         });
 
@@ -119,4 +123,10 @@ public class MyListFragment extends Fragment {
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+    }
+
+    
 }
