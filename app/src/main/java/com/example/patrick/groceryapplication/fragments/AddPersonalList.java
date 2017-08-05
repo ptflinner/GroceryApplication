@@ -41,7 +41,7 @@ public class AddPersonalList extends DialogFragment {
         add.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-//                OnDialogCloseListener activity = (OnDialogCloseListener) getActivity();
+
                 Intent intent = new Intent();
                 Bundle args=new Bundle();
                 Log.d(TAG,"TITLE: "+title.getText().toString());
@@ -53,8 +53,6 @@ public class AddPersonalList extends DialogFragment {
                 getTargetFragment().onActivityResult(
                         getTargetRequestCode(), REQUEST_CODE, intent);
 
-//                getTargetFragment().onActivityResult(getTargetRequestCode(),1,null);
-//                activity.closeDialog(title.getText().toString(), categoriesSpinner.getSelectedItem().toString());
                 AddPersonalList.this.dismiss();
             }
         });
