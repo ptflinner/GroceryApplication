@@ -2,6 +2,8 @@ package com.example.patrick.groceryapplication.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +63,42 @@ public class ItemFragment extends DialogFragment {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //passing the data from this fragment to the activity
+                //uncomment this block of code
+
+               String itemname = name.getText().toString();
+                String itemquantity = quantity.getText().toString();
+                String itemprice = price.getText().toString();
+                Bundle b = new Bundle();
+                b.putString("Name",itemname);
+                b.putString("Quantity",itemprice);
+                b.putString("Price",itemquantity);
+
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+
+/*                nameOfYourItemFragment itemFrag = new nameOfYourItemFragment();
+                itemFrag.setArguments(b);
+                ft.replace(R.id.frame_container,itemFragment);
+                ft.commit();*/
+
+
+                //copy pasta this code into the your item fragment
+/*                Bundle b = getArguments();
+                String iname = b.getString("Name");
+                String iquantity = b.getString("Quantity");
+                String iprice = b.getString("Price");
+
+                TextView yourNameView = (TextView) view.findViewById(R.id.itemName);
+                TextView yourQuantityView = (TextView) view.findViewById(R.id.itemQuantity;
+                TextView yourPriceView = (TextView) view.findViewById(R.id.item_price);
+
+                yourNameView.setText(iname);
+                yourQuantityView.setText(iquantity);
+                yourPriceView.setText(iprice);*/
+
+
+                //-----------------
                 OnDialogCloseListener activity = (OnDialogCloseListener) getActivity();
                 activity.closeDialog(name.getText().toString(),quantity.getText().toString(),price.getText().toString(),
                         store.getText().toString(),camera.getText().toString());

@@ -155,4 +155,35 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    /*
+//stuff in Simon's mainActivity
+    private RecyclerView rv;
+    private FloatingActionButton button;
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.frame_container, new barCodeFragment());
+        ft.commit();
+
+        button = (FloatingActionButton) findViewById(R.id.addToDo);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getSupportFragmentManager();
+                barCodeFragment frag = new barCodeFragment();
+                frag.show(fm, "barcodefragment");
+            }
+        });
+        rv = (RecyclerView) findViewById(R.id.recyclerView);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+    }
+    @Override
+    public void closeDialog(String name, String quantity, String price, String store, String picture) {
+
+    }
+*/
+
 }
