@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp"
-    android:weightSum="1"
     tools:context="com.example.patrick.groceryapplication.fragments.ItemFragment">
     <!-- categories -->
     <Spinner

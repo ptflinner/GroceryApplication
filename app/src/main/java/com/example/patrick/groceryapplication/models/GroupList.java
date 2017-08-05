@@ -12,15 +12,15 @@ import java.util.HashMap;
 public class GroupList {
 
     private String name = "";
-    private String description = "";
+    private String category = "";
     private HashMap<String,Item> items;
 
     public GroupList() {
     }
 
-    public GroupList(String name, String description, HashMap<String,Item> items) {
+    public GroupList(String name, String category, HashMap<String,Item> items) {
         this.name = name;
-        this.description = description;
+        this.category = category;
         this.items = items;
     }
 
@@ -32,12 +32,12 @@ public class GroupList {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getCategory() {
+        return category;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public HashMap<String,Item> getItems() {

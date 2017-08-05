@@ -3,28 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="1"
-    tools:context="layout.AddPersonalList">
+    tools:context=".fragments.AddPersonalList">
 
     <EditText
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight=".1"
+        android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:paddingBottom="3dp"
         android:hint="Enter a Title for Your Personal List" />
     <Spinner
         android:id="@+id/categories_spinner"
-        android:layout_height="0dp"
-        android:layout_width="match_parent"
-        android:layout_weight=".1"/>
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
 
     <Button
         android:id="@+id/add"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight=".1"
+        android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:text="Add" />
 

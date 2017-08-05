@@ -169,9 +169,7 @@ public class MainActivity extends AppCompatActivity {
         userReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    user=(dataSnapshot.getValue(User.class));
-                } else {
+                if (!dataSnapshot.exists()) {
                     User userToAdd = new User(firebaseUid, "John Doe", "02/21/1992", "California", null);
                     userReference.setValue(userToAdd);
                 }

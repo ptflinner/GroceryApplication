@@ -1,8 +1,10 @@
 package com.example.patrick.groceryapplication.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,30 +14,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.patrick.groceryapplication.MainActivity;
 import com.example.patrick.groceryapplication.R;
-import com.example.patrick.groceryapplication.adapters.GroupListAdapter;
 import com.example.patrick.groceryapplication.models.GroupList;
-import com.example.patrick.groceryapplication.models.Item;
-import com.example.patrick.groceryapplication.models.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.security.acl.Group;
 import java.util.ArrayList;
 
-public class GroupListFragment extends Fragment {
+public class GroupListFragment extends Fragment{
 
     private FloatingActionButton fab;
     private RecyclerView groupListRecyclerView;
     private ArrayList<GroupList> groupArray;
     private static final String TAG="GROUPLISTFRAGMENT";
     private FirebaseRecyclerAdapter<GroupList,ItemHolder> mGroupListAdapter;
+    private FirebaseRecyclerAdapter<String,ItemHolder> mStringAdapter;
     private DatabaseReference groupRef;
+    private final static int REQUEST_CODE=245;
 
     public GroupListFragment(){
 
@@ -58,21 +58,22 @@ public class GroupListFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_group_list, container, false);
         fab=(FloatingActionButton) view.findViewById(R.id.fab_group_list);
 
+
         fab.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
-//                FragmentManager fm = getSupportFragmentManager();
-//                AddMyListFragment frag = new AddMyListFragment();
-//                frag.show(fm, "addMyListFragment");
-                firebaseGroupAdd(FirebaseDatabase.getInstance());
-                Log.d(TAG,"BUTTON CLICKED");
+                FragmentManager fm = getFragmentManager();
+                AddPersonalList frag = new AddPersonalList();
+                frag.setTargetFragment(GroupListFragment.this,REQUEST_CODE);
+                frag.show(fm, "addPersonalList");
             }
         });
 
         groupListRecyclerView=(RecyclerView) view.findViewById(R.id.frag_group_list_recycler);
         groupListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        groupRef=FirebaseDatabase.getInstance().getReference("groupList");
+        String uid= FirebaseAuth.getInstance().getCurrentUser().getUid();
+        groupRef=FirebaseDatabase.getInstance().getReference("userList").child(uid).child("groupLists");
 
         // Inflate the layout for this fragment
         return view;
@@ -85,39 +86,72 @@ public class GroupListFragment extends Fragment {
     }
 
     public void createAdapter(){
-        mGroupListAdapter = new FirebaseRecyclerAdapter<GroupList, ItemHolder>(
-                GroupList.class,
+        mStringAdapter = new FirebaseRecyclerAdapter<String, ItemHolder>(
+                String.class,
                 R.layout.group_list_recycle_item,
                 ItemHolder.class,
                 groupRef
         ) {
             @Override
-            protected void populateViewHolder(ItemHolder viewHolder, GroupList model, final int position) {
+            protected void populateViewHolder(final ItemHolder viewHolder, final String model, final int position) {
 
-//                mGroupListAdapter.getRef(position).getKey();
-                Log.d(TAG,"FIREBASE");
-                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                Log.d(TAG,model);
+                DatabaseReference gRef=FirebaseDatabase.getInstance().getReference("groupList").
+                        child(model);
+
+
+                gRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                           GroupList gModel=(dataSnapshot.getValue(GroupList.class));
+                            viewHolder.bind(gModel,position);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+                viewHolder.mView.setOnClickListener(new View.OnClickListener(){
+
                     @Override
                     public void onClick(View view) {
-                        Fragment groupListItems =GroupListItemFragment.newInstance(mGroupListAdapter.getRef(position).getKey());
+                        Fragment groupListItems =GroupListItemFragment.newInstance(model);
                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
                         transaction.replace(R.id.frame_layout, groupListItems);
                         transaction.addToBackStack(null);
                         transaction.commit();
                     }
                 });
-                viewHolder.bind(model,position);
             }
+
         };
-        groupListRecyclerView.setAdapter(mGroupListAdapter);
+        groupListRecyclerView.setAdapter(mStringAdapter);
     }
 
-    public void firebaseGroupAdd(FirebaseDatabase fdb){
+    public void firebaseGroupAdd(FirebaseDatabase fdb,GroupList groupList){
         DatabaseReference groupRef = fdb.getReference("groupList");
-//        itemsArr.add(item);
-//        itemsArr.add(new Item("Slammers Gift Card","Monetary","1","It is a gift card"));
-        GroupList groupList = new GroupList("Best Buy","Need cheap tech",null);
-        groupRef.push().setValue(groupList);
+        String pushKey=groupRef.push().getKey();
+        groupRef.child(pushKey).setValue(groupList);
+
+        final String firebaseUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference userReference=(FirebaseDatabase.getInstance().getReference("userList").child(firebaseUid));
+        userReference.child("groupLists").push().setValue(pushKey);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==AddPersonalList.REQUEST_CODE){
+            Bundle extras=data.getBundleExtra("args");
+
+            Log.d(TAG,"BUNDLE: "+extras.getString("title"));
+            Log.d(TAG,"BUNDLE: "+extras.getString("cat"));
+            GroupList groupList = new GroupList(extras.getString("title"),extras.getString("cat"), null);
+            firebaseGroupAdd(FirebaseDatabase.getInstance(), groupList);
+            Log.d(TAG, "BUTTON CLICKED");
+        }
     }
     public static class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         View mView;
