@@ -8,6 +8,10 @@ public class Item {
     private String description;
 
     public Item() {
+        this.name="";
+        this.category="";
+        this.count="";
+        this.description="";
     }
 
     public Item(String name, String category, String count, String description) {

@@ -95,11 +95,11 @@ public class GroupListItemFragment extends Fragment {
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-//                        Fragment groupListItems =GroupListItemFragment.newInstance(mItemListAdapter.getRef(position).getKey());
-//                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//                        transaction.replace(R.id.frame_layout, groupListItems);
-//                        transaction.addToBackStack(null);
-//                        transaction.commit();
+                        Fragment groupItems =GroupItemFragment.newInstance(getGroupKey(),mItemListAdapter.getRef(position).getKey());
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.frame_layout, groupItems);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
 
                     }
                 });

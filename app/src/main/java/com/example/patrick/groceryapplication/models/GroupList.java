@@ -1,6 +1,7 @@
 package com.example.patrick.groceryapplication.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -12,12 +13,12 @@ public class GroupList {
 
     private String name = "";
     private String description = "";
-    private ArrayList<Item> items;
+    private HashMap<String,Item> items;
 
     public GroupList() {
     }
 
-    public GroupList(String name, String description, ArrayList<Item> items) {
+    public GroupList(String name, String description, HashMap<String,Item> items) {
         this.name = name;
         this.description = description;
         this.items = items;
@@ -39,11 +40,11 @@ public class GroupList {
         this.description = description;
     }
 
-    public ArrayList<Item> getItems() {
+    public HashMap<String,Item> getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<Item> items) {
+    public void setItems(HashMap<String,Item> items) {
         this.items = items;
     }
 }

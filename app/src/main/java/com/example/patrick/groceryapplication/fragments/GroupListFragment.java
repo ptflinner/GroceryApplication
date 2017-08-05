@@ -114,11 +114,9 @@ public class GroupListFragment extends Fragment {
 
     public void firebaseGroupAdd(FirebaseDatabase fdb){
         DatabaseReference groupRef = fdb.getReference("groupList");
-        ArrayList<Item> itemsArr = new ArrayList<>();
-//        itemsArr.add(new Item("Hamburger Patty","Meat","8","It is hamburger meat"));
-//        itemsArr.add(new Item("Hamburger Buns","Wheat","8","It is a hamburger bun"));
+//        itemsArr.add(item);
 //        itemsArr.add(new Item("Slammers Gift Card","Monetary","1","It is a gift card"));
-        GroupList groupList = new GroupList("Best Buy","Need cheap tech",itemsArr);
+        GroupList groupList = new GroupList("Best Buy","Need cheap tech",null);
         groupRef.push().setValue(groupList);
     }
     public static class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

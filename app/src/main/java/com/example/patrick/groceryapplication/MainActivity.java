@@ -34,6 +34,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -54,8 +55,6 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         helper = new DBHelper(this);
         db = helper.getWritableDatabase();
-
-        insertDummy();
     }
 
     @Override
@@ -74,11 +73,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final FirebaseDatabase mFirebaseDatabase=FirebaseDatabase.getInstance();
-//        firebaseGroupAdd(mFirebaseDatabase);
-        //final DatabaseReference databaseReference=mFirebaseDatabase.getReference("groups");
-
-//        databaseReference.push().setValue(list);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -117,46 +111,25 @@ public class MainActivity extends AppCompatActivity {
         });
 
         loadUserInformation();
-
+//        firebaseGroupAdd(FirebaseDatabase.getInstance());
         //Manually displaying the first fragment - one time only
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout, MyListFragment.newInstance());
         transaction.commit();
     }
 
-    /*
-    *
-    * @Parameters firebase db
-    * GroupList object takes the @Parameters
-    * String List Name, ArrayList Items, String Description from the text fields the user inputs
-    *
-    * */
     public void firebaseGroupAdd(FirebaseDatabase fdb){
         DatabaseReference groupRef = fdb.getReference("groupList");
-        ArrayList<Item> itemsArr = new ArrayList<>();
-//        itemsArr.add(new Item("Hamburger Patty","Meat","8","It is hamburger meat"));
-//        itemsArr.add(new Item("Hamburger Buns","Wheat","8","It is a hamburger bun"));
-//        itemsArr.add(new Item("Slammers Gift Card","Monetary","1","It is a gift card"));
-        GroupList groupList = new GroupList("Barbeque","Fun night cooking meat",itemsArr);
+//        HashMap<String,Item> itemsArr = new HashMap<>();
+//
+//        itemsArr.put("0",new Item("Hamburger Patty","Meat","8","It is hamburger meat"));
+//        itemsArr.put("1",new Item("Hamburger Buns","Wheat","8","It is a hamburger bun"));
+//        itemsArr.put("2",new Item("Slammers Gift Card","Monetary","1","It is a gift card"));
+        GroupList groupList = new GroupList("Barbeque","Fun night cooking meat",null);
 
         groupRef.push().setValue(groupList);
+
     }
-    /*
-    *
-    *
-    *
-    *   Replace char witht he user values then for the update we can use a map or a has table
-    *   but we can just use any adding method !Beware watch what method you use dont delete all the data!
-        char extraItem;
-     public void firebaseAddingMoreItems(FirebaseDatabase fdb){
-       DatabaseReference itemRef = fdb.getReference("groupList").child("items");
-         ArrayList<String> extraItems = new ArrayList<>();
-         extraItems.add(extraItems.toString());
-         itemRef.update().setValue();
-
-     }
-*/
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.sign_out,menu);
@@ -196,14 +169,10 @@ public class MainActivity extends AppCompatActivity {
         userReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<String> groupLists = new ArrayList<String>();
-                groupLists.add("39291d");
-                groupLists.add("3923423123d");
-                groupLists.add("124125511d");
                 if (dataSnapshot.exists()) {
                     user=(dataSnapshot.getValue(User.class));
                 } else {
-                    User userToAdd = new User(firebaseUid, "John Doe", "02/21/1992", "California", groupLists);
+                    User userToAdd = new User(firebaseUid, "John Doe", "02/21/1992", "California", null);
                     userReference.setValue(userToAdd);
                 }
             }
@@ -213,21 +182,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    
-    private void insertDummy(){
-//        SQLiteUtils add = new SQLiteUtils();
-//
-//        add.addItem(db, "apples", 2, 12, "Purchased", "Immage", "Fruits");
-//        add.addList(db, "My List", "gaylist");
-//        add.addList(db, "My List1", "gaylist1");
-//        add.addList(db, "My List2", "gaylist2");
-//        add.addList(db, "My List3", "gaylist3");
-//        add.addList(db, "My List4", "gaylist4");
-//        add.addMyList(db,1,1);
-    }
-
-    public User getUser() {
-        return user;
-    }
-
 }
