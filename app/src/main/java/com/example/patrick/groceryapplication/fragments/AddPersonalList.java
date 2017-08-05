@@ -1,4 +1,4 @@
-package layout;
+package com.example.patrick.groceryapplication.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -19,6 +19,13 @@ public class AddPersonalList extends DialogFragment {
     private final String TAG = "AddPersonalList";
 
     public AddPersonalList(){}
+
+    static AddPersonalList newInstance(){
+        AddPersonalList list = new AddPersonalList();
+        Bundle args = new Bundle();
+
+        return list;
+    }
 
     public interface OnDialogCloseListener{
         void closeDialog(String title, String categoriesSpinner);

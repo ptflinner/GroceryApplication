@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="5">
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="#ADD8E6" />
+
+        <TextView
+            android:id="@+id/grocery_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2sp"
+            android:layout_weight="4.5"
+            android:textSize="18sp"
+            tools:text="Eggs" />
+
+        <View
+            android:layout_width="1sp"
+            android:layout_height="match_parent"
+            android:background="#C0C0C0"
+            />
+
+        <TextView
+            android:id="@+id/grocery_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_weight=".5"
+
+            android:padding="5sp"
+            tools:text="x3" />
+
+        <View
+            android:layout_width="1sp"
+            android:layout_height="match_parent"
+            android:background="#C0C0C0"
+            />
+
+        <ImageView
+            android:id="@+id/grocery_image"
+            android:layout_width="50dp"
+            android:layout_height="38dp"
+            tools:src="@drawable/ic_camera_enhance_black_24dp"
+            android:src="@drawable/ic_camera_enhance_black_24dp"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#C0C0C0"
+        />
+</LinearLayout>

@@ -1,8 +1,14 @@
 package com.example.patrick.groceryapplication;
-
 import com.example.patrick.groceryapplication.models.*;
 import android.content.Intent;
 import android.os.Handler;
+
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Handler;
+
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -16,9 +22,10 @@ import android.view.MenuItem;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.patrick.groceryapplication.models.User;
+import com.example.patrick.groceryapplication.utils.DBHelper;
+import com.example.patrick.groceryapplication.utils.SQLiteUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,10 +46,31 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton button;
     private GoogleApiClient mGoogleApiClient;
     private BottomNavigationView mBottomNavView;
-    private static final String TAG="MainActivity";
+    private static final String TAG = "MainActivity";
+    private SQLiteDatabase db;
+    private DBHelper helper;
+    private Cursor cursor;
     private DatabaseReference userReference;
 
-    User user;
+    @Override
+    protected void onStart() {
+        super.onStart();
+        helper = new DBHelper(this);
+        db = helper.getWritableDatabase();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (db != null) {
+
+            db.close();
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,33 +93,33 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         mGoogleApiClient.connect();
 
-        mBottomNavView=(BottomNavigationView) findViewById(R.id.bottom_navigation);
+        mBottomNavView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         mBottomNavView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener(){
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
 
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment frag=null;
-                switch(item.getItemId()){
-                    case R.id.my_list:
-                        frag=MyListFragment.newInstance();
-                        break;
-                    case R.id.group_list:
-                        frag=GroupListFragment.newInstance();
-                        break;
-                    case R.id.featured_list:
-                        frag=FeaturedListFragment.newInstance();
-                        break;
-                    default:
-                        Log.e(TAG,"Navigation Error Occurred");
-                        Log.e(TAG,"Navigation ID:" +item.getItemId());
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        Fragment frag = null;
+                        switch (item.getItemId()) {
+                            case R.id.my_list:
+                                frag = MyListFragment.newInstance();
+                                break;
+                            case R.id.group_list:
+                                frag = GroupListFragment.newInstance();
+                                break;
+                            case R.id.featured_list:
+                                frag = FeaturedListFragment.newInstance();
+                                break;
+                            default:
+                                Log.e(TAG, "Navigation Error Occurred");
+                                Log.e(TAG, "Navigation ID:" + item.getItemId());
+                        }
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.frame_layout, frag);
+                        transaction.commit();
+                        return true;
                     }
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.frame_layout, frag);
-                transaction.commit();
-                return true;
-            }
-        });
+                });
 
         loadUserInformation();
 
@@ -103,14 +131,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.sign_out,menu);
+        getMenuInflater().inflate(R.menu.sign_out, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int itemThatWasClicked=item.getItemId();
-        if(itemThatWasClicked==R.id.sign_out){
+        int itemThatWasClicked = item.getItemId();
+        if (itemThatWasClicked == R.id.sign_out) {
             signOutOfGoogle();
             return true;
         }
@@ -118,18 +146,21 @@ public class MainActivity extends AppCompatActivity {
         return onOptionsItemSelected(item);
     }
 
-    private void signOutOfGoogle(){
+    private void signOutOfGoogle() {
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(Status status) {
-                        FirebaseAuth auth=FirebaseAuth.getInstance();
+                        FirebaseAuth auth = FirebaseAuth.getInstance();
                         auth.signOut();
-                        startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
                         finish();
                     }
                 });
     }
+
+
+
 
 
     public DatabaseReference getUserReference() {
@@ -140,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
         this.userReference = userReference;
     }
 
-    private void loadUserInformation(){
+    private void loadUserInformation() {
         // Load Character from Database
         final String firebaseUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         setUserReference(FirebaseDatabase.getInstance().getReference("userList").child(firebaseUid));
@@ -148,15 +179,15 @@ public class MainActivity extends AppCompatActivity {
         userReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<String> groupLists=new ArrayList<String>();
+                ArrayList<String> groupLists = new ArrayList<String>();
                 groupLists.add("39291d");
                 groupLists.add("3923423123d");
                 groupLists.add("124125511d");
                 if (dataSnapshot.exists()) {
-                    User userToAdd=new User(firebaseUid,"John Doe","02/21/1992","California",groupLists);
+                    User userToAdd = new User(firebaseUid, "John Doe", "02/21/1992", "California", groupLists);
                     userReference.setValue(userToAdd);
                 } else {
-                    User userToAdd=new User(firebaseUid,"John Doe","02/21/1992","California",groupLists);
+                    User userToAdd = new User(firebaseUid, "John Doe", "02/21/1992", "California", groupLists);
                     userReference.setValue(userToAdd);
                 }
             }
@@ -198,3 +229,4 @@ public class MainActivity extends AppCompatActivity {
 */
 
 }
+
