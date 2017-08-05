@@ -25,7 +25,7 @@ import com.example.patrick.groceryapplication.models.BarCodeItems;
 public class NetworkUtils {
     //https://newsapi.org/v1/articles?source=the-next-web&sortBy=latest&apiKey=
     //9afb25d9435f4779934d24d24cb2cc33
-    public static final String BASE_URL = "https://newsapi.org/v1/articles?source=the-next-web&sortBy=latest";
+    public static final String BASE_URL = "http://api.upcdatabase.org/json";
     public static final String TAG = "NetworkUtils";
     public static final String apikey = "0f0cb14a14b7134d22586414523c975d";
     //public String itemNumber = ;

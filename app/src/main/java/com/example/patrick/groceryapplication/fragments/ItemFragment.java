@@ -50,7 +50,7 @@ public class ItemFragment extends DialogFragment {
         camera = (EditText) view.findViewById(R.id.item_picture);
 
         item_spinner = (Spinner) view.findViewById(R.id.categories_item_spinner);
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(this.getActivity(),R.array.categories_array,android.R.layout.simple_spinner_item);
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(this.getActivity(),R.array.categories_array1,android.R.layout.simple_spinner_item);
         item_spinner.setAdapter(adapter);
         bar_code = (Button) view.findViewById(R.id.scan_button);
         bar_code.setOnClickListener(new View.OnClickListener() {
