@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="1"
-    tools:context="layout.AddPersonalList">
+    tools:context=".fragments.AddPersonalList">
 
     <EditText
         android:id="@+id/title"

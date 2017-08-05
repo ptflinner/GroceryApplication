@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         helper = new DBHelper(this);
         db = helper.getWritableDatabase();
-        insertDummy();
+
     }
 
     @Override
@@ -149,17 +149,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void insertDummy() {
-        SQLiteUtils add = new SQLiteUtils();
 
-        add.addItem(db, "apples", 2, 12, "Purchased", "Immage", "Fruits");
-        add.addList(db, "My List", "gaylist");
-        add.addList(db, "My List1", "gaylist1");
-        add.addList(db, "My List2", "gaylist2");
-        add.addList(db, "My List3", "gaylist3");
-        add.addList(db, "My List4", "gaylist4");
-        add.addMyList(db, 1, 1);
-    }
 
 
     public DatabaseReference getUserReference() {

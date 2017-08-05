@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -22,7 +23,7 @@ import com.example.patrick.groceryapplication.utils.Contract;
 import com.example.patrick.groceryapplication.utils.DBHelper;
 import com.example.patrick.groceryapplication.utils.SQLiteUtils;
 
-public class MyListFragment extends Fragment implements MyListAdapter.ItemClickListener {
+public class MyListFragment extends Fragment {
 
     private RecyclerView myListRecyclerView;
     private FloatingActionButton fab;
@@ -55,9 +56,8 @@ public class MyListFragment extends Fragment implements MyListAdapter.ItemClickL
 
             @Override
             public void onClick(View view) {
-//                FragmentManager fm = getSupportFragmentManager();
-//                AddMyListFragment frag = new AddMyListFragment();
-//                frag.show(fm, "addMyListFragment");
+
+                Log.d(TAG, "hey im faaabulous");
             }
         });
 
@@ -92,9 +92,9 @@ public class MyListFragment extends Fragment implements MyListAdapter.ItemClickL
         adapter = new MyListAdapter(cursor,new MyListAdapter.ItemClickListener() {
 
             @Override
-            public void onItemClick(Cursor cursor, int clickedItemIndex) {
+            public void onItemClick(Cursor cursor, int clickedItemIndex, long id) {
                 Log.d(TAG, "" + clickedItemIndex);
-                Fragment myListItems =MyListItemFragment.newInstance(clickedItemIndex);
+                Fragment myListItems =MyListItemFragment.newInstance(id);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.frame_layout, myListItems);
                 transaction.addToBackStack(null);
@@ -119,17 +119,4 @@ public class MyListFragment extends Fragment implements MyListAdapter.ItemClickL
 
     }
 
-
-    @Override
-    public void onItemClick(Cursor cursor, int clickedItemIndex) {
-        Log.d(TAG, "" + clickedItemIndex);
-        Fragment MyListItems = new MyListItemFragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        Log.d(TAG, "before transaction replace");
-        transaction.replace(R.id.recycler_view_my_list, MyListItems);
-        Log.d(TAG, "before transaction addToBackStacck");
-        transaction.addToBackStack(null);
-        Log.d(TAG, "before transaction commit");
-        transaction.commit();
-    }
 }
