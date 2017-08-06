@@ -39,7 +39,7 @@ public class AddPersonalList extends DialogFragment {
         add = (Button) view.findViewById(R.id.add);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.categories_array, android.R.layout.simple_spinner_item);
+                R.array.categories_array1, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categoriesSpinner.setAdapter(adapter);
 

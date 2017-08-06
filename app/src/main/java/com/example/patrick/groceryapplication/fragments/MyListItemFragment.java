@@ -56,6 +56,15 @@ public class MyListItemFragment extends Fragment{
         fab = (FloatingActionButton) view.findViewById(R.id.fab_my_list_items);
 
         //put fab click listener here
+        fab.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+
+                Log.d(TAG, "hey im faaabulous");
+
+            }
+        });
 
         Log.d(TAG, "" + getListId());
         myListItemRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_my_list_items);

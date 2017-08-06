@@ -8,6 +8,10 @@
     android:padding="10dp"
     android:weightSum="1"
     tools:context="com.example.patrick.groceryapplication.fragments.ItemFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="5">
     <!-- categories -->
     <Spinner
         android:id="@+id/categories_item_spinner"
@@ -91,5 +95,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
+    </LinearLayout>
 
 </LinearLayout>

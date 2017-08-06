@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,7 @@ public class ItemFragment extends DialogFragment {
     private Button add;
     private final String TAG = "itemFragment";
     private String toast;
-
+    public static final int REQUEST_CODE=349;
     public ItemFragment(){}
 
     public interface OnDialogCloseListener{
@@ -65,17 +66,13 @@ public class ItemFragment extends DialogFragment {
             public void onClick(View v) {
                 //passing the data from this fragment to the activity
                 //uncomment this block of code
-
-               String itemname = name.getText().toString();
+                String itemname = name.getText().toString();
                 String itemquantity = quantity.getText().toString();
                 String itemprice = price.getText().toString();
                 Bundle b = new Bundle();
                 b.putString("Name",itemname);
                 b.putString("Quantity",itemprice);
                 b.putString("Price",itemquantity);
-
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
 
 /*                nameOfYourItemFragment itemFrag = new nameOfYourItemFragment();
                 itemFrag.setArguments(b);
@@ -99,9 +96,14 @@ public class ItemFragment extends DialogFragment {
 
 
                 //-----------------
-                OnDialogCloseListener activity = (OnDialogCloseListener) getActivity();
-                activity.closeDialog(name.getText().toString(),quantity.getText().toString(),price.getText().toString(),
-                        store.getText().toString(),camera.getText().toString());
+                //                OnDialogCloseListener activity = (OnDialogCloseListener) getActivity();
+                Intent intent = new Intent();
+                intent.putExtra("args",b);
+                getTargetFragment().onActivityResult(
+                        getTargetRequestCode(), REQUEST_CODE, intent);
+
+//                getTargetFragment().onActivityResult(getTargetRequestCode(),1,null);
+//                activity.closeDialog(title.getText().toString(), categoriesSpinner.getSelectedItem().toString());
                 ItemFragment.this.dismiss();
             }
         });

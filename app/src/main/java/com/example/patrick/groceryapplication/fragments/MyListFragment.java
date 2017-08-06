@@ -1,6 +1,7 @@
 package com.example.patrick.groceryapplication.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 
 import com.example.patrick.groceryapplication.MyListAdapter;
 import com.example.patrick.groceryapplication.R;
+import com.example.patrick.groceryapplication.models.Item;
 import com.example.patrick.groceryapplication.utils.Contract;
 import com.example.patrick.groceryapplication.utils.DBHelper;
 import com.example.patrick.groceryapplication.utils.SQLiteUtils;
@@ -32,6 +34,7 @@ public class MyListFragment extends Fragment {
     private SQLiteDatabase db;
     private MyListAdapter adapter;
     private final String TAG = "myListFRAGMENT";
+    public final static int REQUEST_CODE=349;
 
     public MyListFragment(){}
 
@@ -58,6 +61,10 @@ public class MyListFragment extends Fragment {
             public void onClick(View view) {
 
                 Log.d(TAG, "hey im faaabulous");
+                FragmentManager fm = getFragmentManager();
+                ItemFragment frag = new ItemFragment();
+                frag.setTargetFragment(MyListFragment.this,REQUEST_CODE);
+                frag.show(fm, "ItemFragment");
             }
         });
 
@@ -119,4 +126,15 @@ public class MyListFragment extends Fragment {
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode== ItemFragment.REQUEST_CODE){
+            Bundle extras=data.getBundleExtra("args");
+
+            Log.d(TAG,"BUNDLE: "+extras.getString("Name"));
+            Log.d(TAG,"BUNDLE: "+extras.getString("Quantity"));
+            Log.d(TAG,"BUNDLE: "+extras.getString("Price"));
+
+        }
+    }
 }
