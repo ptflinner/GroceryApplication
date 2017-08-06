@@ -16,7 +16,6 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".LoginActivity">
             <intent-filter>
@@ -29,8 +28,9 @@
             android:name=".jobs.FirebaseJob"
             android:enabled="true"
             android:exported="false">
-            <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+            <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
         </service>
+
     </application>
 
 </manifest>

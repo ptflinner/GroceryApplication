@@ -3,6 +3,7 @@ package com.example.patrick.groceryapplication.adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +23,12 @@ public class MyListItemAdapter extends RecyclerView.Adapter<MyListItemAdapter.Gr
     public static final String TAG = "MyListItemAdapter";
     private Cursor cursor;
     private Context context;
+    private ItemClickListener listener;
 
 
-    public MyListItemAdapter(Cursor cursor){
+    public MyListItemAdapter(Cursor cursor, ItemClickListener listener){
         this.cursor = cursor;
+        this.listener = listener;
     }
 
 
@@ -50,7 +53,11 @@ public class MyListItemAdapter extends RecyclerView.Adapter<MyListItemAdapter.Gr
         return cursor.getCount();
     }
 
-    class GroceryItemHolder extends RecyclerView.ViewHolder {
+    public interface ItemClickListener{
+        void onItemClick(Cursor cursor, int clickedItemIndex, long id);
+    }
+
+    class GroceryItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView image;
         TextView name;
         TextView quantity;
@@ -64,18 +71,27 @@ public class MyListItemAdapter extends RecyclerView.Adapter<MyListItemAdapter.Gr
             name = (TextView) view.findViewById(R.id.grocery_name);
             quantity = (TextView) view.findViewById(R.id.grocery_quantity);
             checkBox = (CheckBox) view.findViewById(R.id.checkBox);
+            view.setOnClickListener(this);
 
         }
 
         public void bind(GroceryItemHolder holder, int pos){
             cursor.moveToPosition(pos);
+
             id = cursor.getLong(cursor.getColumnIndex(Contract.TABLE_ITEM.COLUMN_NAME_ID));
             name.setText(cursor.getString(cursor.getColumnIndex(Contract.TABLE_ITEM.COLUMN_NAME_ITEM_NAME)));
-            quantity.setText(cursor.getInt(cursor.getColumnIndex(Contract.TABLE_ITEM.COLUMN_NAME_QUANTITY)));
+            quantity.setText(cursor.getInt(cursor.getColumnIndex(Contract.TABLE_ITEM.COLUMN_NAME_QUANTITY))+"");
             //image code is supposed to be here
+            holder.itemView.setTag(id);
 
         }
 
 
+        @Override
+        public void onClick(View v) {
+            int pos = getAdapterPosition();
+            listener.onItemClick(cursor, pos, id);
+            Log.d(TAG, "" + pos);
+        }
     }
 }

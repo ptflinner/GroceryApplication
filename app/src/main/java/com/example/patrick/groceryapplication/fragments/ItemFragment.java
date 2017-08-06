@@ -2,6 +2,9 @@ package com.example.patrick.groceryapplication.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +34,7 @@ public class ItemFragment extends DialogFragment {
     private Button add;
     private final String TAG = "itemFragment";
     private String toast;
-
+    public static final int REQUEST_CODE=349;
     public ItemFragment(){}
 
     public interface OnDialogCloseListener{
@@ -48,7 +51,7 @@ public class ItemFragment extends DialogFragment {
         camera = (EditText) view.findViewById(R.id.item_picture);
 
         item_spinner = (Spinner) view.findViewById(R.id.categories_item_spinner);
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(this.getActivity(),R.array.categories_array,android.R.layout.simple_spinner_item);
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(this.getActivity(),R.array.categories_array1,android.R.layout.simple_spinner_item);
         item_spinner.setAdapter(adapter);
         bar_code = (Button) view.findViewById(R.id.scan_button);
         bar_code.setOnClickListener(new View.OnClickListener() {
@@ -61,9 +64,46 @@ public class ItemFragment extends DialogFragment {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OnDialogCloseListener activity = (OnDialogCloseListener) getActivity();
-                activity.closeDialog(name.getText().toString(),quantity.getText().toString(),price.getText().toString(),
-                        store.getText().toString(),camera.getText().toString());
+                //passing the data from this fragment to the activity
+                //uncomment this block of code
+                String itemname = name.getText().toString();
+                String itemquantity = quantity.getText().toString();
+                String itemprice = price.getText().toString();
+                Bundle b = new Bundle();
+                b.putString("Name",itemname);
+                b.putString("Quantity",itemprice);
+                b.putString("Price",itemquantity);
+
+/*                nameOfYourItemFragment itemFrag = new nameOfYourItemFragment();
+                itemFrag.setArguments(b);
+                ft.replace(R.id.frame_container,itemFragment);
+                ft.commit();*/
+
+
+                //copy pasta this code into the your item fragment
+/*                Bundle b = getArguments();
+                String iname = b.getString("Name");
+                String iquantity = b.getString("Quantity");
+                String iprice = b.getString("Price");
+
+                TextView yourNameView = (TextView) view.findViewById(R.id.itemName);
+                TextView yourQuantityView = (TextView) view.findViewById(R.id.itemQuantity;
+                TextView yourPriceView = (TextView) view.findViewById(R.id.item_price);
+
+                yourNameView.setText(iname);
+                yourQuantityView.setText(iquantity);
+                yourPriceView.setText(iprice);*/
+
+
+                //-----------------
+                //                OnDialogCloseListener activity = (OnDialogCloseListener) getActivity();
+                Intent intent = new Intent();
+                intent.putExtra("args",b);
+                getTargetFragment().onActivityResult(
+                        getTargetRequestCode(), REQUEST_CODE, intent);
+
+//                getTargetFragment().onActivityResult(getTargetRequestCode(),1,null);
+//                activity.closeDialog(title.getText().toString(), categoriesSpinner.getSelectedItem().toString());
                 ItemFragment.this.dismiss();
             }
         });

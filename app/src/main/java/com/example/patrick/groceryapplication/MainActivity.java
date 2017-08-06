@@ -1,5 +1,4 @@
 package com.example.patrick.groceryapplication;
-
 import com.example.patrick.groceryapplication.models.*;
 import android.content.Intent;
 
@@ -8,7 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -16,6 +17,8 @@ import android.view.MenuItem;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+
 import com.example.patrick.groceryapplication.models.User;
 import com.example.patrick.groceryapplication.utils.DBHelper;
 import com.example.patrick.groceryapplication.utils.SQLiteUtils;
@@ -38,17 +41,13 @@ import java.util.HashMap;
 
 
 public class MainActivity extends AppCompatActivity {
-
     private GoogleApiClient mGoogleApiClient;
     private BottomNavigationView mBottomNavView;
-    private static final String TAG="MainActivity";
+    private static final String TAG = "MainActivity";
     private SQLiteDatabase db;
     private DBHelper helper;
     private Cursor cursor;
     private DatabaseReference userReference;
-    private User user;
-    private ArrayList<String> userGroupLists;
-    private ArrayList<GroupList> userGroups;
 
     @Override
     protected void onStart() {
@@ -60,11 +59,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if(db != null){
+        if (db != null) {
 
             db.close();
         }
-        if(cursor != null){
+        if (cursor != null) {
             cursor.close();
         }
     }
@@ -82,64 +81,50 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         mGoogleApiClient.connect();
 
-        mBottomNavView=(BottomNavigationView) findViewById(R.id.bottom_navigation);
+        mBottomNavView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         mBottomNavView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener(){
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
 
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment frag=null;
-                switch(item.getItemId()){
-                    case R.id.my_list:
-                        frag=MyListFragment.newInstance();
-                        break;
-                    case R.id.group_list:
-                        frag=GroupListFragment.newInstance();
-                        break;
-                    case R.id.featured_list:
-                        frag=FeaturedListFragment.newInstance();
-                        break;
-                    default:
-                        Log.e(TAG,"Navigation Error Occurred");
-                        Log.e(TAG,"Navigation ID:" +item.getItemId());
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        Fragment frag = null;
+                        switch (item.getItemId()) {
+                            case R.id.my_list:
+                                frag = MyListFragment.newInstance();
+                                break;
+                            case R.id.group_list:
+                                frag = GroupListFragment.newInstance();
+                                break;
+                            case R.id.featured_list:
+                                frag = FeaturedListFragment.newInstance();
+                                break;
+                            default:
+                                Log.e(TAG, "Navigation Error Occurred");
+                                Log.e(TAG, "Navigation ID:" + item.getItemId());
+                        }
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.frame_layout, frag);
+                        transaction.commit();
+                        return true;
                     }
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.frame_layout, frag);
-                transaction.commit();
-                return true;
-            }
-        });
+                });
 
         loadUserInformation();
-//        firebaseGroupAdd(FirebaseDatabase.getInstance());
-        //Manually displaying the first fragment - one time only
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout, MyListFragment.newInstance());
         transaction.commit();
     }
 
-    public void firebaseGroupAdd(FirebaseDatabase fdb){
-        DatabaseReference groupRef = fdb.getReference("groupList");
-//        HashMap<String,Item> itemsArr = new HashMap<>();
-//
-//        itemsArr.put("0",new Item("Hamburger Patty","Meat","8","It is hamburger meat"));
-//        itemsArr.put("1",new Item("Hamburger Buns","Wheat","8","It is a hamburger bun"));
-//        itemsArr.put("2",new Item("Slammers Gift Card","Monetary","1","It is a gift card"));
-        GroupList groupList = new GroupList("Barbeque","Fun night cooking meat",null);
-
-        groupRef.push().setValue(groupList);
-
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.sign_out,menu);
+        getMenuInflater().inflate(R.menu.sign_out, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int itemThatWasClicked=item.getItemId();
-        if(itemThatWasClicked==R.id.sign_out){
+        int itemThatWasClicked = item.getItemId();
+        if (itemThatWasClicked == R.id.sign_out) {
             signOutOfGoogle();
             return true;
         }
@@ -147,20 +132,18 @@ public class MainActivity extends AppCompatActivity {
         return onOptionsItemSelected(item);
     }
 
-    private void signOutOfGoogle(){
+    private void signOutOfGoogle() {
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(Status status) {
-                        FirebaseAuth auth=FirebaseAuth.getInstance();
+                        FirebaseAuth auth = FirebaseAuth.getInstance();
                         auth.signOut();
-                        startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
                         finish();
                     }
                 });
     }
-
-
 
     private void loadUserInformation() {
         // Load Character from Database
@@ -169,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
         userReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.exists()) {
+                if (!(dataSnapshot.exists())) {
                     User userToAdd = new User(firebaseUid, "John Doe", "02/21/1992", "California", null);
                     userReference.setValue(userToAdd);
                 }
@@ -180,4 +163,35 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    /*
+//stuff in Simon's mainActivity
+    private RecyclerView rv;
+    private FloatingActionButton button;
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.frame_container, new barCodeFragment());
+        ft.commit();
+
+        button = (FloatingActionButton) findViewById(R.id.addToDo);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getSupportFragmentManager();
+                barCodeFragment frag = new barCodeFragment();
+                frag.show(fm, "barcodefragment");
+            }
+        });
+        rv = (RecyclerView) findViewById(R.id.recyclerView);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+    }
+    @Override
+    public void closeDialog(String name, String quantity, String price, String store, String picture) {
+
+    }
+*/
 }
+

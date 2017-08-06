@@ -3,7 +3,9 @@ package com.example.patrick.groceryapplication.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
+
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +27,6 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ItemHolder
     private ItemClickListener listener;
 
 
-
     public MyListAdapter(Cursor cursor, ItemClickListener listener){
         this.cursor = cursor;
         this.listener = listener;
@@ -33,7 +34,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ItemHolder
 
     @Override
     public ItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
+        context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View view = inflater.inflate(R.layout.my_lists, parent, false);
@@ -54,13 +55,14 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ItemHolder
     }
 
     public interface ItemClickListener{
-        void onItemClick(Cursor cursor, int clickedItemIndex);
+        void onItemClick(Cursor cursor, int clickedItemIndex, long id);
     }
 
     class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView title;
         TextView category;
         long id;
+
         ItemHolder(View view){
             super(view);
             title = (TextView) view.findViewById(R.id.my_list_title);
@@ -80,7 +82,8 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ItemHolder
         @Override
         public void onClick(View v) {
             int pos = getAdapterPosition();
-            listener.onItemClick(cursor, pos);
+            listener.onItemClick(cursor, pos, id);
+            Log.d(TAG, "" + pos);
 
         }
     }

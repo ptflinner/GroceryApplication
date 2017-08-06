@@ -36,7 +36,7 @@
 
     <!--item fragment -->
     <string name="scan">scan </string>
-    <string-array name="categories_array">
+    <string-array name="categories_array1">
         <item>All</item>
         <item>Dairy</item>
         <item>Meat</item>
