@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GroceryApplication</string>
+    <string name="app_name">Shopping Lists</string>
     <string name="title_activity_login">Sign in</string>
     <!-- Strings related to login -->
     <string name="signed_out">Signed Out</string>

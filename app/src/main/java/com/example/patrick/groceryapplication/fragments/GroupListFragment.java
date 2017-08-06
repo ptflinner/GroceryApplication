@@ -64,7 +64,7 @@ public class GroupListFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 FragmentManager fm = getFragmentManager();
-                AddPersonalList frag = new AddPersonalList();
+                AddPersonalListFragment frag = new AddPersonalListFragment();
                 frag.setTargetFragment(GroupListFragment.this,REQUEST_CODE);
                 frag.show(fm, "addPersonalList");
             }
@@ -143,7 +143,7 @@ public class GroupListFragment extends Fragment{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==AddPersonalList.REQUEST_CODE){
+        if(requestCode==AddPersonalListFragment.REQUEST_CODE){
             Bundle extras=data.getBundleExtra("args");
 
             Log.d(TAG,"BUNDLE: "+extras.getString("title"));

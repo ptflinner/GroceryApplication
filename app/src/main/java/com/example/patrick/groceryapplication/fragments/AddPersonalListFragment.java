@@ -14,13 +14,13 @@ import android.widget.Spinner;
 
 import com.example.patrick.groceryapplication.R;
 
-public class AddPersonalList extends DialogFragment {
+public class AddPersonalListFragment extends DialogFragment {
     private EditText title;
     private Spinner categoriesSpinner;
     private Button add;
-    private final String TAG = "AddPersonalList";
+    private final String TAG = "AddPersonalListFragment";
     public  static final int REQUEST_CODE=245;
-    public AddPersonalList(){}
+    public AddPersonalListFragment(){}
 
     public interface OnDialogCloseListener{
         void closeDialog(String title, String categoriesSpinner);
@@ -53,7 +53,7 @@ public class AddPersonalList extends DialogFragment {
                 getTargetFragment().onActivityResult(
                         getTargetRequestCode(), REQUEST_CODE, intent);
 
-                AddPersonalList.this.dismiss();
+                AddPersonalListFragment.this.dismiss();
             }
         });
         return view;
