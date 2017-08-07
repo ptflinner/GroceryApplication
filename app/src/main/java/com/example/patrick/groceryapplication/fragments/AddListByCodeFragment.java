@@ -11,9 +11,15 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.patrick.groceryapplication.R;
+import com.example.patrick.groceryapplication.models.GroupList;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 
 public class AddListByCodeFragment extends DialogFragment {
@@ -65,17 +71,38 @@ public class AddListByCodeFragment extends DialogFragment {
 //                getTargetFragment().onActivityResult(
 //                        getTargetRequestCode(), REQUEST_CODE, intent);
 
-                String key=listID.getText().toString();
-                Log.d(TAG,key);
-                String fuid=FirebaseAuth.getInstance().getCurrentUser().getUid();
-                Log.d(TAG,fuid);
-                DatabaseReference userRef=(FirebaseDatabase.getInstance()).getReference("userList").child(fuid);
-                userRef.child("groupLists").push().setValue(key);
+                FirebaseDatabase fdb=FirebaseDatabase.getInstance();
+                firebaseGroupAdd(fdb);
 
                 AddListByCodeFragment.this.dismiss();
             }
         });
         // Inflate the layout for this fragment
         return view;
+    }
+    public void firebaseGroupAdd(FirebaseDatabase fdb){
+        final String pushKey=listID.getText().toString();
+        final DatabaseReference groupRef = fdb.getReference("groupList").child(pushKey);
+        final String firebaseUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final DatabaseReference userReference=(FirebaseDatabase.getInstance().getReference("userList").child(firebaseUid));
+        final DatabaseReference userNameReference=(FirebaseDatabase.getInstance().getReference("userList").child(firebaseUid).child("name"));
+
+        userNameReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String name=dataSnapshot.getValue(String.class);
+//                HashMap<String, String> users=new HashMap<>();
+//                users.put(firebaseUid,name);
+
+                userReference.child("groupLists").push().setValue(pushKey);
+                groupRef.child("users").child(firebaseUid).setValue(name);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

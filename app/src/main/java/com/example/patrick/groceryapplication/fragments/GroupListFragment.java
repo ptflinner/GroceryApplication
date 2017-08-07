@@ -106,7 +106,7 @@ public class GroupListFragment extends Fragment{
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()){
                            GroupList gModel=(dataSnapshot.getValue(GroupList.class));
-                            viewHolder.bind(gModel,position);
+                           viewHolder.bind(gModel,position);
                         }
                     }
 
