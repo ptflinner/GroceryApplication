@@ -14,14 +14,16 @@ public class GroupList {
     private String name = "";
     private String category = "";
     private HashMap<String,Item> items;
+    private HashMap<String,String> users;
 
     public GroupList() {
     }
 
-    public GroupList(String name, String category, HashMap<String,Item> items) {
+    public GroupList(String name, String category) {
         this.name = name;
         this.category = category;
-        this.items = items;
+        this.items = new HashMap<>();
+        this.users =new HashMap<>();
     }
 
     public String getName() {
@@ -46,5 +48,13 @@ public class GroupList {
 
     public void setItems(HashMap<String,Item> items) {
         this.items = items;
+    }
+
+    public HashMap<String, String> getUsers() {
+        return users;
+    }
+
+    public void setUsers(HashMap<String, String> users) {
+        this.users = users;
     }
 }

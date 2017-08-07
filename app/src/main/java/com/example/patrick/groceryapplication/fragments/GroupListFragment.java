@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GroupListFragment extends Fragment{
 
@@ -64,7 +65,7 @@ public class GroupListFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 FragmentManager fm = getFragmentManager();
-                AddPersonalListFragment frag = new AddPersonalListFragment();
+                AddGroupListFragment frag = new AddGroupListFragment();
                 frag.setTargetFragment(GroupListFragment.this,REQUEST_CODE);
                 frag.show(fm, "addPersonalList");
             }
@@ -131,27 +132,52 @@ public class GroupListFragment extends Fragment{
         groupListRecyclerView.setAdapter(mStringAdapter);
     }
 
-    public void firebaseGroupAdd(FirebaseDatabase fdb,GroupList groupList){
-        DatabaseReference groupRef = fdb.getReference("groupList");
-        String pushKey=groupRef.push().getKey();
-        groupRef.child(pushKey).setValue(groupList);
+    public void firebaseGroupAdd(FirebaseDatabase fdb,final GroupList groupList){
+        final DatabaseReference groupRef = fdb.getReference("groupList");
+        final String pushKey=groupRef.push().getKey();
 
         final String firebaseUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference userReference=(FirebaseDatabase.getInstance().getReference("userList").child(firebaseUid));
-        userReference.child("groupLists").push().setValue(pushKey);
+        final DatabaseReference userReference=(FirebaseDatabase.getInstance().getReference("userList").child(firebaseUid));
+        DatabaseReference userNameReference=(FirebaseDatabase.getInstance().getReference("userList").child(firebaseUid).child("name"));
+
+        userNameReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String name=dataSnapshot.getValue(String.class);
+                HashMap<String, String> users=new HashMap<>();
+                users.put(firebaseUid,name);
+                groupList.setUsers(users);
+
+                userReference.child("groupLists").push().setValue(pushKey);
+                groupRef.child(pushKey).setValue(groupList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==AddPersonalListFragment.REQUEST_CODE){
+        if(requestCode== AddGroupListFragment.REQUEST_CODE){
             Bundle extras=data.getBundleExtra("args");
 
             Log.d(TAG,"BUNDLE: "+extras.getString("title"));
             Log.d(TAG,"BUNDLE: "+extras.getString("cat"));
-            GroupList groupList = new GroupList(extras.getString("title"),extras.getString("cat"), null);
+            GroupList groupList = new GroupList(extras.getString("title"),extras.getString("cat"));
             firebaseGroupAdd(FirebaseDatabase.getInstance(), groupList);
             Log.d(TAG, "BUTTON CLICKED");
         }
+//        if(requestCode==AddListByCodeFragment.REQUEST_CODE){
+//            Bundle extras=data.getBundleExtra("args");
+//
+//            DatabaseReference groupRef=(FirebaseDatabase.getInstance()).getReference("groupList").child(extras.getString("key"));
+//
+//
+//        }
     }
     public static class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         View mView;

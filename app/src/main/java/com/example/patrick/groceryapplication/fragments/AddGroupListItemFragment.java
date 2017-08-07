@@ -2,9 +2,6 @@ package com.example.patrick.groceryapplication.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +11,24 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.patrick.groceryapplication.MainActivity;
 import com.example.patrick.groceryapplication.R;
-import com.example.patrick.groceryapplication.models.Item;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Nomis on 7/25/2017.
  */
 
-public class ItemFragment extends DialogFragment {
+public class AddGroupListItemFragment extends DialogFragment {
     private EditText name;
     private EditText quantity;
     private EditText price;
@@ -32,18 +37,29 @@ public class ItemFragment extends DialogFragment {
     private EditText store;
     private EditText camera;
     private Button add;
+    private Spinner userSpinner;
+    private HashMap<String,String> usersWithPermission;
     private final String TAG = "itemFragment";
     private String toast;
-    public static final int REQUEST_CODE=349;
-    public ItemFragment(){}
+    public static final int REQUEST_CODE=123;
 
-    public interface OnDialogCloseListener{
+    public AddGroupListItemFragment(){}
 
-        void closeDialog(String toString, String s, String name, String quantity, String price);
+    public static AddGroupListItemFragment newInstance(String groupKey) {
+
+        Bundle args = new Bundle();
+        args.putString("key",groupKey);
+        AddGroupListItemFragment fragment = new AddGroupListItemFragment();
+        fragment.setArguments(args);
+        return fragment;
+
     }
+
+    public String getGroupKey(){return getArguments().getString("key");}
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
-        View view = inflater.inflate(R.layout.adding_item_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_adding_group_list_item, container, false);
         name = (EditText) view.findViewById(R.id.itemName);
         quantity = (EditText) view.findViewById(R.id.itemQuantity);
         price = (EditText) view.findViewById(R.id.item_price);
@@ -51,8 +67,33 @@ public class ItemFragment extends DialogFragment {
         camera = (EditText) view.findViewById(R.id.item_picture);
 
         item_spinner = (Spinner) view.findViewById(R.id.categories_item_spinner);
+        userSpinner=(Spinner) view.findViewById(R.id.user_spinner);
+
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this.getActivity(),R.array.categories_array1,android.R.layout.simple_spinner_item);
         item_spinner.setAdapter(adapter);
+
+        DatabaseReference userRef=(FirebaseDatabase.getInstance().getReference("groupList").child(getGroupKey()).child("users"));
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                ArrayList<String> userPermission=new ArrayList<>();
+                for(DataSnapshot snap:dataSnapshot.getChildren()){
+                    String user=snap.getValue(String.class);
+                    userPermission.add(user);
+                }
+                ArrayAdapter<String> userAdapter=new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,userPermission);
+                userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                userSpinner.setAdapter(userAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
         bar_code = (Button) view.findViewById(R.id.scan_button);
         bar_code.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,42 +110,22 @@ public class ItemFragment extends DialogFragment {
                 String itemname = name.getText().toString();
                 String itemquantity = quantity.getText().toString();
                 String itemprice = price.getText().toString();
+                String itemProvider=userSpinner.getSelectedItem().toString();
+                String itemCategory=item_spinner.getSelectedItem().toString();
+
                 Bundle b = new Bundle();
                 b.putString("Name",itemname);
                 b.putString("Quantity",itemprice);
                 b.putString("Price",itemquantity);
+                b.putString("provider",itemProvider);
+                b.putString("category",itemCategory);
 
-/*                nameOfYourItemFragment itemFrag = new nameOfYourItemFragment();
-                itemFrag.setArguments(b);
-                ft.replace(R.id.frame_container,itemFragment);
-                ft.commit();*/
-
-
-                //copy pasta this code into the your item fragment
-/*                Bundle b = getArguments();
-                String iname = b.getString("Name");
-                String iquantity = b.getString("Quantity");
-                String iprice = b.getString("Price");
-
-                TextView yourNameView = (TextView) view.findViewById(R.id.itemName);
-                TextView yourQuantityView = (TextView) view.findViewById(R.id.itemQuantity;
-                TextView yourPriceView = (TextView) view.findViewById(R.id.item_price);
-
-                yourNameView.setText(iname);
-                yourQuantityView.setText(iquantity);
-                yourPriceView.setText(iprice);*/
-
-
-                //-----------------
-                //                OnDialogCloseListener activity = (OnDialogCloseListener) getActivity();
                 Intent intent = new Intent();
                 intent.putExtra("args",b);
                 getTargetFragment().onActivityResult(
                         getTargetRequestCode(), REQUEST_CODE, intent);
 
-//                getTargetFragment().onActivityResult(getTargetRequestCode(),1,null);
-//                activity.closeDialog(title.getText().toString(), categoriesSpinner.getSelectedItem().toString());
-                ItemFragment.this.dismiss();
+                AddGroupListItemFragment.this.dismiss();
             }
         });
 

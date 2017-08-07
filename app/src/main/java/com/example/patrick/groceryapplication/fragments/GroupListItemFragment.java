@@ -1,9 +1,10 @@
 package com.example.patrick.groceryapplication.fragments;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,13 +15,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.patrick.groceryapplication.R;
-import com.example.patrick.groceryapplication.models.GroupList;
+import com.example.patrick.groceryapplication.models.GroupItem;
 import com.example.patrick.groceryapplication.models.Item;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
 
 public class GroupListItemFragment extends Fragment {
 
@@ -29,6 +28,7 @@ public class GroupListItemFragment extends Fragment {
     private RecyclerView itemListRecyclerView;
     private FirebaseRecyclerAdapter<Item,GroupListItemFragment.ItemHolder> mItemListAdapter;
     private DatabaseReference itemRef;
+    private static final int REQUEST_CODE=123;
 
     public GroupListItemFragment() {
         // Required empty public constructor
@@ -66,11 +66,10 @@ public class GroupListItemFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-//            FragmentManager fm = getSupportFragmentManager();
-//            AddMyListFragment frag = new AddMyListFragment();
-//            frag.show(fm, "addMyListFragment");
-            firebaseGroupAdd(FirebaseDatabase.getInstance());
-            Log.d(TAG,"RABBLE");
+                FragmentManager fm = getFragmentManager();
+                AddGroupListItemFragment frag = new AddGroupListItemFragment().newInstance(getGroupKey());
+                frag.setTargetFragment(GroupListItemFragment.this,REQUEST_CODE);
+                frag.show(fm, "addGroupListItemFragment");
             }
         });
 
@@ -109,15 +108,20 @@ public class GroupListItemFragment extends Fragment {
         itemListRecyclerView.setAdapter(mItemListAdapter);
     }
 
-    public void firebaseGroupAdd(FirebaseDatabase fdb){
+    public void firebaseGroupAdd(FirebaseDatabase fdb,GroupItem item){
         DatabaseReference itemRef = fdb.getReference("groupList").child(getGroupKey()).child("items");
-        Item item=new Item("Computer","Tech","1","Beep Boop");
-
-//        itemsArr.add(new Item("Hamburger Patty","Meat","8","It is hamburger meat"));
-//        itemsArr.add(new Item("Hamburger Buns","Wheat","8","It is a hamburger bun"));
-//        itemsArr.add(new Item("Slammers Gift Card","Monetary","1","It is a gift card"));
-//        GroupList groupList = new GroupList("Best Buy","Need cheap tech",itemsArr);
         itemRef.push().setValue(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode== AddGroupListItemFragment.REQUEST_CODE){
+            Bundle extras=data.getBundleExtra("args");
+;
+            GroupItem item= new GroupItem(extras.getString("Name"),extras.getString("category"),extras.getString("Quantity"),extras.getString("Price"),extras.getString("provider"));
+            firebaseGroupAdd(FirebaseDatabase.getInstance(), item);
+            Log.d(TAG, "BUTTONCLICKED");
+        }
     }
 
     public static class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
