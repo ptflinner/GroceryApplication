@@ -1,5 +1,6 @@
 package com.example.patrick.groceryapplication.utils;
 
+import com.example.patrick.groceryapplication.models.BarCodeItems;
 import com.example.patrick.groceryapplication.models.Item;
 
 import org.json.JSONArray;
@@ -50,5 +51,24 @@ public class JsonUtils {
             parsedShoppingList.add(new Item(itemName));
         }
         return parsedShoppingList;
+    }
+
+    //parse the data and put into a object
+    public static ArrayList<BarCodeItems> parseJson(String json) throws JSONException{
+        ArrayList<BarCodeItems> parsedData = new ArrayList<>();
+        JSONObject main = new JSONObject(json);
+        JSONArray items = main.getJSONArray("items");
+
+        for(int i = 0; i < items.length(); i++){
+            JSONObject item = items.getJSONObject(i);
+            String number = item.getString("number");
+            String itemname = item.getString("itemname");
+            String description = item.getString("description");
+            String avg_price = item.getString("url");
+
+            //NewsItem news = new NewsItem(author, title, description, url,urlToImage, publishedAt);
+            parsedData.add(new BarCodeItems(number,itemname,description,avg_price));
+        }
+        return parsedData;
     }
 }

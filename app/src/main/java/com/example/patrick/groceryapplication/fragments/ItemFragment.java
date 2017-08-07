@@ -4,6 +4,10 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +19,22 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.patrick.groceryapplication.R;
-import com.example.patrick.groceryapplication.models.Item;
+import com.example.patrick.groceryapplication.models.BarCodeItems;
+import com.example.patrick.groceryapplication.utils.JsonUtils;
+import com.example.patrick.groceryapplication.utils.NetworkUtils;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * Created by Nomis on 7/25/2017.
  */
 
-public class ItemFragment extends DialogFragment {
+public class ItemFragment extends DialogFragment implements LoaderManager.LoaderCallbacks<Void> {
     private EditText name;
     private EditText quantity;
     private EditText price;
@@ -34,7 +45,10 @@ public class ItemFragment extends DialogFragment {
     private Button add;
     private final String TAG = "itemFragment";
     private String toast;
+    private String content;
     public static final int REQUEST_CODE=349;
+    private static final int BAR_LOADER=1;
+    public final static String SEARCH_QUERY_EXTRA = "query";
     public ItemFragment(){}
 
     public interface OnDialogCloseListener{
@@ -44,6 +58,7 @@ public class ItemFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.adding_item_fragment, container, false);
+
         name = (EditText) view.findViewById(R.id.itemName);
         quantity = (EditText) view.findViewById(R.id.itemQuantity);
         price = (EditText) view.findViewById(R.id.item_price);
@@ -74,29 +89,6 @@ public class ItemFragment extends DialogFragment {
                 b.putString("Quantity",itemprice);
                 b.putString("Price",itemquantity);
 
-/*                nameOfYourItemFragment itemFrag = new nameOfYourItemFragment();
-                itemFrag.setArguments(b);
-                ft.replace(R.id.frame_container,itemFragment);
-                ft.commit();*/
-
-
-                //copy pasta this code into the your item fragment
-/*                Bundle b = getArguments();
-                String iname = b.getString("Name");
-                String iquantity = b.getString("Quantity");
-                String iprice = b.getString("Price");
-
-                TextView yourNameView = (TextView) view.findViewById(R.id.itemName);
-                TextView yourQuantityView = (TextView) view.findViewById(R.id.itemQuantity;
-                TextView yourPriceView = (TextView) view.findViewById(R.id.item_price);
-
-                yourNameView.setText(iname);
-                yourQuantityView.setText(iquantity);
-                yourPriceView.setText(iprice);*/
-
-
-                //-----------------
-                //                OnDialogCloseListener activity = (OnDialogCloseListener) getActivity();
                 Intent intent = new Intent();
                 intent.putExtra("args",b);
                 getTargetFragment().onActivityResult(
@@ -133,11 +125,92 @@ public class ItemFragment extends DialogFragment {
             if(result.getContents() == null) {
                 toast = "Cancelled from fragment";
             } else {
+                content=result.getContents();
+                load();
                 toast = "Scanned from fragment: " + result.getContents();
             }
 
             // At this point we may or may not have a reference to the activity
             displayToast();
         }
+    }
+//    //@Override
+//    public AsyncTaskLoader<ArrayList<BarCodeItems>> onCreateLoader(int id, final Bundle args) {
+//        return new AsyncTaskLoader<ArrayList<BarCodeItems>>(this) {
+//
+//            @Override
+//            protected void onStartLoading() {
+//                super.onStartLoading();
+//                if(args == null) return;
+//            }
+//
+//            @Override
+//            public ArrayList<BarCodeItems> loadInBackground() {
+//                String query = args.getString(SEARCH_QUERY_EXTRA);
+//
+//                if(query == null || TextUtils.isEmpty(query)) return null;
+//
+//                ArrayList<BarCodeItems> result = null;
+//                URL url = NetworkUtils.makeUrl();
+//                //Log.d(TAG, "url: " + url.toString());
+//                try {
+//                    String json = NetworkUtils.getResponseFromHttpUrl(url);
+//                    result = NetworkUtils.parseJson(json);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                    return null;
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    return null;
+//                }
+//                return result;
+//
+//            }
+//        };
+//    }
+
+    @Override
+    public Loader<Void> onCreateLoader(int d, Bundle args){
+        return new AsyncTaskLoader<Void>(this.getActivity()) {
+
+            //Loader starts and shows that the screen is refreshing by enabling progressbar
+            @Override
+            protected void onStartLoading() {
+                super.onStartLoading();
+            }
+
+            //Runs internet refresh off the UI thread
+            @Override
+            public Void loadInBackground() {
+                ArrayList<BarCodeItems> results=new ArrayList<>();
+                URL url= NetworkUtils.makeUrl();
+                try{
+                    String jsonBarcode=NetworkUtils.getResponseFromHttpUrl(url);
+                    results= JsonUtils.parseJson(jsonBarcode);
+                }
+                catch (IOException e){
+                    Log.d(TAG,"IO EXCEPTOIN OCCURRED");
+                    e.printStackTrace();
+                }
+                catch (JSONException e){
+                    Log.d(TAG,"JSON EXCEPTION OCCURRED");
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+    }
+    @Override
+    public void onLoadFinished(Loader<Void> loader, Void data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Void> loader) {
+
+    }
+    private void load(){
+        LoaderManager lm = getLoaderManager();
+        lm.restartLoader(BAR_LOADER,null,this).forceLoad();
     }
 }
