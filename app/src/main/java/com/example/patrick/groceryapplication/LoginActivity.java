@@ -100,7 +100,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     //Signs in to the firebase server with google credentials
     //Warning logs are displayed if the login fails
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct){
+    private void firebaseAuthWithGoogle(final GoogleSignInAccount acct){
         Log.d(TAG,"firebaseAuthWithGoogle: "+acct.getId());
         AuthCredential credential=GoogleAuthProvider.getCredential(acct.getIdToken(),null);
         firebaseAuth.signInWithCredential(credential)
@@ -114,7 +114,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Toast.makeText(LoginActivity.this,"Authentication Failed",Toast.LENGTH_SHORT).show();
                         }
                         else{
-                            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                            Intent intent=new Intent(LoginActivity.this,MainActivity.class);
+                            Bundle bundle=new Bundle();
+                            bundle.putString("firstName",acct.getGivenName());
+                            bundle.putString("lastName",acct.getFamilyName());
+                            bundle.putString("displayName",acct.getDisplayName());
+                            intent.putExtra("signInArgs",bundle);
+                            startActivity(intent);
                             finish();
                         }
                     }
@@ -175,9 +181,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     //If yes then it begins the main activity
     //Otherwise it completes the function and login page is loaded fully
     private void silentSignInCompleted(GoogleSignInResult signInResult){
-        GoogleSignInAccount signInAccount=signInResult.getSignInAccount();
-        if(signInAccount!=null){
-            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+        GoogleSignInAccount acct=signInResult.getSignInAccount();
+        if(acct!=null){
+            Intent intent=new Intent(LoginActivity.this,MainActivity.class);
+            Bundle bundle=new Bundle();
+            bundle.putString("firstName",acct.getGivenName());
+            bundle.putString("lastName",acct.getFamilyName());
+            bundle.putString("displayName",acct.getDisplayName());
+            intent.putExtra("signInArgs",bundle);
+            startActivity(intent);
             finish();
         }
     }

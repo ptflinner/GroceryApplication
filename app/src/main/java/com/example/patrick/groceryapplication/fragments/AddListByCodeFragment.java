@@ -85,7 +85,7 @@ public class AddListByCodeFragment extends DialogFragment {
         final DatabaseReference groupRef = fdb.getReference("groupList").child(pushKey);
         final String firebaseUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         final DatabaseReference userReference=(FirebaseDatabase.getInstance().getReference("userList").child(firebaseUid));
-        final DatabaseReference userNameReference=(FirebaseDatabase.getInstance().getReference("userList").child(firebaseUid).child("name"));
+        final DatabaseReference userNameReference=(FirebaseDatabase.getInstance().getReference("userList").child(firebaseUid).child("displayName"));
 
         userNameReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -100,7 +100,7 @@ public class AddListByCodeFragment extends DialogFragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.d(TAG,"BROKE BITCH");
             }
         });
 

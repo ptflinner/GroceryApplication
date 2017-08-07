@@ -153,7 +153,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!(dataSnapshot.exists())) {
-                    User userToAdd = new User(firebaseUid, "John Doe", "02/21/1992", "California", null);
+                    Bundle bundle=getIntent().getBundleExtra("signInArgs");
+                    String firstName=bundle.getString("firstName");
+                    String lastName=bundle.getString("lastName");
+                    String displayName=bundle.getString("displayName");
+                    User userToAdd = new User(firebaseUid, firstName,lastName,displayName, null);
                     userReference.setValue(userToAdd);
                 }
             }

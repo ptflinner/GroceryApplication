@@ -138,7 +138,7 @@ public class GroupListFragment extends Fragment{
 
         final String firebaseUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         final DatabaseReference userReference=(FirebaseDatabase.getInstance().getReference("userList").child(firebaseUid));
-        DatabaseReference userNameReference=(FirebaseDatabase.getInstance().getReference("userList").child(firebaseUid).child("name"));
+        DatabaseReference userNameReference=(FirebaseDatabase.getInstance().getReference("userList").child(firebaseUid).child("displayName"));
 
         userNameReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
