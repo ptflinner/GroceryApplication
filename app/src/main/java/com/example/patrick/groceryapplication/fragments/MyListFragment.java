@@ -1,29 +1,25 @@
 package com.example.patrick.groceryapplication.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.patrick.groceryapplication.MyListAdapter;
+import com.example.patrick.groceryapplication.adapters.MyListAdapter;
 import com.example.patrick.groceryapplication.R;
-import com.example.patrick.groceryapplication.models.Item;
 import com.example.patrick.groceryapplication.utils.Contract;
 import com.example.patrick.groceryapplication.utils.DBHelper;
-import com.example.patrick.groceryapplication.utils.SQLiteUtils;
 
 public class MyListFragment extends Fragment {
 
@@ -62,9 +58,9 @@ public class MyListFragment extends Fragment {
 
                 Log.d(TAG, "hey im faaabulous");
                 FragmentManager fm = getFragmentManager();
-                ItemFragment frag = new ItemFragment();
+                AddGroupListItemFragment frag = new AddGroupListItemFragment();
                 frag.setTargetFragment(MyListFragment.this,REQUEST_CODE);
-                frag.show(fm, "ItemFragment");
+                frag.show(fm, "AddGroupListItemFragment");
             }
         });
 
@@ -128,7 +124,7 @@ public class MyListFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode== ItemFragment.REQUEST_CODE){
+        if(requestCode== AddGroupListItemFragment.REQUEST_CODE){
             Bundle extras=data.getBundleExtra("args");
 
             Log.d(TAG,"BUNDLE: "+extras.getString("Name"));

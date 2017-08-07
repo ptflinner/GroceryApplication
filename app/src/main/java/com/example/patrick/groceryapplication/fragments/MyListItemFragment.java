@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.patrick.groceryapplication.MyListItemAdapter;
+import com.example.patrick.groceryapplication.adapters.MyListItemAdapter;
 import com.example.patrick.groceryapplication.R;
 import com.example.patrick.groceryapplication.utils.DBHelper;
 

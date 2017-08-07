@@ -6,12 +6,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp"
-    android:weightSum="1"
-    tools:context="com.example.patrick.groceryapplication.fragments.ItemFragment">
+    tools:context="com.example.patrick.groceryapplication.fragments.AddGroupListItemFragment">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="5">
+        android:orientation="vertical">
     <!-- categories -->
     <Spinner
         android:id="@+id/categories_item_spinner"
@@ -45,7 +44,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:hint="price placeholder"/>
-
+    <Spinner
+        android:id="@+id/user_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <!-- stores -->
     <EditText
         android:id="@+id/item_store"

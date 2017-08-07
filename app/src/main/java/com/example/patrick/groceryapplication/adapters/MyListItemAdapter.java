@@ -1,4 +1,4 @@
-package com.example.patrick.groceryapplication;
+package com.example.patrick.groceryapplication.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -11,9 +11,8 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.patrick.groceryapplication.R;
 import com.example.patrick.groceryapplication.utils.Contract;
-
-import java.util.List;
 
 /**
  * Created by Barry on 7/26/2017.

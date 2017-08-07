@@ -14,7 +14,12 @@ public class BarCodeItems {
     public BarCodeItems(String number,String itemName, String description, String avg_price){
 
     }
-
+    public BarCodeItems(){
+        this.number="";
+        this.itemname="";
+        this.description="";
+        this.avg_price="";
+    }
 
     public String getNumber() {
         return number;
