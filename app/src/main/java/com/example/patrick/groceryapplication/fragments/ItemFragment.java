@@ -31,6 +31,7 @@ public class ItemFragment extends DialogFragment {
     private Button add;
     private final String TAG = "itemFragment";
     private String toast;
+    public static final int REQUEST_CODE = 420;
 
     public ItemFragment(){}
 
@@ -61,9 +62,14 @@ public class ItemFragment extends DialogFragment {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OnDialogCloseListener activity = (OnDialogCloseListener) getActivity();
-                activity.closeDialog(name.getText().toString(),quantity.getText().toString(),price.getText().toString(),
-                        store.getText().toString(),camera.getText().toString());
+                Intent intent = new Intent();
+                Bundle args = new Bundle();
+                args.putString("name", name.getText().toString());
+                args.putInt("quantity", Integer.parseInt(quantity.getText().toString()));
+                args.putDouble("price", Double.parseDouble(price.getText().toString()));
+
+                intent.putExtra("args", args);
+                getTargetFragment().onActivityResult(getTargetRequestCode(), REQUEST_CODE, intent);
                 ItemFragment.this.dismiss();
             }
         });
@@ -80,24 +86,5 @@ public class ItemFragment extends DialogFragment {
         integrator.setCameraId(0);  // Use a specific camera of the device
         integrator.initiateScan();
     }
-    private void displayToast() {
-        if(getActivity() != null && toast != null) {
-            Toast.makeText(getActivity(), toast, Toast.LENGTH_LONG).show();
-            toast = null;
-        }
-    }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null) {
-            if(result.getContents() == null) {
-                toast = "Cancelled from fragment";
-            } else {
-                toast = "Scanned from fragment: " + result.getContents();
-            }
 
-            // At this point we may or may not have a reference to the activity
-            displayToast();
-        }
-    }
 }

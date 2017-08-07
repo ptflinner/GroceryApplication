@@ -1,10 +1,13 @@
 package com.example.patrick.groceryapplication.fragments;
 
+import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +18,7 @@ import android.view.ViewGroup;
 
 import com.example.patrick.groceryapplication.MyListItemAdapter;
 import com.example.patrick.groceryapplication.R;
+import com.example.patrick.groceryapplication.utils.Contract;
 import com.example.patrick.groceryapplication.utils.DBHelper;
 
 
@@ -30,7 +34,8 @@ public class MyListItemFragment extends Fragment{
     private DBHelper helper;
     private Cursor cursor;
     private SQLiteDatabase db;
-    MyListItemAdapter adapter;
+    private MyListItemAdapter adapter;
+    private final static int REQUEST_CODE = 420;
 
 
     public MyListItemFragment(){}
@@ -56,6 +61,16 @@ public class MyListItemFragment extends Fragment{
         fab = (FloatingActionButton) view.findViewById(R.id.fab_my_list_items);
 
         //put fab click listener here
+        fab.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                ItemFragment frag = new ItemFragment();
+                frag.setTargetFragment(MyListItemFragment.this, REQUEST_CODE);
+                frag.show(fm, "itemFragment");
+            }
+        });
 
         Log.d(TAG, "" + getListId());
         myListItemRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_my_list_items);
@@ -105,5 +120,28 @@ public class MyListItemFragment extends Fragment{
         super.onStop();
         if (db != null) db.close();
         if (cursor != null) cursor.close();
+    }
+
+    //crossreference handler here
+    //check if there's any item id for the passed on list id
+    //if not then have it ready to handle it and insert a new one
+    //it there is then have it ready to
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == ItemFragment.REQUEST_CODE){
+            Bundle extras = data.getBundleExtra("args");
+
+        }
+    }
+
+    private long addItem(SQLiteDatabase db, String name, int quantity, double price){
+        ContentValues cv = new ContentValues();
+        cv.put(Contract.TABLE_ITEM.COLUMN_NAME_ITEM_NAME, title);
+        cv.put(Contract.TABLE_LIST.COLUMN_NAME_LIST_CATEGORY, category);
+        Log.d(TAG, title + " inserted into db");
+        Log.d(TAG, category + " inserted into db");
+        return db.insert(Contract.TABLE_LIST.TABLE_NAME, null, cv);
     }
 }

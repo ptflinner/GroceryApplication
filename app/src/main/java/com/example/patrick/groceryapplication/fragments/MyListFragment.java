@@ -1,5 +1,6 @@
 package com.example.patrick.groceryapplication.fragments;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -123,10 +124,28 @@ public class MyListFragment extends Fragment {
 
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+    //insert new list
+    private long addList(SQLiteDatabase db, String title, String category){
+        ContentValues cv = new ContentValues();
+        cv.put(Contract.TABLE_LIST.COLUMN_NAME_LIST_NAME, title);
+        cv.put(Contract.TABLE_LIST.COLUMN_NAME_LIST_CATEGORY, category);
+        Log.d(TAG, title + " inserted into db");
+        Log.d(TAG, category + " inserted into db");
+        return db.insert(Contract.TABLE_LIST.TABLE_NAME, null, cv);
     }
 
-    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode== AddPersonalList.REQUEST_CODE){
+            Bundle extras=data.getBundleExtra("args");
+            Log.d(TAG,"BUNDLE: "+extras.getString("title"));
+            Log.d(TAG,"BUNDLE: "+extras.getString("category"));
+            addList(db, extras.getString("title"), extras.getString("category"));
+            createAdapter();
+
+            Log.d(TAG, "BUTTON CLICKED");
+        }
+    }
+
+
 }

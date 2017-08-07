@@ -52,8 +52,8 @@ public class DBHelper extends SQLiteOpenHelper{
 
         String table_list_query = "CREATE TABLE " + Contract.TABLE_LIST.TABLE_NAME +
             " (" + Contract.TABLE_LIST.COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            Contract.TABLE_LIST.COLUMN_NAME_LIST_NAME + " TEXT NOT NULL, " +
-            Contract.TABLE_LIST.COLUMN_NAME_LIST_CATEGORY + " TEXT NOT NULL " +
+            Contract.TABLE_LIST.COLUMN_NAME_LIST_NAME + " INTEGER, " +
+            Contract.TABLE_LIST.COLUMN_NAME_LIST_CATEGORY + " INTEGER " +
             "); ";
         Log.d(TAG, "Create table two SQL:" + table_list_query);
         db.execSQL(table_list_query);
