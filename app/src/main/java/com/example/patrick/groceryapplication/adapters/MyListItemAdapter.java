@@ -1,4 +1,4 @@
-package com.example.patrick.groceryapplication;
+package com.example.patrick.groceryapplication.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -11,9 +11,8 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.patrick.groceryapplication.R;
 import com.example.patrick.groceryapplication.utils.Contract;
-
-import java.util.List;
 
 /**
  * Created by Barry on 7/26/2017.
@@ -93,6 +92,15 @@ public class MyListItemAdapter extends RecyclerView.Adapter<MyListItemAdapter.Gr
             int pos = getAdapterPosition();
             listener.onItemClick(cursor, pos, id);
             Log.d(TAG, "" + pos);
+        }
+    }
+
+    public void swapCursor(Cursor newCursor){
+        if (cursor != null) cursor.close();
+        cursor = newCursor;
+        if (newCursor != null) {
+            // Force the RecyclerView to refresh
+            this.notifyDataSetChanged();
         }
     }
 }

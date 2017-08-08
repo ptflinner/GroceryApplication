@@ -7,19 +7,19 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.patrick.groceryapplication.MyListAdapter;
+import com.example.patrick.groceryapplication.adapters.MyListAdapter;
 import com.example.patrick.groceryapplication.R;
 import com.example.patrick.groceryapplication.utils.Contract;
 import com.example.patrick.groceryapplication.utils.DBHelper;
@@ -35,6 +35,7 @@ public class MyListFragment extends Fragment {
     private MyListAdapter adapter;
     private final String TAG = "myListFRAGMENT";
     private final static int REQUEST_CODE = 1;
+
 
     public MyListFragment(){}
 
@@ -109,6 +110,24 @@ public class MyListFragment extends Fragment {
         });
 
         myListRecyclerView.setAdapter(adapter);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT){
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                long id = (long) viewHolder.itemView.getTag();
+                Log.d(TAG, "removing id: " + id);
+                //remove list function call here
+                SQLiteUtils.removeList(db, id);
+                adapter.swapCursor(getAllList(db));
+            }
+        }).attachToRecyclerView(myListRecyclerView);
+
     }
 
     //grabs all list
@@ -123,7 +142,6 @@ public class MyListFragment extends Fragment {
                 Contract.TABLE_LIST.COLUMN_NAME_LIST_CATEGORY);
 
     }
-
     //insert new list
     private long addList(SQLiteDatabase db, String title, String category){
         ContentValues cv = new ContentValues();
@@ -133,6 +151,7 @@ public class MyListFragment extends Fragment {
         Log.d(TAG, category + " inserted into db");
         return db.insert(Contract.TABLE_LIST.TABLE_NAME, null, cv);
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

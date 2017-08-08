@@ -43,9 +43,9 @@ public class DBHelper extends SQLiteOpenHelper{
             Contract.TABLE_ITEM.COLUMN_NAME_ITEM_NAME + " TEXT NOT NULL, " +
             Contract.TABLE_ITEM.COLUMN_NAME_QUANTITY + " INTEGER, " +
             Contract.TABLE_ITEM.COLUMN_NAME_PRICE + " DOUBLE, " +
-            Contract.TABLE_ITEM.COLUMN_NAME_PICTURE + " TEXT NOT NULL, " +
+            Contract.TABLE_ITEM.COLUMN_NAME_PICTURE + " TEXT, " +
             Contract.TABLE_ITEM.COLUMN_NAME_CATEGORY + " TEXT NOT NULL, " +
-            Contract.TABLE_ITEM.COLUMN_NAME_PURCHASE_STATUS + " TEXT NOT NULL" +
+            Contract.TABLE_ITEM.COLUMN_NAME_PURCHASE_STATUS + " INTEGER NOT NULL" +
             "); ";
         Log.d(TAG, "Create table one SQL:" + table_item_query);
         db.execSQL(table_item_query);
@@ -73,5 +73,6 @@ public class DBHelper extends SQLiteOpenHelper{
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL("DROP TABLE IF EXISTS" + Contract.TABLE_ITEM.TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS" + Contract.TABLE_LIST.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS" + Contract.TABLE_COMPLETED_LIST.TABLE_NAME);
 	}
 }

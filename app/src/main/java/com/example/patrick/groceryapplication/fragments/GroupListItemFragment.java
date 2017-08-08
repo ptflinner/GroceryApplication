@@ -1,109 +1,150 @@
 package com.example.patrick.groceryapplication.fragments;
 
-import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.patrick.groceryapplication.R;
+import com.example.patrick.groceryapplication.models.GroupItem;
+import com.example.patrick.groceryapplication.models.Item;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link GroupListItemFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link GroupListItemFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class GroupListItemFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
+    private static final String TAG="GROUPLISTITEMFRAGMENT";
+    private FloatingActionButton fab;
+    private RecyclerView itemListRecyclerView;
+    private FirebaseRecyclerAdapter<Item,GroupListItemFragment.ItemHolder> mItemListAdapter;
+    private DatabaseReference itemRef;
+    private static final int REQUEST_CODE=123;
 
     public GroupListItemFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment GroupListItemFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static GroupListItemFragment newInstance(String param1, String param2) {
-        GroupListItemFragment fragment = new GroupListItemFragment();
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        createAdapter();
+    }
+
+    public static GroupListItemFragment newInstance(String groupKey) {
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString("key",groupKey);
+        GroupListItemFragment fragment = new GroupListItemFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    public String getGroupKey(){return getArguments().getString("key");}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        View view=inflater.inflate(R.layout.fragment_group_list, container, false);
+        fab=(FloatingActionButton) view.findViewById(R.id.fab_group_list);
+
+        fab.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getFragmentManager();
+                AddGroupListItemFragment frag = new AddGroupListItemFragment().newInstance(getGroupKey());
+                frag.setTargetFragment(GroupListItemFragment.this,REQUEST_CODE);
+                frag.show(fm, "addGroupListItemFragment");
+            }
+        });
+
+        itemListRecyclerView=(RecyclerView) view.findViewById(R.id.frag_group_list_recycler);
+        itemListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        itemRef= FirebaseDatabase.getInstance().getReference("groupList").child(getGroupKey()).child("items");
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_group_list_item, container, false);
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    public void createAdapter(){
+        mItemListAdapter = new FirebaseRecyclerAdapter<Item, GroupListItemFragment.ItemHolder>(
+                Item.class,
+                R.layout.group_item_list_recycle,
+                GroupListItemFragment.ItemHolder.class,
+                itemRef) {
+            @Override
+            protected void populateViewHolder(ItemHolder viewHolder, Item model, final int position) {
+
+                Log.d(TAG,"FIREBASE");
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Fragment groupItems =GroupItemFragment.newInstance(getGroupKey(),mItemListAdapter.getRef(position).getKey());
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.frame_layout, groupItems);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+
+                    }
+                });
+                viewHolder.bind(model,position);
+            }
+        };
+        itemListRecyclerView.setAdapter(mItemListAdapter);
+    }
+
+    public void firebaseGroupAdd(FirebaseDatabase fdb,GroupItem item){
+        DatabaseReference itemRef = fdb.getReference("groupList").child(getGroupKey()).child("items");
+        itemRef.push().setValue(item);
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode== AddGroupListItemFragment.REQUEST_CODE){
+            Bundle extras=data.getBundleExtra("args");
+;
+            GroupItem item= new GroupItem(extras.getString("Name"),extras.getString("category"),extras.getString("Quantity"),extras.getString("Price"),extras.getString("provider"));
+            firebaseGroupAdd(FirebaseDatabase.getInstance(), item);
+            Log.d(TAG, "BUTTONCLICKED");
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
+    public static class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        View mView;
+        private TextView itemName;
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        public ItemHolder(View itemView) {
+            super(itemView);
+            this.mView=itemView;
+            itemName=(TextView) itemView.findViewById(R.id.group_item_name);
+            itemView.setOnClickListener(this);
+
+        }
+
+        public void bind(Item item, int position){
+            Log.d(TAG,"LIST NAME:"+item.getName());
+            itemName.setText(item.getName());
+        }
+
+        @Override
+        public void onClick(View view) {
+//            int pos=getAdapterPosition();
+//            mItemClick.onItemClickListener(pos,groupLists.get(pos));
+        }
     }
 }

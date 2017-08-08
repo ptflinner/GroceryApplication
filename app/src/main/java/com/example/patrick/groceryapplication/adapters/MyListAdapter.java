@@ -1,12 +1,9 @@
-package com.example.patrick.groceryapplication;
+package com.example.patrick.groceryapplication.adapters;
 
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.patrick.groceryapplication.fragments.MyListItemFragment;
+import com.example.patrick.groceryapplication.R;
 import com.example.patrick.groceryapplication.utils.Contract;
 
 
@@ -88,6 +85,15 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ItemHolder
             listener.onItemClick(cursor, pos, id);
             Log.d(TAG, "" + pos);
 
+        }
+    }
+
+    public void swapCursor(Cursor newCursor){
+        if (cursor != null) cursor.close();
+        cursor = newCursor;
+        if (newCursor != null) {
+            // Force the RecyclerView to refresh
+            this.notifyDataSetChanged();
         }
     }
 
