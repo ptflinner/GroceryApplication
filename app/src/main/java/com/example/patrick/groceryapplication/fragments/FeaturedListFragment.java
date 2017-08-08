@@ -155,7 +155,7 @@ public class FeaturedListFragment extends Fragment {
             }
             TextView subtitle = (TextView) v.findViewById(R.id.featured_list_subtitle_view);
             Item featuredItem = featuredList.get(groupPosition).getGroceryList().get(childPosition);
-            subtitle.setText(featuredItem.getItemName());
+            subtitle.setText(featuredItem.getName());
             return v;
         }
         @Override

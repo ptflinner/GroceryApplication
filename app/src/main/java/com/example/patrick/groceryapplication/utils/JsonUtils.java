@@ -64,18 +64,15 @@ public class JsonUtils {
     public static BarCodeItems parseJson(String json) throws JSONException{
         BarCodeItems parsedData=new BarCodeItems();
         JSONObject main = new JSONObject(json);
-        JSONArray items = main.getJSONArray("items");
 
-        for(int i = 0; i < items.length(); i++){
-            JSONObject item = items.getJSONObject(i);
-            String number = item.getString("number");
-            String itemname = item.getString("itemname");
-            String description = item.getString("description");
-            String avg_price = item.getString("avgprice");
+        String number = main.getString("number");
+        String itemname = main.getString("itemname");
+        String description = main.getString("description");
+        String avg_price = main.getString("avg_price");
 
-            //NewsItem news = new NewsItem(author, title, description, url,urlToImage, publishedAt);
-            parsedData=new BarCodeItems(number,itemname,description,avg_price);
-        }
+        //NewsItem news = new NewsItem(author, title, description, url,urlToImage, publishedAt);
+        parsedData=new BarCodeItems(number,itemname,description,avg_price);
+
         return parsedData;
     }
 }

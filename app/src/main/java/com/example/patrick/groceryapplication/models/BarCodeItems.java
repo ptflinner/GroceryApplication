@@ -12,7 +12,10 @@ public class BarCodeItems {
     private String avg_price;
 
     public BarCodeItems(String number,String itemName, String description, String avg_price){
-
+        this.number= number;
+        this.itemname= itemName;
+        this.description= description;
+        this.avg_price= avg_price;
     }
     public BarCodeItems(){
         this.number="";
