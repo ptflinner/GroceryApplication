@@ -24,6 +24,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -99,14 +101,17 @@ public class GroupListFragment extends Fragment{
                 Log.d(TAG,model);
                 DatabaseReference gRef=FirebaseDatabase.getInstance().getReference("groupList").
                         child(model);
-
-
+                
                 gRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()){
+                           boolean admin=true;
                            GroupList gModel=(dataSnapshot.getValue(GroupList.class));
-                           viewHolder.bind(gModel,position);
+                            if(!(gModel.getAdmin().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))){
+                                admin=false;
+                            }
+                           viewHolder.bind(gModel,position,admin,model);
                         }
                     }
 
@@ -147,6 +152,7 @@ public class GroupListFragment extends Fragment{
                 HashMap<String, String> users=new HashMap<>();
                 users.put(firebaseUid,name);
                 groupList.setUsers(users);
+                groupList.setAdmin(firebaseUid);
 
                 userReference.child("groupLists").push().setValue(pushKey);
                 groupRef.child(pushKey).setValue(groupList);
@@ -182,18 +188,22 @@ public class GroupListFragment extends Fragment{
     public static class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         View mView;
         private TextView listName;
-
+        private TextView listId;
         public ItemHolder(View itemView) {
             super(itemView);
             this.mView=itemView;
             listName=(TextView) itemView.findViewById(R.id.group_list_name);
             itemView.setOnClickListener(this);
-
+            listId=(TextView) itemView.findViewById(R.id.group_list_id);
         }
 
-        public void bind(GroupList groupList, int position){
+        public void bind(GroupList groupList, int position,boolean admin,String key){
             Log.d(TAG,"LIST NAME:"+groupList.getName());
             listName.setText(groupList.getName());
+            if(admin){
+                listId.setText(key);
+                listId.setVisibility(View.VISIBLE);
+            }
         }
 
         @Override
