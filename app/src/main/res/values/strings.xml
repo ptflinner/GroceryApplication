@@ -11,7 +11,7 @@
     <string name="title_text">Google Sign-In\nQuickstart</string>
     <string name="sign_in">Sign in</string>
 
-    <string-array name="categories_array">
+    <string-array name="list_categories_array">
         <item>All Lists</item>
         <item>Weekly Groceries</item>
         <item>Pharmacy Items</item>
@@ -33,6 +33,17 @@
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--item fragment -->
+    <string name="scan">scan </string>
+    <string-array name="categories_array">
+        <item>All</item>
+        <item>Dairy</item>
+        <item>Meat</item>
+        <item>Vegetables</item>
+        <item>Fruits</item>
+        <item>Junk Food</item>
+    </string-array>
     <string name="title_activity_main2">Main2Activity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
