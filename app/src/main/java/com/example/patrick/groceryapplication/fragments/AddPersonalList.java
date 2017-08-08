@@ -1,7 +1,9 @@
-package layout;
+package com.example.patrick.groceryapplication.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +19,8 @@ public class AddPersonalList extends DialogFragment {
     private Spinner categoriesSpinner;
     private Button add;
     private final String TAG = "AddPersonalList";
+    public static final int REQUEST_CODE = 1;
 
-    public AddPersonalList(){}
 
     public interface OnDialogCloseListener{
         void closeDialog(String title, String categoriesSpinner);
@@ -32,19 +34,29 @@ public class AddPersonalList extends DialogFragment {
         add = (Button) view.findViewById(R.id.add);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.categories_array, android.R.layout.simple_spinner_item);
+                R.array.list_categories_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categoriesSpinner.setAdapter(adapter);
 
         add.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                OnDialogCloseListener activity = (OnDialogCloseListener) getActivity();
-                activity.closeDialog(title.getText().toString(), categoriesSpinner.getSelectedItem().toString());
+                Intent intent = new Intent();
+                Bundle args=new Bundle();
+                Log.d(TAG,"TITLE: "+title.getText().toString());
+                Log.d(TAG,"CAT: "+categoriesSpinner.getSelectedItem().toString());
+                args.putString("title",title.getText().toString());
+                args.putString("cat",categoriesSpinner.getSelectedItem().toString());
+
+                intent.putExtra("args",args);
+                getTargetFragment().onActivityResult(
+                        getTargetRequestCode(), REQUEST_CODE, intent);
+
                 AddPersonalList.this.dismiss();
             }
         });
         return view;
     }
 }
+
 

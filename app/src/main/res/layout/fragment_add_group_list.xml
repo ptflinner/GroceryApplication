@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragments.AddPersonalList">
+    tools:context=".fragments.AddGroupListFragment">
 
     <EditText
         android:id="@+id/title"
@@ -20,6 +20,12 @@
 
     <Button
         android:id="@+id/add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="@string/add" />
+    <Button
+        android:id="@+id/add_code_transfer_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
