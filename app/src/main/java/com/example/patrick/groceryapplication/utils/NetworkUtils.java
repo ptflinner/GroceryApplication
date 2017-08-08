@@ -28,16 +28,16 @@ public class NetworkUtils {
     public static final String BASE_URL = "http://api.upcdatabase.org/json";
     public static final String TAG = "NetworkUtils";
     public static final String apikey = "0f0cb14a14b7134d22586414523c975d";
+
     //public String itemNumber = ;
 
     //URL :http://api.upcdatabase.org/json/0f0cb14a14b7134d22586414523c975d/0111222333446
     //Api Key:0f0cb14a14b7134d22586414523c975d
     //Item#:0111222333446
 
-    public static URL makeUrl(){
+    public static URL makeUrl(String item_code){
         Uri uri = Uri.parse(BASE_URL).buildUpon()
-                .appendPath(apikey)
-                //.appendPath(itemNumber)
+                .appendEncodedPath("/"+apikey+"/"+item_code)
                 .build();
 
 
@@ -45,7 +45,7 @@ public class NetworkUtils {
         try{
             String urlString = uri.toString();
             Log.d(TAG, "Url: " + urlString);
-            url = new URL(uri.toString());
+            url = new URL(BASE_URL+"/"+apikey+"/"+item_code);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

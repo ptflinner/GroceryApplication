@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:hint="item quqantity placeholder" />
+            android:hint="item quantity placeholder" />
 
 
         <!-- price -->
@@ -49,7 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:hint="price placeholder"/>
+            android:hint="store placeholder"/>
         <!-- picture -->
         <EditText
             android:id="@+id/item_picture"
