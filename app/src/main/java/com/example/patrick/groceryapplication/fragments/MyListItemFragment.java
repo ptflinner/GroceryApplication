@@ -16,7 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.patrick.groceryapplication.MyListItemAdapter;
+import com.example.patrick.groceryapplication.adapters.MyListItemAdapter;
 import com.example.patrick.groceryapplication.R;
 import com.example.patrick.groceryapplication.utils.Contract;
 import com.example.patrick.groceryapplication.utils.DBHelper;
@@ -132,16 +132,29 @@ public class MyListItemFragment extends Fragment{
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == ItemFragment.REQUEST_CODE){
             Bundle extras = data.getBundleExtra("args");
-
+            long id=addItem(db, extras.getString("Name"), extras.getInt("Quantity"), extras.getDouble("Price"), extras.getString("Category"));
+            Log.d(TAG, id+"FUCK YOU BARRY");
+//            addXRef(db,getListId(),db.last);
         }
     }
 
-    private long addItem(SQLiteDatabase db, String name, int quantity, double price){
+    private long addItem(SQLiteDatabase db, String name, int quantity, double price, String category){
         ContentValues cv = new ContentValues();
-        cv.put(Contract.TABLE_ITEM.COLUMN_NAME_ITEM_NAME, title);
-        cv.put(Contract.TABLE_LIST.COLUMN_NAME_LIST_CATEGORY, category);
-        Log.d(TAG, title + " inserted into db");
+        cv.put(Contract.TABLE_ITEM.COLUMN_NAME_ITEM_NAME, name);
+        cv.put(Contract.TABLE_ITEM.COLUMN_NAME_CATEGORY, category);
+        cv.put(Contract.TABLE_ITEM.COLUMN_NAME_PRICE, price);
+        cv.put(Contract.TABLE_ITEM.COLUMN_NAME_QUANTITY, quantity);
+
         Log.d(TAG, category + " inserted into db");
         return db.insert(Contract.TABLE_LIST.TABLE_NAME, null, cv);
     }
+
+    private long addXRef(SQLiteDatabase db, long listID, long itemID){
+        ContentValues cv = new ContentValues();
+        cv.put(Contract.TABLE_COMPLETED_LIST.COLUMN_NAME_ITEM_ID,itemID);
+        cv.put(Contract.TABLE_COMPLETED_LIST.COLUMN_NAME_LIST_ID, listID);
+
+        return db.insert(Contract.TABLE_COMPLETED_LIST.TABLE_NAME,null,cv);
+    }
+
 }

@@ -8,18 +8,18 @@ import java.util.ArrayList;
  */
 public class User {
     private String id = "";
-    private String name;
-    private String dob;
-    private String location;
+    private String firstName;
+    private String lastName;
+    private String displayName;
     private ArrayList<String> groupLists;
     public User() {
     }
 
-    public User(String id,String name, String dob, String location,ArrayList<String> groupLists) {
+    public User(String id,String firstName, String lastName, String displayName,ArrayList<String> groupLists) {
         this.id = id;
-        this.name = name;
-        this.dob = dob;
-        this.location = location;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.displayName = displayName;
         this.groupLists=groupLists;
 
     }
@@ -32,35 +32,35 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getDob() {
-        return dob;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setDob(String dob) {
-        this.dob = dob;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getLocation() {
-        return location;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public void setUser(User user){
         this.id = user.getId();
-        this.name = user.getName();
-        this.dob = user.getDob();
-        this.location = user.getLocation();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.displayName = user.getDisplayName();
         this.groupLists=user.getGroupLists();
     }
 

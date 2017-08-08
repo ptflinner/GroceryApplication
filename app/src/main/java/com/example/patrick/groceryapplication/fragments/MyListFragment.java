@@ -7,23 +7,21 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.patrick.groceryapplication.MyListAdapter;
+import com.example.patrick.groceryapplication.adapters.MyListAdapter;
 import com.example.patrick.groceryapplication.R;
 import com.example.patrick.groceryapplication.utils.Contract;
 import com.example.patrick.groceryapplication.utils.DBHelper;
-import com.example.patrick.groceryapplication.utils.SQLiteUtils;
 
 public class MyListFragment extends Fragment {
 
@@ -35,6 +33,7 @@ public class MyListFragment extends Fragment {
     private MyListAdapter adapter;
     private final String TAG = "myListFRAGMENT";
     private final static int REQUEST_CODE = 1;
+
 
     public MyListFragment(){}
 
@@ -123,7 +122,6 @@ public class MyListFragment extends Fragment {
                 Contract.TABLE_LIST.COLUMN_NAME_LIST_CATEGORY);
 
     }
-
     //insert new list
     private long addList(SQLiteDatabase db, String title, String category){
         ContentValues cv = new ContentValues();
@@ -146,6 +144,4 @@ public class MyListFragment extends Fragment {
             Log.d(TAG, "BUTTON CLICKED");
         }
     }
-
-
 }

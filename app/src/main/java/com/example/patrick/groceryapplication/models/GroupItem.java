@@ -1,24 +1,30 @@
 package com.example.patrick.groceryapplication.models;
 
+/**
+ * Created by Patrick on 8/6/2017.
+ */
 
-public class Item {
+public class GroupItem {
     private String name;
     private String category;
     private String count;
-    private String description;
+    private String price;
+    private String provider;
 
-    public Item() {
+    public GroupItem() {
         this.name="";
         this.category="";
         this.count="";
-        this.description="";
+        this.price="";
+        this.provider="";
     }
 
-    public Item(String name, String category, String count, String description) {
+    public GroupItem(String name, String category, String count, String description,String provider) {
         this.name = name;
         this.category = category;
         this.count = count;
-        this.description = description;
+        this.price = description;
+        this.provider=provider;
     }
 
     public String getName() {
@@ -46,10 +52,18 @@ public class Item {
     }
 
     public String getDescription() {
-        return description;
+        return price;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.price = description;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
     }
 }
