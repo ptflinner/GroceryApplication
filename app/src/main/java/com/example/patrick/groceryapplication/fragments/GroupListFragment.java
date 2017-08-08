@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.patrick.groceryapplication.R;
+import com.example.patrick.groceryapplication.models.AdminHolder;
 import com.example.patrick.groceryapplication.models.GroupList;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -101,15 +102,18 @@ public class GroupListFragment extends Fragment{
                 Log.d(TAG,model);
                 DatabaseReference gRef=FirebaseDatabase.getInstance().getReference("groupList").
                         child(model);
-                
+
+                final AdminHolder adminHolder=new AdminHolder(false);
                 gRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()){
-                           boolean admin=true;
+                           boolean admin=false;
+
                            GroupList gModel=(dataSnapshot.getValue(GroupList.class));
-                            if(!(gModel.getAdmin().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))){
-                                admin=false;
+                            if((gModel.getAdmin().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))){
+                                admin=true;
+                                adminHolder.setAdmin(true);
                             }
                            viewHolder.bind(gModel,position,admin,model);
                         }
@@ -124,7 +128,7 @@ public class GroupListFragment extends Fragment{
 
                     @Override
                     public void onClick(View view) {
-                        Fragment groupListItems =GroupListItemFragment.newInstance(model);
+                        Fragment groupListItems =GroupListItemFragment.newInstance(model,adminHolder.isAdmin());
                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
                         transaction.replace(R.id.frame_layout, groupListItems);
                         transaction.addToBackStack(null);

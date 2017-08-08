@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,9 +46,10 @@ public class GroupListItemFragment extends Fragment {
         createAdapter();
     }
 
-    public static GroupListItemFragment newInstance(String groupKey) {
+    public static GroupListItemFragment newInstance(String groupKey,boolean admin) {
         Bundle args = new Bundle();
         args.putString("key",groupKey);
+        args.putBoolean("admin",admin);
         GroupListItemFragment fragment = new GroupListItemFragment();
         fragment.setArguments(args);
         return fragment;
@@ -55,6 +57,7 @@ public class GroupListItemFragment extends Fragment {
 
     public String getGroupKey(){return getArguments().getString("key");}
 
+    public Boolean getAdminRights(){return getArguments().getBoolean("admin");}
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -102,11 +105,32 @@ public class GroupListItemFragment extends Fragment {
 
                     }
                 });
-                viewHolder.bind(model,position);
+                viewHolder.bind(viewHolder,model,position);
             }
         };
         itemListRecyclerView.setAdapter(mItemListAdapter);
+
+        Log.d(TAG,"Admin: "+getAdminRights());
+        if(getAdminRights()){
+            //Allows for items to be deleted by swiping
+            new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+                @Override
+                public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                    int id = (int)viewHolder.itemView.getTag();
+                    String itemKey=mItemListAdapter.getRef(id).getKey();
+                    itemRef.child(itemKey).removeValue();
+                    Log.d(TAG, "passing id: " + itemKey);
+                }
+            }).attachToRecyclerView(itemListRecyclerView);
+        }
     }
+
 
     public void firebaseGroupAdd(FirebaseDatabase fdb,GroupItem item){
         DatabaseReference itemRef = fdb.getReference("groupList").child(getGroupKey()).child("items");
@@ -136,9 +160,10 @@ public class GroupListItemFragment extends Fragment {
 
         }
 
-        public void bind(Item item, int position){
+        public void bind(ItemHolder holder,Item item, int position){
             Log.d(TAG,"LIST NAME:"+item.getName());
             itemName.setText(item.getName());
+            holder.itemView.setTag(position);
         }
 
         @Override
