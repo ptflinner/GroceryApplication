@@ -10,6 +10,7 @@
     <string name="desc_google_icon">Google Logo</string>
     <string name="title_text">Google Sign-In\nQuickstart</string>
     <string name="sign_in">Sign in</string>
+    <string name="item_name">Your item</string>
 
     <string-array name="list_categories_array">
         <item>All Lists</item>

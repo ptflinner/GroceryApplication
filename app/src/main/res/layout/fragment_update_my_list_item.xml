@@ -6,7 +6,7 @@
     tools:context="com.example.patrick.groceryapplication.fragments.UpdateMyListItem">
 
     <ImageView
-
+        android:contentDescription="@string/item_name"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_gravity="center"
@@ -15,14 +15,22 @@
         android:src="@drawable/ic_camera_enhance_black_24dp"
         tools:src="@drawable/duck"/>
 
-    <TextView
+    <Button
+        android:id="@+id/update_picture"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="30sp"
         android:padding="10dp"
-        tools:text="Duck"
+        android:text="dust"
+        android:inputType="text"
+        android:labelFor="@id/item_detail_picture"
         android:layout_gravity="center"
-        android:id="@+id/item_detail_name"/>
+        android:id="@+id/update_name"/>
 
     <View
         android:layout_width="350dp"
@@ -47,12 +55,14 @@
             tools:text="Price"
             />
         <EditText
-            android:id="@+id/item_detail_price"
+            android:id="@+id/update_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:inputType="text"
+            android:labelFor="@id/update_price"
             android:textSize="20sp"
-            tools:text="$3.50"
+            android:text="vervrev"
             />
 
     </LinearLayout>
@@ -71,18 +81,20 @@
             tools:text="Quantity"
             />
         <EditText
-            android:id="@+id/item_detail_quantity"
+            android:id="@+id/update_quantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:inputType="text"
+            android:text="quantity"
+            android:labelFor="@id/update_quantity"
             android:textSize="20sp"
-            tools:text="x69"
             />
 
     </LinearLayout>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/update_item"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

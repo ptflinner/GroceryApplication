@@ -6,10 +6,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,6 +31,7 @@ public class MyListItemDetailFragment extends Fragment{
     private TextView itemName;
     private TextView itemPrice;
     private TextView itemQuantity;
+    private Button updateButton;
 
 
 
@@ -58,7 +61,19 @@ public class MyListItemDetailFragment extends Fragment{
         itemName = (TextView) view.findViewById(R.id.item_detail_name);
         itemPrice = (TextView) view.findViewById(R.id.item_detail_price);
         itemQuantity = (TextView) view.findViewById(R.id.item_detail_quantity);
+        updateButton = (Button) view.findViewById(R.id.update_button);
 
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Fragment updateItem = UpdateMyListItem.newInstance(getItemId());
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame_layout, updateItem);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
 
     return view;
     }
