@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.example.patrick.groceryapplication.adapters.MyListItemAdapter;
 import com.example.patrick.groceryapplication.R;
 import com.example.patrick.groceryapplication.utils.Contract;
 import com.example.patrick.groceryapplication.utils.DBHelper;
+import com.example.patrick.groceryapplication.utils.SQLiteUtils;
 
 
 /**
@@ -99,6 +101,23 @@ public class MyListItemFragment extends Fragment{
         });
 
         myListItemRecyclerView.setAdapter(adapter);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT){
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                long id = (long) viewHolder.itemView.getTag();
+                Log.d(TAG, "removing id: " + id);
+                //remove list function call here
+                SQLiteUtils.removeItem(db, id);
+                adapter.swapCursor(getGroceryList(db));
+            }
+        }).attachToRecyclerView(myListItemRecyclerView);
     }
 
     public Cursor getGroceryList(SQLiteDatabase db){
@@ -130,29 +149,33 @@ public class MyListItemFragment extends Fragment{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult: ");
         if(requestCode == ItemFragment.REQUEST_CODE){
             Bundle extras = data.getBundleExtra("args");
-            long id=addItem(db, extras.getString("Name"), extras.getInt("Quantity"), extras.getDouble("Price"), extras.getString("Category"));
-            Log.d(TAG, id+"FUCK YOU BARRY");
-//            addXRef(db,getListId(),db.last);
+            long id = addItem(db, extras.getString("Name"), extras.getInt("Quantity"), extras.getDouble("Price"), extras.getString("Category"));
+            Log.d(TAG, id+"LOVE YOU BARRY");
+            addXRef(db,getListId(), id);
+            createAdapter();
         }
     }
 
     private long addItem(SQLiteDatabase db, String name, int quantity, double price, String category){
         ContentValues cv = new ContentValues();
-        cv.put(Contract.TABLE_ITEM.COLUMN_NAME_ITEM_NAME, name);
-        cv.put(Contract.TABLE_ITEM.COLUMN_NAME_CATEGORY, category);
-        cv.put(Contract.TABLE_ITEM.COLUMN_NAME_PRICE, price);
         cv.put(Contract.TABLE_ITEM.COLUMN_NAME_QUANTITY, quantity);
+        cv.put(Contract.TABLE_ITEM.COLUMN_NAME_ITEM_NAME, name);
+        cv.put(Contract.TABLE_ITEM.COLUMN_NAME_PRICE, price);
+        cv.put(Contract.TABLE_ITEM.COLUMN_NAME_CATEGORY, category);
+        cv.put(Contract.TABLE_ITEM.COLUMN_NAME_PURCHASE_STATUS,0);
 
         Log.d(TAG, category + " inserted into db");
-        return db.insert(Contract.TABLE_LIST.TABLE_NAME, null, cv);
+        return db.insert(Contract.TABLE_ITEM.TABLE_NAME, null, cv);
     }
 
     private long addXRef(SQLiteDatabase db, long listID, long itemID){
         ContentValues cv = new ContentValues();
-        cv.put(Contract.TABLE_COMPLETED_LIST.COLUMN_NAME_ITEM_ID,itemID);
         cv.put(Contract.TABLE_COMPLETED_LIST.COLUMN_NAME_LIST_ID, listID);
+        cv.put(Contract.TABLE_COMPLETED_LIST.COLUMN_NAME_ITEM_ID,itemID);
+
 
         return db.insert(Contract.TABLE_COMPLETED_LIST.TABLE_NAME,null,cv);
     }

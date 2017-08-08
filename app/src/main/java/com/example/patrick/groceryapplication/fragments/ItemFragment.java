@@ -54,7 +54,7 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
         private String toast;
         private String content;
         private BarCodeItems results;
-        public static final int REQUEST_CODE=349;
+        public static final int REQUEST_CODE=420;
         private static final int BAR_LOADER=1;
         public final static String SEARCH_QUERY_EXTRA = "query";
         public ItemFragment(){}
@@ -73,7 +73,6 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
             name = (EditText) view.findViewById(R.id.itemName);
             quantity = (EditText) view.findViewById(R.id.itemQuantity);
             price = (EditText) view.findViewById(R.id.item_price);
-            store = (EditText) view.findViewById(R.id.item_store);
             camera = (EditText) view.findViewById(R.id.item_picture);
 
             item_spinner = (Spinner) view.findViewById(R.id.categories_item_spinner);

@@ -94,4 +94,13 @@ public class MyListItemAdapter extends RecyclerView.Adapter<MyListItemAdapter.Gr
             Log.d(TAG, "" + pos);
         }
     }
+
+    public void swapCursor(Cursor newCursor){
+        if (cursor != null) cursor.close();
+        cursor = newCursor;
+        if (newCursor != null) {
+            // Force the RecyclerView to refresh
+            this.notifyDataSetChanged();
+        }
+    }
 }
