@@ -2,6 +2,13 @@ package com.example.patrick.groceryapplication.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +20,10 @@ import android.widget.Toast;
 
 import com.example.patrick.groceryapplication.MainActivity;
 import com.example.patrick.groceryapplication.R;
+import com.example.patrick.groceryapplication.models.BarCodeItems;
+import com.example.patrick.groceryapplication.utils.JsonUtils;
+import com.example.patrick.groceryapplication.utils.NetworkUtils;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,6 +31,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,8 +43,7 @@ import java.util.HashMap;
 /**
  * Created by Nomis on 7/25/2017.
  */
-
-public class AddGroupListItemFragment extends DialogFragment {
+public class AddGroupListItemFragment extends DialogFragment implements LoaderManager.LoaderCallbacks<Void>{
     private EditText name;
     private EditText quantity;
     private EditText price;
@@ -41,12 +56,13 @@ public class AddGroupListItemFragment extends DialogFragment {
     private HashMap<String,String> usersWithPermission;
     private final String TAG = "itemFragment";
     private String toast;
+    private String content;
+    private static final int BAR_LOADER=1;
     public static final int REQUEST_CODE=123;
-
+    BarCodeItems results;
     public AddGroupListItemFragment(){}
 
     public static AddGroupListItemFragment newInstance(String groupKey) {
-
         Bundle args = new Bundle();
         args.putString("key",groupKey);
         AddGroupListItemFragment fragment = new AddGroupListItemFragment();
@@ -69,7 +85,7 @@ public class AddGroupListItemFragment extends DialogFragment {
         item_spinner = (Spinner) view.findViewById(R.id.categories_item_spinner);
         userSpinner=(Spinner) view.findViewById(R.id.user_spinner);
 
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(this.getActivity(),R.array.categories_array1,android.R.layout.simple_spinner_item);
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(this.getActivity(),R.array.categories_array,android.R.layout.simple_spinner_item);
         item_spinner.setAdapter(adapter);
 
         DatabaseReference userRef=(FirebaseDatabase.getInstance().getReference("groupList").child(getGroupKey()).child("users"));
@@ -133,7 +149,7 @@ public class AddGroupListItemFragment extends DialogFragment {
     }
 
     public void scanFromFragment() {
-        IntentIntegrator integrator = new IntentIntegrator(getActivity());
+        IntentIntegrator integrator = new IntentIntegrator(this.getActivity()).forSupportFragment(AddGroupListItemFragment.this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
         integrator.setPrompt("Scan a barcode");
         integrator.setBeepEnabled(false);
@@ -142,18 +158,20 @@ public class AddGroupListItemFragment extends DialogFragment {
         integrator.initiateScan();
     }
     private void displayToast() {
-        if(getActivity() != null && toast != null) {
-            Toast.makeText(getActivity(), toast, Toast.LENGTH_LONG).show();
+        if(this.getActivity() != null && toast != null) {
+            Toast.makeText(this.getActivity(), toast, Toast.LENGTH_LONG).show();
             toast = null;
         }
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        IntentResult result = IntentIntegrator.parseActivityResult(IntentIntegrator.REQUEST_CODE, resultCode, data);
         if(result != null) {
             if(result.getContents() == null) {
                 toast = "Cancelled from fragment";
             } else {
+                content=result.getContents();
+                load();
                 toast = "Scanned from fragment: " + result.getContents();
             }
 
@@ -161,4 +179,107 @@ public class AddGroupListItemFragment extends DialogFragment {
             displayToast();
         }
     }
+
+    @Override
+    public Loader<Void> onCreateLoader(int id, Bundle args) {
+        return new AsyncTaskLoader<Void>(this.getActivity()) {
+
+            //Loader starts and shows that the screen is refreshing by enabling progressbar
+            @Override
+            protected void onStartLoading() {
+                super.onStartLoading();
+                Log.d(TAG,"LOD STARTING");
+            }
+
+            //Runs internet refresh off the UI thread
+            @Override
+            public Void loadInBackground() {
+                //URL url= NetworkUtils.makeUrl("0f0cb14a14b7134d22586414523c975d");
+                URL url= NetworkUtils.makeUrl(content);
+                try{
+                    Log.d(TAG,url+"");
+                    String jsonBarcode=NetworkUtils.getResponseFromHttpUrl(url);
+                    results= JsonUtils.parseJson(jsonBarcode);
+                }
+                catch (IOException e){
+                    Log.d(TAG,"IO EXCEPTOIN OCCURRED");
+                    e.printStackTrace();
+                }
+                catch (JSONException e){
+                    Log.d(TAG,"JSON EXCEPTION OCCURRED");
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Void> loader, Void data) {
+            Log.d(TAG,"AM I DONE");
+//        name.setText("testing");
+//        price.setText("another test");
+        name.setText(results.getItemName());
+        price.setText(results.getAvg_price());
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Void> loader) {
+
+    }
+    private void load(){
+        LoaderManager lm = this.getActivity().getSupportLoaderManager();
+        lm.restartLoader(BAR_LOADER,null,this).forceLoad();
+    }
+//this not working
+//    @Override
+//    public Loader<Void> onCreateLoader(int d, final Bundle args){
+//        return new AsyncTaskLoader<Void>(this.getActivity()) {
+//
+//            //Loader starts and shows that the screen is refreshing by enabling progressbar
+//            @Override
+//            protected void onStartLoading() {
+//                super.onStartLoading();
+//                Log.d(TAG,"LOD STARTING");
+//            }
+//
+//            //Runs internet refresh off the UI thread
+//            @Override
+//            public Void loadInBackground() {
+//                //URL url= NetworkUtils.makeUrl("0f0cb14a14b7134d22586414523c975d");
+//                URL url= NetworkUtils.makeUrl(content);
+//                try{
+//                    Log.d(TAG,url+"");
+//                    String jsonBarcode=NetworkUtils.getResponseFromHttpUrl(url);
+//                    results= JsonUtils.parseJson(jsonBarcode);
+//                }
+//                catch (IOException e){
+//                    Log.d(TAG,"IO EXCEPTOIN OCCURRED");
+//                    e.printStackTrace();
+//                }
+//                catch (JSONException e){
+//                    Log.d(TAG,"JSON EXCEPTION OCCURRED");
+//                    e.printStackTrace();
+//                }
+//                return null;
+//            }
+//        };
+//    }
+//    @Override
+//    public void onLoadFinished(Loader<Void> loader, Void data) {
+//        Log.d(TAG,"AM I DONE");
+//       // name.setText("testing");
+//        //price.setText("another test");
+//        //name.setText(results.getItemName());
+//        price.setText(results.getAvg_price());
+//    }
+//
+//    @Override
+//    public void onLoaderReset(Loader<Void> loader) {
+//
+//    }
+//    private void load(){
+//        LoaderManager lm = this.getActivity().getSupportLoaderManager();
+//        lm.restartLoader(BAR_LOADER,null,this).forceLoad();
+//    }
 }

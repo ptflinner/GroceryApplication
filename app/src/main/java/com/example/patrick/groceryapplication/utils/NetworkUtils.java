@@ -28,16 +28,16 @@ public class NetworkUtils {
     public static final String BASE_URL = "http://api.upcdatabase.org/json";
     public static final String TAG = "NetworkUtils";
     public static final String apikey = "0f0cb14a14b7134d22586414523c975d";
+
     //public String itemNumber = ;
 
     //URL :http://api.upcdatabase.org/json/0f0cb14a14b7134d22586414523c975d/0111222333446
     //Api Key:0f0cb14a14b7134d22586414523c975d
     //Item#:0111222333446
 
-    public static URL makeUrl(){
+    public static URL makeUrl(String item_code){
         Uri uri = Uri.parse(BASE_URL).buildUpon()
-                .appendPath(apikey)
-                //.appendPath(itemNumber)
+                .appendEncodedPath("/"+apikey+"/"+item_code)
                 .build();
 
 
@@ -45,7 +45,7 @@ public class NetworkUtils {
         try{
             String urlString = uri.toString();
             Log.d(TAG, "Url: " + urlString);
-            url = new URL(uri.toString());
+            url = new URL(BASE_URL+"/"+apikey+"/"+item_code);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -70,23 +70,5 @@ public class NetworkUtils {
         } finally {
             urlConnection.disconnect();
         }
-    }
-    //parse the data and put into a object
-    public static ArrayList<BarCodeItems> parseJson(String json) throws JSONException{
-        ArrayList<BarCodeItems> parsedData = new ArrayList<>();
-        JSONObject main = new JSONObject(json);
-        JSONArray items = main.getJSONArray("items");
-
-        for(int i = 0; i < items.length(); i++){
-            JSONObject item = items.getJSONObject(i);
-            String number = item.getString("number");
-            String itemname = item.getString("itemname");
-            String description = item.getString("description");
-            String avg_price = item.getString("url");
-
-            //NewsItem news = new NewsItem(author, title, description, url,urlToImage, publishedAt);
-            parsedData.add(new BarCodeItems(number,itemname,description,avg_price));
-        }
-        return parsedData;
     }
 }

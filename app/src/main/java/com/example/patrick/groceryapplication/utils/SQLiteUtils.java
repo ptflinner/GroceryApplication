@@ -93,12 +93,14 @@ public class SQLiteUtils {
      * TAG included
      *
      */
-    public boolean removeItem(SQLiteDatabase db,long id){
+    public static boolean removeItem(SQLiteDatabase db,long id){
         Log.d(TAG, " - Deleting item with id:" + id + db);
+        db.delete(Contract.TABLE_COMPLETED_LIST.TABLE_NAME, Contract.TABLE_COMPLETED_LIST.COLUMN_NAME_ITEM_ID + "=" + id, null);
         return db.delete(Contract.TABLE_ITEM.TABLE_NAME, Contract.TABLE_ITEM._ID + "=" + id, null) >= 0;
     }
-    public boolean removeList(SQLiteDatabase db, long id){
+    public static boolean removeList(SQLiteDatabase db, long id){
         Log.d(TAG, " - Deleting List with id:" + id);
+        db.delete(Contract.TABLE_COMPLETED_LIST.TABLE_NAME, Contract.TABLE_COMPLETED_LIST.COLUMN_NAME_LIST_ID + "=" + id, null);
         return db.delete(Contract.TABLE_LIST.TABLE_NAME, Contract.TABLE_LIST._ID + "=" + id, null) >= 0;
     }
 

@@ -43,17 +43,17 @@ public class DBHelper extends SQLiteOpenHelper{
             Contract.TABLE_ITEM.COLUMN_NAME_ITEM_NAME + " TEXT NOT NULL, " +
             Contract.TABLE_ITEM.COLUMN_NAME_QUANTITY + " INTEGER, " +
             Contract.TABLE_ITEM.COLUMN_NAME_PRICE + " DOUBLE, " +
-            Contract.TABLE_ITEM.COLUMN_NAME_PICTURE + " TEXT NOT NULL, " +
+            Contract.TABLE_ITEM.COLUMN_NAME_PICTURE + " TEXT, " +
             Contract.TABLE_ITEM.COLUMN_NAME_CATEGORY + " TEXT NOT NULL, " +
-            Contract.TABLE_ITEM.COLUMN_NAME_PURCHASE_STATUS + " TEXT NOT NULL" +
+            Contract.TABLE_ITEM.COLUMN_NAME_PURCHASE_STATUS + " INTEGER NOT NULL" +
             "); ";
         Log.d(TAG, "Create table one SQL:" + table_item_query);
         db.execSQL(table_item_query);
 
         String table_list_query = "CREATE TABLE " + Contract.TABLE_LIST.TABLE_NAME +
             " (" + Contract.TABLE_LIST.COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            Contract.TABLE_LIST.COLUMN_NAME_LIST_NAME + " TEXT NOT NULL, " +
-            Contract.TABLE_LIST.COLUMN_NAME_LIST_CATEGORY + " TEXT NOT NULL " +
+            Contract.TABLE_LIST.COLUMN_NAME_LIST_NAME + " INTEGER, " +
+            Contract.TABLE_LIST.COLUMN_NAME_LIST_CATEGORY + " INTEGER " +
             "); ";
         Log.d(TAG, "Create table two SQL:" + table_list_query);
         db.execSQL(table_list_query);

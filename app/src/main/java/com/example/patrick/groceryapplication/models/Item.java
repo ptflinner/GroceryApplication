@@ -21,6 +21,13 @@ public class Item {
         this.description = description;
     }
 
+    public Item(String name){
+        this.name = name;
+        this.category="";
+        this.count="";
+        this.description="";
+    }
+
     public String getName() {
         return name;
     }
