@@ -1,5 +1,6 @@
 package com.example.patrick.groceryapplication.fragments;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -24,11 +25,15 @@ import com.example.patrick.groceryapplication.models.BarCodeItems;
 import com.example.patrick.groceryapplication.utils.JsonUtils;
 import com.example.patrick.groceryapplication.utils.NetworkUtils;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import org.json.JSONException;
@@ -47,21 +52,24 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
     private EditText name;
     private EditText quantity;
     private EditText price;
-    private Button bar_code;
     private Spinner item_spinner;
     private EditText store;
     private EditText camera;
+    private Button bar_code;
+    private Button gallery;
     private Button add;
     private Spinner userSpinner;
     private HashMap<String,String> usersWithPermission;
     private final String TAG = "itemFragment";
     private String toast;
     private String content;
+    private static final int GALLERY_INTENT = 2;
+    private StorageReference mStorage;
     private static final int BAR_LOADER=1;
     public static final int REQUEST_CODE=123;
     BarCodeItems results;
     public AddGroupListItemFragment(){}
-
+//sending information to other fragments
     public static AddGroupListItemFragment newInstance(String groupKey) {
         Bundle args = new Bundle();
         args.putString("key",groupKey);
@@ -70,9 +78,9 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
         return fragment;
 
     }
-
+//get key for group list you belong too
     public String getGroupKey(){return getArguments().getString("key");}
-
+//the view when you are adding an item to the list
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.fragment_adding_group_list_item, container, false);
@@ -87,7 +95,7 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
 
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this.getActivity(),R.array.categories_array1,android.R.layout.simple_spinner_item);
         item_spinner.setAdapter(adapter);
-
+        //show the memebers of the current group list you are on
         DatabaseReference userRef=(FirebaseDatabase.getInstance().getReference("groupList").child(getGroupKey()).child("users"));
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -108,8 +116,18 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
 
             }
         });
-
-
+        //opens up your gallery to upload an image to the firebase database
+        mStorage = FirebaseStorage.getInstance().getReference();
+        gallery = (Button) view.findViewById(R.id.gallery_image);
+        gallery.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent,GALLERY_INTENT);
+            }
+        });
+        // open up the scanner to scan barcodes
         bar_code = (Button) view.findViewById(R.id.scan_button);
         bar_code.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +135,7 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
                 scanFromFragment();
             }
         });
+        //add button to add your current item into your list
         add = (Button) view.findViewById(R.id.add);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +166,7 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
 
         return view;
     }
-
+//setting up the barcode scanner
     public void scanFromFragment() {
         IntentIntegrator integrator = new IntentIntegrator(this.getActivity()).forSupportFragment(AddGroupListItemFragment.this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
@@ -163,12 +182,24 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
             toast = null;
         }
     }
+    //
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(IntentIntegrator.REQUEST_CODE, resultCode, data);
         if(result != null) {
             if(result.getContents() == null) {
-                toast = "Cancelled from fragment";
+                //toast = "Cancelled from fragment";
+                Uri uri = data.getData();
+                // may need to change if multiple users
+                //uploading images to the firebase database
+                StorageReference path = mStorage.child("Photos").child(uri.getLastPathSegment());
+                path.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        toast = "Upload done";
+                    }
+                });
+
             } else {
                 content=result.getContents();
                 load();

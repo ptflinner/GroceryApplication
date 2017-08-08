@@ -73,6 +73,12 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="Add" />
+        <Button
+            android:id="@+id/gallery_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="upload image from gallery" />
         <TextureView
             android:id="@+id/scan_format"
             android:layout_width="wrap_content"

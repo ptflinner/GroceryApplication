@@ -1,13 +1,13 @@
 package com.example.patrick.groceryapplication.fragments;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
-import android.text.TextUtils;
+
 import android.util.Log;
 
 import android.view.LayoutInflater;
@@ -19,20 +19,22 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.patrick.groceryapplication.MainActivity;
+
 import com.example.patrick.groceryapplication.R;
 import com.example.patrick.groceryapplication.models.BarCodeItems;
 import com.example.patrick.groceryapplication.utils.JsonUtils;
 import com.example.patrick.groceryapplication.utils.NetworkUtils;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -48,12 +50,15 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
     private EditText store;
     private EditText camera;
     private Button add;
-    private Spinner userSpinner;
+    //private Spinner userSpinner;
     private HashMap<String, String> usersWithPermission;
     private final String TAG = "itemFragment";
     private String toast;
     private String content;
     private BarCodeItems results;
+    private Button gallery;
+    private static final int GALLERY_INTENT = 2;
+    private StorageReference mStorage;
     public static final int REQUEST_CODE = 349;
     private static final int BAR_LOADER = 1;
     public final static String SEARCH_QUERY_EXTRA = "query";
@@ -68,7 +73,7 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
         fragment.setArguments(args);
         return fragment;
     }
-
+//creating the view for adding an item
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item, container, false);
@@ -79,10 +84,22 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
         camera = (EditText) view.findViewById(R.id.item_picture);
 
         item_spinner = (Spinner) view.findViewById(R.id.categories_item_spinner);
-        userSpinner = (Spinner) view.findViewById(R.id.user_spinner);
+        //userSpinner = (Spinner) view.findViewById(R.id.user_spinner);
 
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this.getActivity(), R.array.categories_array1, android.R.layout.simple_spinner_item);
         item_spinner.setAdapter(adapter);
+        mStorage = FirebaseStorage.getInstance().getReference();
+        //opens up your gallery to choose a picture to be uploaded to the firebase database
+        gallery = (Button) view.findViewById(R.id.gallery_image);
+        gallery.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent,GALLERY_INTENT);
+            }
+        });
+        //open up a scanner to scan a barcode
         bar_code = (Button) view.findViewById(R.id.scan_button);
         bar_code.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +107,7 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
                 scanFromFragment();
             }
         });
+        //add the item to your current list/group list
         add = (Button) view.findViewById(R.id.add);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +136,7 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
 
         return view;
     }
-
+    //function for the scanner to scan barcodes
     public void scanFromFragment() {
         IntentIntegrator integrator = new IntentIntegrator(this.getActivity()).forSupportFragment(ItemFragment.this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
@@ -128,20 +146,30 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
         integrator.setCameraId(0);  // Use a specific camera of the device
         integrator.initiateScan();
     }
-
+//show toast on successful/unsuccessful scan
     private void displayToast() {
         if (getActivity() != null && toast != null) {
             Toast.makeText(getActivity(), toast, Toast.LENGTH_LONG).show();
             toast = null;
         }
     }
-
+//stuff with toast
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
-            if (result.getContents() == null) {
-                toast = "Cancelled from fragment";
+        //uploading images or displaying the toast
+        if(result != null) {
+            if(result.getContents() == null) {
+                //toast = "Cancelled from fragment";
+                Uri uri = data.getData();
+                // may need to change if multiple users
+                StorageReference path = mStorage.child("Photos").child(uri.getLastPathSegment());
+                path.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        toast = "Upload done";
+                    }
+                });
             } else {
                 content = result.getContents();
                 load();
@@ -152,7 +180,7 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
             displayToast();
         }
     }
-
+//connection to the upcdatabase.org's api
     @Override
     public Loader<Void> onCreateLoader(int id, Bundle args) {
         return new AsyncTaskLoader<Void>(this.getActivity()) {
@@ -184,7 +212,7 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
             }
         };
     }
-
+//auto fill name and price when you scan a barcode when adding an item
     @Override
     public void onLoadFinished(Loader<Void> loader, Void data) {
         Log.d(TAG, "AM I DONE");
