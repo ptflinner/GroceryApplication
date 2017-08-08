@@ -3,23 +3,23 @@ package com.example.patrick.groceryapplication.models;
 import java.util.ArrayList;
 
 public class FeaturedItem {
-    private String Title;
+    private String title;
     private ArrayList<Item> groceryList;
     private int itemCount;
 
     public FeaturedItem(String title, ArrayList<Item> groceryList, int itemCount) {
-        Title = title;
+        this.title = title;
         this.groceryList = groceryList;
         this.itemCount = itemCount;
     }
     public FeaturedItem(){}
 
     public String getTitle() {
-        return Title;
+        return title;
     }
 
     public void setTitle(String title) {
-        Title = title;
+        this.title = title;
     }
 
     public ArrayList<Item> getGroceryList() {
