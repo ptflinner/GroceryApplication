@@ -136,12 +136,5 @@ public class MyListItemFragment extends Fragment{
         }
     }
 
-    private long addItem(SQLiteDatabase db, String name, int quantity, double price){
-        ContentValues cv = new ContentValues();
-        cv.put(Contract.TABLE_ITEM.COLUMN_NAME_ITEM_NAME, title);
-        cv.put(Contract.TABLE_LIST.COLUMN_NAME_LIST_CATEGORY, category);
-        Log.d(TAG, title + " inserted into db");
-        Log.d(TAG, category + " inserted into db");
-        return db.insert(Contract.TABLE_LIST.TABLE_NAME, null, cv);
-    }
+
 }
