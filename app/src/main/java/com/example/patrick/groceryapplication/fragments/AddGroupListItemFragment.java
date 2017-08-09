@@ -1,12 +1,17 @@
 package com.example.patrick.groceryapplication.fragments;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.FileProvider;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -38,11 +44,14 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import org.json.JSONException;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -54,7 +63,7 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
     private EditText price;
     private Spinner item_spinner;
     private EditText store;
-    private EditText camera;
+    //private EditText camera;
     private Button bar_code;
     private Button gallery;
     private Button add;
@@ -62,8 +71,11 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
     private HashMap<String,String> usersWithPermission;
     private final String TAG = "itemFragment";
     private String toast;
-    private String content;
-    private static final int GALLERY_INTENT = 2;
+    private String content;//8/6
+    private ImageView itemImage;
+    private ProgressDialog progress;
+    private static final int CAMERA_REQUEST_CODE =2;
+    //private static final int GALLERY_INTENT = 2;
     private StorageReference mStorage;
     private static final int BAR_LOADER=1;
     public static final int REQUEST_CODE=123;
@@ -80,7 +92,48 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
     }
 //get key for group list you belong too
     public String getGroupKey(){return getArguments().getString("key");}
-//the view when you are adding an item to the list
+    //camera stuff_____________________________________--------------------------------------------------
+    String mCurrentPhotoPath;
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File...
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this.getActivity(),
+                        "com.example.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
+            }
+        }
+    }
+
+    //the view when you are adding an item to the list
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.fragment_adding_group_list_item, container, false);
@@ -88,8 +141,9 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
         quantity = (EditText) view.findViewById(R.id.itemQuantity);
         price = (EditText) view.findViewById(R.id.item_price);
         store = (EditText) view.findViewById(R.id.item_store);
-        camera = (EditText) view.findViewById(R.id.item_picture);
+        //camera = (EditText) view.findViewById(R.id.item_picture);
 
+        progress = new ProgressDialog(getActivity());
         item_spinner = (Spinner) view.findViewById(R.id.categories_item_spinner);
         userSpinner=(Spinner) view.findViewById(R.id.user_spinner);
 
@@ -119,12 +173,14 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
         //opens up your gallery to upload an image to the firebase database
         mStorage = FirebaseStorage.getInstance().getReference();
         gallery = (Button) view.findViewById(R.id.gallery_image);
+        itemImage = (ImageView) view.findViewById(R.id.item_picture);
         gallery.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent,GALLERY_INTENT);
+                //Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                //intent.setType("image/*");
+                //startActivityForResult(intent,CAMERA_REQUEST_CODE);
+                dispatchTakePictureIntent();
             }
         });
         // open up the scanner to scan barcodes
@@ -182,6 +238,7 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
             toast = null;
         }
     }
+
     //
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -189,13 +246,17 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
         if(result != null) {
             if(result.getContents() == null) {
                 //toast = "Cancelled from fragment";
+                progress.setMessage("Uploading...");
+                progress.show();
                 Uri uri = data.getData();
                 // may need to change if multiple users
                 //uploading images to the firebase database
+                Uri photoURI=(Uri)getArguments().get(MediaStore.EXTRA_OUTPUT);
                 StorageReference path = mStorage.child("Photos").child(uri.getLastPathSegment());
-                path.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                path.putFile(photoURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        //progress.dismiss();
                         toast = "Upload done";
                     }
                 });

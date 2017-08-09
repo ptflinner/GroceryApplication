@@ -56,7 +56,7 @@
         android:layout_marginBottom="10dp"
         android:hint="store placeholder"/>
     <!-- picture -->
-    <EditText
+    <ImageView
         android:id="@+id/item_picture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
