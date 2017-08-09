@@ -54,6 +54,7 @@ public class MyListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_my_list, container, false);
+
         fab=(FloatingActionButton) view.findViewById(R.id.fab_my_list);
 
         fab.setOnClickListener(new View.OnClickListener(){

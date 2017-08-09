@@ -5,88 +5,152 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+<ImageView
 
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:id="@+id/item_detail_picture"
-        android:src="@drawable/ic_camera_enhance_black_24dp"
-        tools:src="@drawable/duck"/>
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:layout_gravity="center"
+    android:layout_marginTop="10dp"
+    android:id="@+id/item_detail_picture"
+    android:src="@drawable/ic_camera_enhance_black_24dp"
+    tools:src="@drawable/duck"/>
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textSize="30sp"
+    android:padding="10dp"
+    tools:text="Duck"
+    android:layout_gravity="center"
+    android:id="@+id/item_detail_name"/>
+
+<View
+    android:layout_width="350dp"
+    android:layout_gravity="center"
+    android:layout_height="1dp"
+    android:background="#c0c0c0"
+    />
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
 
     <TextView
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:padding="10dp"
-        tools:text="Duck"
-        android:layout_gravity="center"
-        android:id="@+id/item_detail_name"/>
-
-    <View
-        android:layout_width="350dp"
-        android:layout_gravity="center"
-        android:layout_height="1dp"
-        android:background="#c0c0c0"
+        android:textSize="20sp"
+        android:text="Price"
+        tools:text="Price"
+        />
+    <TextView
+        android:id="@+id/item_detail_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:textSize="20sp"
+        tools:text="$3.50"
         />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+</RelativeLayout>
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <TextView
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-
-        <TextView
-            android:layout_marginLeft="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="20sp"
-            android:text="Price"
-            tools:text="Price"
-            />
-        <TextView
-            android:id="@+id/item_detail_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="20sp"
-            tools:text="$3.50"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_marginLeft="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="20sp"
-            android:text="Quantity"
-            tools:text="Quantity"
-            />
-        <TextView
-            android:id="@+id/item_detail_quantity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="20sp"
-            tools:text="x69"
-            />
-
-    </LinearLayout>
-
-    <Button
-        android:layout_gravity="center"
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
-        android:text="update item"
+        android:textSize="20sp"
+        android:text="Quantity"
+        tools:text="Quantity"
         />
+    <TextView
+        android:id="@+id/item_detail_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:textSize="20sp"
+        tools:text="x69"
+        />
+
+</RelativeLayout>
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="Category"
+        tools:text="Category"/>
+
+    <TextView
+
+        android:id="@+id/item_detail_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="Category"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:layout_gravity="end"/>
+</RelativeLayout>
+    <!--
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="Store"
+        tools:text="Store"/>
+
+    <TextView
+
+        android:id="@+id/item_detail_store"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="Store"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:layout_gravity="end"/>
+</RelativeLayout>
+-->
+<Button
+    android:layout_gravity="center"
+    android:layout_width="400dp"
+    android:layout_height="wrap_content"
+    android:text="update item"
+    android:id="@+id/update_button"
+    />
+<Button
+    android:layout_gravity="center"
+    android:layout_width="400dp"
+    android:layout_height="wrap_content"
+    android:text="delete item"
+    android:id="@+id/delete_button"
+    android:background="#F00"
+    android:textColor="#FFF"/>
+
 
 
 </LinearLayout>

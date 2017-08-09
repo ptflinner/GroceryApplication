@@ -1,0 +1,123 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.patrick.groceryapplication.fragments.UpdateMyListItem">
+
+    <ImageView
+        android:contentDescription="@string/item_name"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:id="@+id/item_detail_picture"
+        android:src="@drawable/ic_camera_enhance_black_24dp"
+        tools:src="@drawable/duck"/>
+
+
+    <View
+        android:layout_width="350dp"
+        android:layout_gravity="center"
+        android:layout_height="1dp"
+        android:background="#c0c0c0"
+        />
+    <Spinner
+        android:id="@+id/update_categories_item_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="48dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="20sp"
+                android:text="Name"
+                tools:text="Name"
+                />
+            <EditText
+                android:id="@+id/update_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="text"
+                android:textSize="20sp"
+
+                />
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:text="Price"
+            tools:text="Price"
+            />
+        <EditText
+            android:id="@+id/update_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="text"
+            android:labelFor="@id/update_price"
+            android:textSize="20sp"
+
+            />
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="20sp"
+                android:text="Quantity"
+                tools:text="Quantity"
+                />
+            <EditText
+                android:id="@+id/update_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="text"
+
+                android:labelFor="@id/update_quantity"
+                android:textSize="20sp"
+                />
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/update_item"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="update item" />
+
+
+
+
+
+
+</LinearLayout>
