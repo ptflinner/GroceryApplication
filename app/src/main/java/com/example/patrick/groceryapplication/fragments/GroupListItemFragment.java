@@ -164,10 +164,10 @@ public class GroupListItemFragment extends Fragment {
         if(requestCode== AddGroupListItemFragment.REQUEST_CODE){
             Bundle extras=data.getBundleExtra("args");
             //Bitmap bitmap = getArguments().getParcelable("image");
-          /*  Bundle bundle = getArguments();
-            Bitmap bitmap = bundle.getParcelable("image");*/
-
-            GroupItem item= new GroupItem(extras.getString("Name"),extras.getString("category"),extras.getString("Quantity"),extras.getString("Price"),extras.getString("provider"));
+            Bundle bundle = getArguments();
+            Bitmap bitmap = bundle.getParcelable("image");
+            GroupItem item= new GroupItem(extras.getString("Name"),extras.getString("category"),extras.getString("Quantity"),extras.getString("Price"),extras.getString("provider"),
+                    bitmap);
             firebaseGroupAdd(FirebaseDatabase.getInstance(), item);
             Log.d(TAG, "BUTTONCLICKED");
         }

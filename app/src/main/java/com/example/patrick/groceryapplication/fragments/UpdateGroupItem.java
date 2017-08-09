@@ -82,6 +82,7 @@ public class UpdateGroupItem extends Fragment {
                 Log.d("ITEM FRAG",getItemKey());
 
                 GroupItem item=(dataSnapshot.getValue(GroupItem.class));
+                image.setImageBitmap(item.getImage());
                 nameET.setText(item.getName());
                 quantityET.setText(item.getPrice());
                 editCategory.setSelection(findSpinnerPosition(item.getCategory()));

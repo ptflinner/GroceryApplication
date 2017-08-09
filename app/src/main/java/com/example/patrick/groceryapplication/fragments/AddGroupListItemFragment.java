@@ -99,7 +99,7 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
 //get key for group list you belong too
     public String getGroupKey(){return getArguments().getString("key");}
     //camera stuff_____________________________________--------------------------------------------------
-    String mCurrentPhotoPath;
+  /*  String mCurrentPhotoPath;
 
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -107,9 +107,9 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
+                imageFileName,  *//* prefix *//*
+                ".jpg",         *//* suffix *//*
+                storageDir      *//* directory *//*
         );
 
         // Save a file: path for use with ACTION_VIEW intents
@@ -136,7 +136,7 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
                 startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
             }
         }
-    }
+    }*/
 
     //the view when you are adding an item to the list
     @Override
@@ -268,10 +268,11 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] dataBAOS = baos.toByteArray();
                 imageHolder.setImageBitmap(bitmap);
-                //GroupListItemFragment fragment = new GroupListItemFragment();
-                //Bundle bundle = new Bundle();
-                //extras.putParcelable("image",bitmap);
-                //fragment.setArguments(extras);
+
+                GroupListItemFragment fragment = new GroupListItemFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("image",bitmap);
+                fragment.setArguments(bundle);
 
                 StorageReference storageRef = FirebaseStorage.getInstance().getReference("Photos");
 
