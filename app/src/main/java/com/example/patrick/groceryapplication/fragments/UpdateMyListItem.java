@@ -96,13 +96,16 @@ public class UpdateMyListItem extends Fragment {
             public void onClick(View view) {
 //                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE);
 //                startActivityForResult(intent,1);
-                saveImage();
+                imageOptions();
             }
         });
         return view;
     }
-
-    public void saveImage(){
+    //method to update items image obption are given
+    //camera photo
+    // gallery photo
+    //or cancel the option
+    public void imageOptions(){
 
         final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -112,14 +115,17 @@ public class UpdateMyListItem extends Fragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if(options[i].equals("Take Photo")){
+                    //create a camera intent that lets you capture the image from the phone
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE);
                     startActivityForResult(intent,1);
                 }else if (options[i].equals("Choose from Gallery")) {
+                    //options to choose image from the phones gallery
                     Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     intent.setType("image/*");
                     startActivityForResult(intent,0);
                 }
                 else if(options[i].equals("Cancel")){
+                    //cancel the users options
                     dialogInterface.dismiss();
                 }
             }
@@ -131,6 +137,7 @@ public class UpdateMyListItem extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
+        //creats a bitmap image and set the image to the user
             if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == getActivity().RESULT_OK ) {
                 extra = data.getExtras();
                 Bitmap bitmap = (Bitmap) extra.get("data");
@@ -140,6 +147,7 @@ public class UpdateMyListItem extends Fragment {
 
         }
         else if(requestCode == SELECT_FIlE){
+                //gives the user the option to select a image from the user galary
                 Uri selectedImage = data.getData();
                 image.setImageURI(selectedImage);
             }
