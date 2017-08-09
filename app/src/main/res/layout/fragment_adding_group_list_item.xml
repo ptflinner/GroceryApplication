@@ -37,11 +37,13 @@
         android:id="@+id/item_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
         android:layout_marginBottom="10dp"
         android:hint="price placeholder"/>
     <!-- quantity -->
     <EditText
         android:id="@+id/itemQuantity"
+        android:inputType="number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"

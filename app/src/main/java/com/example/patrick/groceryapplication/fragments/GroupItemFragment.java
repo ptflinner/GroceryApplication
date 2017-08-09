@@ -23,7 +23,8 @@ public class GroupItemFragment extends Fragment {
     private TextView nameTV;
     private TextView countTV;
     private TextView categoryTV;
-    private TextView descriptionTV;
+    private TextView priceTV;
+
     private final static String TAG="ITEM FRAG";
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,7 @@ public class GroupItemFragment extends Fragment {
         nameTV=(TextView) view.findViewById(R.id.name_group_item_tv);
         countTV=(TextView) view.findViewById(R.id.count_group_item_tv);
         categoryTV=(TextView) view.findViewById(R.id.category_group_item_tv);
-        descriptionTV=(TextView) view.findViewById(R.id.description_group_item_tv);
+        priceTV=(TextView) view.findViewById(R.id.group_item_price);
 
         DatabaseReference itemRef=(FirebaseDatabase.getInstance())
                 .getReference("groupList")
@@ -67,10 +68,10 @@ public class GroupItemFragment extends Fragment {
                 Log.d("ITEM FRAG",getItemKey());
 
                 Item item=(dataSnapshot.getValue(Item.class));
-                nameTV.setText("Name: "+item.getName());
-                countTV.setText("Number of Items: "+item.getCount());
-                categoryTV.setText("Item Category: "+item.getCategory());
-                descriptionTV.setText("Item Description: "+item.getDescription());
+                nameTV.setText(item.getName());
+                countTV.setText(item.getPrice());
+                categoryTV.setText(item.getCategory());
+                priceTV.setText("$"+item.getCount());
             }
 
             @Override

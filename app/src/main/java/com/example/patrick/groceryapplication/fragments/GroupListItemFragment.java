@@ -151,11 +151,13 @@ public class GroupListItemFragment extends Fragment {
     public static class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         View mView;
         private TextView itemName;
+        private TextView itemQuantity;
 
         public ItemHolder(View itemView) {
             super(itemView);
             this.mView=itemView;
             itemName=(TextView) itemView.findViewById(R.id.group_item_name);
+            itemQuantity=(TextView) itemView.findViewById(R.id.group_item_quantity);
             itemView.setOnClickListener(this);
 
         }
@@ -163,6 +165,7 @@ public class GroupListItemFragment extends Fragment {
         public void bind(ItemHolder holder,Item item, int position){
             Log.d(TAG,"LIST NAME:"+item.getName());
             itemName.setText(item.getName());
+            itemQuantity.setText("$"+item.getCount());
             holder.itemView.setTag(position);
         }
 
