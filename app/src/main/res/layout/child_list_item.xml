@@ -7,6 +7,9 @@
         android:id="@+id/featured_list_subtitle_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16dp"
-        android:text="This is temp text that will hold the place of an item"/>
+        android:padding="3dp"
+        android:paddingStart="36dp"
+        android:text="This is temp text that will hold the place of an item"
+        android:textAlignment="viewStart"
+        android:textSize="20dp" />
 </LinearLayout>
