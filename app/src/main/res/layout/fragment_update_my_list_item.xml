@@ -73,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:inputType="text"
+            android:inputType="numberDecimal"
             android:labelFor="@id/update_price"
             android:textSize="20sp"
 
@@ -99,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:inputType="text"
+                android:inputType="number"
 
                 android:labelFor="@id/update_quantity"
                 android:textSize="20sp"
