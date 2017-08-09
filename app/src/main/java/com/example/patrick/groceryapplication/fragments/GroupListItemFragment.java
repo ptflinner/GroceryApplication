@@ -1,6 +1,8 @@
 package com.example.patrick.groceryapplication.fragments;
 
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -125,7 +127,25 @@ public class GroupListItemFragment extends Fragment {
                     int id = (int)viewHolder.itemView.getTag();
                     String itemKey=mItemListAdapter.getRef(id).getKey();
                     itemRef.child(itemKey).removeValue();
+                    createAdapter();
                     Log.d(TAG, "passing id: " + itemKey);
+                }
+
+                @Override
+                public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                    View itemView=viewHolder.itemView;
+
+                    Paint p = new Paint();
+                    p.setColor(getResources().getColor(R.color.colorAccent));
+                    if (dX > 0) {
+                        c.drawRect((float) itemView.getLeft(), (float) itemView.getTop(), dX,
+                                (float) itemView.getBottom(), p);
+                    } else {
+                        c.drawRect((float) itemView.getRight() + dX, (float) itemView.getTop(),
+                                (float) itemView.getRight(), (float) itemView.getBottom(), p);
+                    }
+
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
                 }
             }).attachToRecyclerView(itemListRecyclerView);
         }

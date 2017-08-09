@@ -1,5 +1,7 @@
 package com.example.patrick.groceryapplication.fragments;
 
+import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +32,8 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import android.content.ClipboardManager;
+import android.widget.Toast;
 
 public class GroupListFragment extends Fragment{
 
@@ -108,12 +113,22 @@ public class GroupListFragment extends Fragment{
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()){
-                           boolean admin=false;
+                            boolean admin=false;
 
-                           GroupList gModel=(dataSnapshot.getValue(GroupList.class));
+                            GroupList gModel=(dataSnapshot.getValue(GroupList.class));
                             if((gModel.getAdmin().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))){
                                 admin=true;
                                 adminHolder.setAdmin(true);
+                                viewHolder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+                                    @Override
+                                    public boolean onLongClick(View view) {
+                                        ClipboardManager clipboardManager=(ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                                        ClipData clip=ClipData.newPlainText("label",model);
+                                        clipboardManager.setPrimaryClip(clip);
+                                        Toast.makeText(getActivity(),"Copied to Clipboard", Toast.LENGTH_LONG).show();
+                                        return true;
+                                    }
+                                });
                             }
                            viewHolder.bind(gModel,position,admin,model);
                         }
@@ -135,6 +150,9 @@ public class GroupListFragment extends Fragment{
                         transaction.commit();
                     }
                 });
+
+
+
             }
 
         };
@@ -181,13 +199,6 @@ public class GroupListFragment extends Fragment{
             firebaseGroupAdd(FirebaseDatabase.getInstance(), groupList);
             Log.d(TAG, "BUTTON CLICKED");
         }
-//        if(requestCode==AddListByCodeFragment.REQUEST_CODE){
-//            Bundle extras=data.getBundleExtra("args");
-//
-//            DatabaseReference groupRef=(FirebaseDatabase.getInstance()).getReference("groupList").child(extras.getString("key"));
-//
-//
-//        }
     }
     public static class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         View mView;
@@ -212,6 +223,7 @@ public class GroupListFragment extends Fragment{
 
         @Override
         public void onClick(View view) {
+            Log.d(TAG,"DOES THIS WORK????");
 //            int pos=getAdapterPosition();
 //            mItemClick.onItemClickListener(pos,groupLists.get(pos));
         }
