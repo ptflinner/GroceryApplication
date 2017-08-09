@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:hint="item name placeholder" />
+        android:hint="item name " />
 
         <!-- price -->
     <EditText
@@ -38,14 +38,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:hint="price placeholder"/>
+        android:hint="price "/>
     <!-- quantity -->
     <EditText
         android:id="@+id/itemQuantity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:hint="item quantity placeholder" />
+        android:hint="item quantity " />
 
 
     <!-- stores -->
@@ -54,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:hint="store placeholder"/>
+        android:hint="store "/>
     <!-- picture -->
     <ImageView
         android:id="@+id/item_picture"
@@ -84,7 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:text="upload image from gallery" />
+        android:text="upload image" />
     <TextureView
         android:id="@+id/scan_format"
         android:layout_width="wrap_content"

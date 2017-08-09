@@ -1,12 +1,14 @@
 package com.example.patrick.groceryapplication.models;
 
 
+import android.graphics.Bitmap;
+
 public class Item {
     private String name;
     private String category;
     private String count;
     private String description;
-
+    //private Bitmap image;
     public Item() {
         this.name="";
         this.category="";
@@ -20,6 +22,13 @@ public class Item {
         this.count = count;
         this.description = description;
     }
+/*    public Item(String name, String category, String count, String description,Bitmap image) {
+        this.name = name;
+        this.category = category;
+        this.count = count;
+        this.description = description;
+        this.image = image;
+    }*/
 
     public String getName() {
         return name;
@@ -52,4 +61,11 @@ public class Item {
     public void setDescription(String description) {
         this.description = description;
     }
+/*    public Bitmap getImage() {
+        return image;
+    }
+
+    public void setImage(Bitmap image) {
+        this.image = image;
+    }*/
 }

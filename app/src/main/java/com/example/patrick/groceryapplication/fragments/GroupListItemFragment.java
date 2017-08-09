@@ -1,6 +1,7 @@
 package com.example.patrick.groceryapplication.fragments;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -117,7 +118,10 @@ public class GroupListItemFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode== AddGroupListItemFragment.REQUEST_CODE){
             Bundle extras=data.getBundleExtra("args");
-;
+            //Bitmap bitmap = getArguments().getParcelable("image");
+          /*  Bundle bundle = getArguments();
+            Bitmap bitmap = bundle.getParcelable("image");*/
+
             GroupItem item= new GroupItem(extras.getString("Name"),extras.getString("category"),extras.getString("Quantity"),extras.getString("Price"),extras.getString("provider"));
             firebaseGroupAdd(FirebaseDatabase.getInstance(), item);
             Log.d(TAG, "BUTTONCLICKED");

@@ -1,5 +1,7 @@
 package com.example.patrick.groceryapplication.models;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by Patrick on 8/6/2017.
  */
@@ -10,6 +12,8 @@ public class GroupItem {
     private String count;
     private String price;
     private String provider;
+    private String imageName;
+    private Bitmap image;
 
     public GroupItem() {
         this.name="";
@@ -25,6 +29,14 @@ public class GroupItem {
         this.count = count;
         this.price = description;
         this.provider=provider;
+    }
+    public GroupItem(String name, String category, String count, String description,String provider, Bitmap image) {
+        this.name = name;
+        this.category = category;
+        this.count = count;
+        this.price = description;
+        this.provider=provider;
+        this.image=image;
     }
 
     public String getName() {
@@ -65,5 +77,29 @@ public class GroupItem {
 
     public void setProvider(String provider) {
         this.provider = provider;
+    }
+
+    public Bitmap getImage() {
+        return image;
+    }
+
+    public void setImage(Bitmap image) {
+        this.image = image;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 }

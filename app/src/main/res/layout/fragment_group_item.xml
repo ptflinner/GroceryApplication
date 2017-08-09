@@ -6,7 +6,14 @@
     android:orientation="vertical"
     android:padding="12dp"
     tools:context="com.example.patrick.groceryapplication.fragments.GroupItemFragment">
-
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:id="@+id/item_detail_picture"
+        android:src="@drawable/ic_camera_enhance_black_24dp"
+        tools:src="@drawable/duck"/>
     <TextView
         android:id="@+id/name_group_item_tv"
         android:layout_width="match_parent"

@@ -2,6 +2,7 @@ package com.example.patrick.groceryapplication.fragments;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -65,6 +66,7 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
     private EditText price;
     private Spinner item_spinner;
     private EditText store;
+    private ImageView imageHolder;
     //private EditText camera;
     private Button bar_code;
     private Button gallery;
@@ -77,6 +79,7 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
     private ImageView itemImage;
     private ProgressDialog progress;
     private static final int CAMERA_REQUEST_CODE =2;
+
     //private static final int GALLERY_INTENT = 2;
     private StorageReference mStorage;
     private static final int BAR_LOADER=1;
@@ -143,7 +146,7 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
         price = (EditText) view.findViewById(R.id.item_price);
         store = (EditText) view.findViewById(R.id.item_store);
         //camera = (EditText) view.findViewById(R.id.item_picture);
-
+        imageHolder = (ImageView) view.findViewById(R.id.item_picture) ;
         progress = new ProgressDialog(getActivity());
         item_spinner = (Spinner) view.findViewById(R.id.categories_item_spinner);
         userSpinner=(Spinner) view.findViewById(R.id.user_spinner);
@@ -174,7 +177,7 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
         //opens up your gallery to upload an image to the firebase database
         mStorage = FirebaseStorage.getInstance().getReference();
         gallery = (Button) view.findViewById(R.id.gallery_image);
-        itemImage = (ImageView) view.findViewById(R.id.item_picture);
+        //itemImage = (ImageView) view.findViewById(R.id.item_picture);
         gallery.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -199,11 +202,16 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
             public void onClick(View v) {
                 //passing the data from this fragment to the activity
                 //uncomment this block of code
+                //BitmapDrawable drawable = (BitmapDrawable) imageHolder.getDrawable();
+                //Bitmap itembitmap = drawable.getBitmap();
+
                 String itemname = name.getText().toString();
                 String itemquantity = quantity.getText().toString();
                 String itemprice = price.getText().toString();
                 String itemProvider=userSpinner.getSelectedItem().toString();
                 String itemCategory=item_spinner.getSelectedItem().toString();
+               // Bitmap itemImage = (Bitmap) data.getExtras().get("data");
+                //String itemimages = itembitmap.toString();
 
                 Bundle b = new Bundle();
                 b.putString("Name",itemname);
@@ -246,32 +254,18 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
         IntentResult result = IntentIntegrator.parseActivityResult(IntentIntegrator.REQUEST_CODE, resultCode, data);
         if(result != null) {
             if(result.getContents() == null) {
-/*
-                //toast = "Cancelled from fragment";
-                progress.setMessage("Uploading...");
-                progress.show();
-                Uri uri = data.getData();
-                Uri photoURI=(Uri)getArguments().get(MediaStore.EXTRA_OUTPUT);
-                StorageReference path = mStorage.child("Photos").child(uri.getLastPathSegment());
-                path.putFile(photoURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        //progress.dismiss();
-                        toast = "Upload done";
-                    }
-                });
-*/
+
                 Bundle extras = data.getExtras();
                 Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] dataBAOS = baos.toByteArray();
+                imageHolder.setImageBitmap(bitmap);
+                //GroupListItemFragment fragment = new GroupListItemFragment();
+                //Bundle bundle = new Bundle();
+                //extras.putParcelable("image",bitmap);
+                //fragment.setArguments(extras);
 
-                //photoholder.setImageBitmap(bitmap);
-
-                /*************** UPLOADS THE PIC TO FIREBASE***************/
-                //Firebase storage folder where you want to put the images
-                //StorageReference path = mStorage.child("Photos").child(uri.getLastPathSegment());
                 StorageReference storageRef = FirebaseStorage.getInstance().getReference("Photos");
 
                 StorageReference imagesRef = storageRef.child("filename" + new Date().getTime());

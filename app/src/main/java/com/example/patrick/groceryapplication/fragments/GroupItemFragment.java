@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.patrick.groceryapplication.R;
@@ -24,6 +25,7 @@ public class GroupItemFragment extends Fragment {
     private TextView countTV;
     private TextView categoryTV;
     private TextView descriptionTV;
+    //private ImageView imageTV;
     private final static String TAG="ITEM FRAG";
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,7 @@ public class GroupItemFragment extends Fragment {
         countTV=(TextView) view.findViewById(R.id.count_group_item_tv);
         categoryTV=(TextView) view.findViewById(R.id.category_group_item_tv);
         descriptionTV=(TextView) view.findViewById(R.id.description_group_item_tv);
-
+        //imageTV = (ImageView) view.findViewById(R.id.item_detail_picture);
         DatabaseReference itemRef=(FirebaseDatabase.getInstance())
                 .getReference("groupList")
                 .child(getGroupKey())
@@ -71,6 +73,7 @@ public class GroupItemFragment extends Fragment {
                 countTV.setText("Number of Items: "+item.getCount());
                 categoryTV.setText("Item Category: "+item.getCategory());
                 descriptionTV.setText("Item Description: "+item.getDescription());
+                //imageTV.setImageBitmap(item.getImage());
             }
 
             @Override
