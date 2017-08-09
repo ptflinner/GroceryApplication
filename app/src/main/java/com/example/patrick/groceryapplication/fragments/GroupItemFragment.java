@@ -3,13 +3,16 @@ package com.example.patrick.groceryapplication.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.patrick.groceryapplication.R;
+import com.example.patrick.groceryapplication.models.GroupItem;
 import com.example.patrick.groceryapplication.models.Item;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,7 +26,11 @@ public class GroupItemFragment extends Fragment {
     private TextView nameTV;
     private TextView countTV;
     private TextView categoryTV;
-    private TextView descriptionTV;
+    private TextView priceTV;
+    private TextView providerTV;
+
+    private Button updateButton;
+
     private final static String TAG="ITEM FRAG";
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,8 +59,9 @@ public class GroupItemFragment extends Fragment {
         nameTV=(TextView) view.findViewById(R.id.name_group_item_tv);
         countTV=(TextView) view.findViewById(R.id.count_group_item_tv);
         categoryTV=(TextView) view.findViewById(R.id.category_group_item_tv);
-        descriptionTV=(TextView) view.findViewById(R.id.description_group_item_tv);
-
+        priceTV=(TextView) view.findViewById(R.id.group_item_price);
+        updateButton=(Button) view.findViewById(R.id.update_item);
+        providerTV=(TextView) view.findViewById(R.id.provider_group_item_tv);
         DatabaseReference itemRef=(FirebaseDatabase.getInstance())
                 .getReference("groupList")
                 .child(getGroupKey())
@@ -66,11 +74,12 @@ public class GroupItemFragment extends Fragment {
                 Log.d("ITEM FRAG",getGroupKey());
                 Log.d("ITEM FRAG",getItemKey());
 
-                Item item=(dataSnapshot.getValue(Item.class));
-                nameTV.setText("Name: "+item.getName());
-                countTV.setText("Number of Items: "+item.getCount());
-                categoryTV.setText("Item Category: "+item.getCategory());
-                descriptionTV.setText("Item Description: "+item.getDescription());
+                GroupItem item=(dataSnapshot.getValue(GroupItem.class));
+                nameTV.setText(item.getName());
+                countTV.setText(item.getPrice());
+                categoryTV.setText(item.getCategory());
+                priceTV.setText("$"+item.getCount());
+                providerTV.setText(item.getProvider());
             }
 
             @Override
@@ -79,6 +88,17 @@ public class GroupItemFragment extends Fragment {
             }
         });
 
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //update fragment click listener
+                Fragment updateItem = UpdateGroupItem.newInstance(getGroupKey(),getItemKey());
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame_layout, updateItem);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
         // Inflate the layout for this fragment
         return view;
     }

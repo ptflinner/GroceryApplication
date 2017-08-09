@@ -57,6 +57,7 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
     private final String TAG = "itemFragment";
     private String toast;
     private String content;
+    private Button cancel;
     private static final int BAR_LOADER=1;
     public static final int REQUEST_CODE=123;
     BarCodeItems results;
@@ -81,7 +82,7 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
         price = (EditText) view.findViewById(R.id.item_price);
         store = (EditText) view.findViewById(R.id.item_store);
         camera = (EditText) view.findViewById(R.id.item_picture);
-
+        cancel = (Button) view.findViewById(R.id.cancel_button);
         item_spinner = (Spinner) view.findViewById(R.id.categories_item_spinner);
         userSpinner=(Spinner) view.findViewById(R.id.user_spinner);
 
@@ -145,6 +146,12 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
             }
         });
 
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddGroupListItemFragment.this.dismiss();
+            }
+        });
         return view;
     }
 

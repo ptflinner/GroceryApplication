@@ -2,42 +2,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="com.example.patrick.groceryapplication.fragments.GroupItemFragment">
+    tools:context="com.example.patrick.groceryapplication.fragments.UpdateMyListItem">
 
     <ImageView
-
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:contentDescription="@string/item_name"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:id="@+id/item_detail_picture"
         android:src="@drawable/ic_camera_enhance_black_24dp"
         tools:src="@drawable/duck"/>
 
-    <TextView
+    <EditText
+        android:id="@+id/update_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:padding="10dp"
-        tools:text="Duck"
-        android:layout_gravity="center"
-        android:id="@+id/name_group_item_tv"/>
-
+        android:layout_gravity="center_horizontal"
+        android:inputType="text"
+        android:textSize="20sp"
+        tools:text="NAME"
+        />
     <View
         android:layout_width="350dp"
         android:layout_gravity="center"
         android:layout_height="1dp"
         android:background="#c0c0c0"
         />
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="15dp"
+        >
+        <TextView
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Category"
+            />
+        <Spinner
+            android:id="@+id/update_categories_item_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:textSize="20sp"/>
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
-
         <TextView
             android:layout_alignParentStart="true"
             android:layout_marginStart="20dp"
@@ -47,8 +66,9 @@
             android:text="Price"
             tools:text="Price"
             />
-        <TextView
-            android:id="@+id/group_item_price"
+        <EditText
+            android:id="@+id/update_price"
+            android:inputType="numberDecimal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -64,6 +84,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <TextView
+            android:layout_marginLeft="20dp"
             android:layout_alignParentStart="true"
             android:layout_marginStart="20dp"
             android:layout_width="wrap_content"
@@ -72,42 +93,17 @@
             android:text="Quantity:"
             tools:text="Quantity"
             />
-        <TextView
-            android:id="@+id/count_group_item_tv"
+        <EditText
+            android:id="@+id/update_quantity"
+            android:inputType="number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="20dp"
             android:textSize="20sp"
-            tools:text="x69"
+            tools:text="1"
             />
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="@string/category"
-            tools:text="Category"/>
-
-        <TextView
-
-            android:id="@+id/category_group_item_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="Category"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="20dp"
-            android:layout_gravity="end"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -121,26 +117,32 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:text="@string/provider"
-            tools:text="Store"/>
+            tools:text="@string/provider"/>
 
-        <TextView
+        <Spinner
             android:id="@+id/provider_group_item_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="20dp"
-            android:layout_gravity="end"/>
+            android:textSize="20sp"/>
     </RelativeLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal">
         <Button
             android:id="@+id/update_item"
-            android:layout_gravity="center|bottom"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="0dp"
-            android:text="update item"
-            />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="update item" />
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"/>
+    </LinearLayout>
 
 
 </LinearLayout>
-

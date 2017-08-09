@@ -1,19 +1,38 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
     tools:context="com.example.patrick.groceryapplication.fragments.AddListByCodeFragment">
-
-    <EditText
-        android:id="@+id/add_code_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:hint="@string/insert"/>
-
-    <Button
-        android:id="@+id/add_code_button"
+    <TextView
+        android:layout_margin="25dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/add"/>
-
-</FrameLayout>
+        android:text="@string/add_code"
+        android:layout_gravity="center"
+        android:textSize="20sp"/>
+    <EditText
+        android:layout_margin="5dp"
+        android:id="@+id/add_code_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/insert"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:layout_marginTop="10dp"
+            android:id="@+id/add_code_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_code"/>
+        <Button
+            android:layout_marginTop="10dp"
+            android:id="@+id/cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"/>
+    </LinearLayout>
+</LinearLayout>
