@@ -10,6 +10,10 @@
     <ExpandableListView
         android:id="@+id/expandable_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:indicatorEnd="?android:attr/expandableListPreferredItemIndicatorRight"
+        android:childIndicator="@drawable/ic_remove_black_24dp"
+        android:groupIndicator="@drawable/ic_view_list_black_24dp"
+        android:divider="@android:color/darker_gray"/>
 
 </LinearLayout>
