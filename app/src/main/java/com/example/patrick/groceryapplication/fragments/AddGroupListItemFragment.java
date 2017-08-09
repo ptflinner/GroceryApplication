@@ -1,6 +1,7 @@
 package com.example.patrick.groceryapplication.fragments;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -44,6 +45,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import org.json.JSONException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -110,7 +112,6 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
-
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -177,10 +178,10 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
         gallery.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                //Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 //intent.setType("image/*");
-                //startActivityForResult(intent,CAMERA_REQUEST_CODE);
-                dispatchTakePictureIntent();
+                startActivityForResult(intent,CAMERA_REQUEST_CODE);
+                //dispatchTakePictureIntent();
             }
         });
         // open up the scanner to scan barcodes
@@ -245,18 +246,42 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
         IntentResult result = IntentIntegrator.parseActivityResult(IntentIntegrator.REQUEST_CODE, resultCode, data);
         if(result != null) {
             if(result.getContents() == null) {
+/*
                 //toast = "Cancelled from fragment";
                 progress.setMessage("Uploading...");
                 progress.show();
                 Uri uri = data.getData();
-                // may need to change if multiple users
-                //uploading images to the firebase database
                 Uri photoURI=(Uri)getArguments().get(MediaStore.EXTRA_OUTPUT);
                 StorageReference path = mStorage.child("Photos").child(uri.getLastPathSegment());
                 path.putFile(photoURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         //progress.dismiss();
+                        toast = "Upload done";
+                    }
+                });
+*/
+                Bundle extras = data.getExtras();
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] dataBAOS = baos.toByteArray();
+
+                //photoholder.setImageBitmap(bitmap);
+
+                /*************** UPLOADS THE PIC TO FIREBASE***************/
+                //Firebase storage folder where you want to put the images
+                //StorageReference path = mStorage.child("Photos").child(uri.getLastPathSegment());
+                StorageReference storageRef = FirebaseStorage.getInstance().getReference("Photos");
+
+                StorageReference imagesRef = storageRef.child("filename" + new Date().getTime());
+
+                UploadTask uploadTask = imagesRef.putBytes(dataBAOS);
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        //progress.dismiss();
+                        //taskSnapshot.getMetadata();
                         toast = "Upload done";
                     }
                 });
