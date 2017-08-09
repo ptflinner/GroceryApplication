@@ -61,8 +61,8 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
     private static final int GALLERY_INTENT = 2;
     private StorageReference mStorage;
     private Button cancel;
+    public static final int REQUEST_CODE = 420;
 
-    public static final int REQUEST_CODE = 349;
     private static final int BAR_LOADER = 1;
     public final static String SEARCH_QUERY_EXTRA = "query";
 
@@ -118,15 +118,15 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
                 //passing the data from this fragment to the activity
                 //uncomment this block of code
                 String itemname = name.getText().toString();
-                String itemquantity = quantity.getText().toString();
-                String itemprice = price.getText().toString();
+                int itemquantity = Integer.parseInt(quantity.getText().toString());
+                double itemprice = Double.parseDouble(price.getText().toString());
                 String itemCategory = item_spinner.getSelectedItem().toString();
 
                 Bundle b = new Bundle();
                 b.putString("Name", itemname);
-                b.putString("Quantity", itemprice);
-                b.putString("Price", itemquantity);
-                b.putString("category", itemCategory);
+                b.putInt("Quantity", itemquantity);
+                b.putDouble("Price", itemprice);
+                b.putString("Category", itemCategory);
 
                 Intent intent = new Intent();
                 intent.putExtra("args", b);

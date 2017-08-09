@@ -177,12 +177,13 @@ public class GroupListItemFragment extends Fragment {
         View mView;
         private TextView itemName;
         private TextView itemQuantity;
-
+        private TextView itemPrice;
         public ItemHolder(View itemView) {
             super(itemView);
             this.mView=itemView;
             itemName=(TextView) itemView.findViewById(R.id.group_item_name);
             itemQuantity=(TextView) itemView.findViewById(R.id.group_item_quantity);
+            itemPrice=(TextView) itemView.findViewById(R.id.grocery_price);
             itemView.setOnClickListener(this);
 
         }
@@ -191,6 +192,7 @@ public class GroupListItemFragment extends Fragment {
             Log.d(TAG,"LIST NAME:"+item.getName());
             itemName.setText(item.getName());
             itemQuantity.setText("$"+item.getCount());
+            itemPrice.setText(item.getCount());
             holder.itemView.setTag(position);
         }
 

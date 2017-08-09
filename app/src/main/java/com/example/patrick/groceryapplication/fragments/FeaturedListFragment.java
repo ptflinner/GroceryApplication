@@ -70,13 +70,18 @@ public class FeaturedListFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.d(TAG, "Count " + dataSnapshot.getChildrenCount());
+                //Required to create a GenericTypeIndicator
                 GenericTypeIndicator<HashMap<String, ArrayList<String>>> t = new GenericTypeIndicator <HashMap<String, ArrayList<String>>>(){};
+                //Get the data from the database: HashMap
                 HashMap<String, ArrayList<String>> dbFeaturedList = dataSnapshot.getValue(t);
+
                 Iterator it = dbFeaturedList.entrySet().iterator();
                 while (it.hasNext()) {
                     Map.Entry pair = (Map.Entry)it.next();
                     Log.d(TAG, pair.getKey() + " = " + pair.getValue());
+                    //Check to see if we have new data not yet stored
                     if(listHashMap.get(pair.getKey()) == null) {
+                        //Add the new data
                         FeaturedItem group = new FeaturedItem();
                         group.setTitle(pair.getKey().toString());
                         ArrayList<Item> items = new ArrayList<Item>();
@@ -88,6 +93,7 @@ public class FeaturedListFragment extends Fragment {
                         featuredList.add(group);
                     }
                 }
+                syncFeaturedList(dbFeaturedList);
                 expandableListAdapter.notifyDataSetChanged();
 
 
@@ -96,6 +102,15 @@ public class FeaturedListFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {}
         });
     }
+
+    private void syncFeaturedList(HashMap<String, ArrayList<String>> dbFeaturedList) {
+        for (int i = featuredList.size()-1; i >= 0; i--) {
+            if (dbFeaturedList.get(featuredList.get(i).getTitle()) == null){
+                featuredList.remove(i);
+            }
+        }
+    }
+
     protected class ExpandableListItemAdapter extends BaseExpandableListAdapter {
 
         @Override

@@ -204,17 +204,20 @@ public class GroupListFragment extends Fragment{
         View mView;
         private TextView listName;
         private TextView listId;
+        private TextView listCategory;
         public ItemHolder(View itemView) {
             super(itemView);
             this.mView=itemView;
             listName=(TextView) itemView.findViewById(R.id.group_list_name);
             itemView.setOnClickListener(this);
             listId=(TextView) itemView.findViewById(R.id.group_list_id);
+            listCategory=(TextView) itemView.findViewById(R.id.group_list_category);
         }
 
         public void bind(GroupList groupList, int position,boolean admin,String key){
             Log.d(TAG,"LIST NAME:"+groupList.getName());
             listName.setText(groupList.getName());
+            listCategory.setText(groupList.getCategory());
             if(admin){
                 listId.setText(key);
                 listId.setVisibility(View.VISIBLE);
