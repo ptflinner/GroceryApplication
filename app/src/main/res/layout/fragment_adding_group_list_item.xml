@@ -11,94 +11,98 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-    <!-- categories -->
-    <Spinner
-        android:id="@+id/categories_item_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="48dp" />
+        <!-- categories -->
+        <Spinner
+            android:id="@+id/categories_item_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="48dp" />
 
-    <!-- person spinner-->
-    <Spinner
-        android:id="@+id/user_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <!--    <TextView
+        <!-- person spinner-->
+        <Spinner
+            android:id="@+id/user_spinner"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />-->
-    <EditText
-        android:id="@+id/itemName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:hint="item name placeholder" />
+            android:layout_height="wrap_content"/>
+        <!--    <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />-->
+        <EditText
+            android:id="@+id/itemName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:hint="item name placeholder" />
 
-        <!-- price -->
-    <EditText
-        android:id="@+id/item_price"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:layout_marginBottom="10dp"
-        android:hint="price placeholder"/>
-    <!-- quantity -->
-    <EditText
-        android:id="@+id/itemQuantity"
-        android:inputType="number"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:hint="item quantity placeholder" />
+            <!-- price -->
+        <EditText
+            android:id="@+id/item_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:layout_marginBottom="10dp"
+            android:hint="price placeholder"/>
+        <!-- quantity -->
+        <EditText
+            android:id="@+id/itemQuantity"
+            android:inputType="number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:hint="item quantity placeholder" />
 
 
-    <!-- stores -->
-    <EditText
-        android:id="@+id/item_store"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:hint="store placeholder"/>
-    <!-- picture -->
-    <EditText
-        android:id="@+id/item_picture"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:hint="camera placeholder"/>
-    <!-- barcode -->
-    <Button
-        android:id="@+id/scan_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="@string/scan" />
-    <!-- android:onClick="scanNow"-->
+        <!-- stores -->
+        <EditText
+            android:id="@+id/item_store"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:hint="store placeholder"/>
+        <!-- picture -->
+        <EditText
+            android:id="@+id/item_picture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:hint="camera placeholder"/>
+        <!-- barcode -->
+        <Button
+            android:id="@+id/scan_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/scan" />
+        <!-- android:onClick="scanNow"-->
 
-    <!-- Add -->
-    <Button
-        android:id="@+id/add"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:text="Add" />
-    <TextureView
-        android:id="@+id/scan_format"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textIsSelectable="true"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/scan_button"/>
+        <!-- Add -->
+        <Button
+            android:id="@+id/add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add" />
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"/>
+        <TextureView
+            android:id="@+id/scan_format"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="true"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/scan_button"/>
 
-    <TextureView
-        android:id="@+id/scan_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textIsSelectable="true"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/scan_format"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        <TextureView
+            android:id="@+id/scan_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="true"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/scan_format"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
     </LinearLayout>
 
 </LinearLayout>
