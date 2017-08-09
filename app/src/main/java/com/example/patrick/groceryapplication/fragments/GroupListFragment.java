@@ -224,8 +224,6 @@ public class GroupListFragment extends Fragment{
         @Override
         public void onClick(View view) {
             Log.d(TAG,"DOES THIS WORK????");
-//            int pos=getAdapterPosition();
-//            mItemClick.onItemClickListener(pos,groupLists.get(pos));
         }
     }
 }

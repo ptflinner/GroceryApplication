@@ -84,13 +84,5 @@ public class AddGroupListFragment extends DialogFragment {
         });
         return view;
     }
-//
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//
-//        getTargetFragment().onActivityResult(
-//                getTargetRequestCode(), REQUEST_CODE, data);
-//        AddGroupListFragment.this.dismiss();
-//    }
 }
 

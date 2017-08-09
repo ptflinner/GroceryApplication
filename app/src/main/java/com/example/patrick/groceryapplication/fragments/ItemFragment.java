@@ -174,7 +174,6 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
             //Runs internet refresh off the UI thread
             @Override
             public Void loadInBackground() {
-                //URL url= NetworkUtils.makeUrl("0f0cb14a14b7134d22586414523c975d");
                 URL url = NetworkUtils.makeUrl(content);
                 try {
                     Log.d(TAG, url + "");
@@ -195,8 +194,6 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
     @Override
     public void onLoadFinished(Loader<Void> loader, Void data) {
         Log.d(TAG, "AM I DONE");
-//        name.setText("testing");
-//        price.setText("another test");
         if(results!=null){
             name.setText(results.getItemName());
             price.setText(results.getAvg_price());
@@ -214,52 +211,3 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
         lm.restartLoader(BAR_LOADER, null, this).forceLoad();
     }
 }
-
-
-/*        @Override
-        public Loader<Void> onCreateLoader(int d, Bundle args){
-            return new AsyncTaskLoader<Void>(this.getActivity()) {
-                //Loader starts and shows that the screen is refreshing by enabling progressbar
-                @Override
-                protected void onStartLoading() {
-
-                    super.onStartLoading();
-                }
-
-                //Runs internet refresh off the UI thread
-                @Override
-                public Void loadInBackground() {
-                    URL url= NetworkUtils.makeUrl(content);
-                    try{
-                        Log.d(TAG,url+"");
-                        String jsonBarcode=NetworkUtils.getResponseFromHttpUrl(url);
-                        results= JsonUtils.parseJson(jsonBarcode);
-                    }
-                    catch (IOException e){
-                        Log.d(TAG,"IO EXCEPTOIN OCCURRED");
-                        e.printStackTrace();
-                    }
-                    catch (JSONException e){
-                        Log.d(TAG,"JSON EXCEPTION OCCURRED");
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
-            };
-        }
-
-        @Override
-        public void onLoadFinished(Loader<Void> loader, Void data) {
-            name.setText(results.getItemName());
-            price.setText(results.getAvg_price());
-        }
-
-        @Override
-        public void onLoaderReset(Loader<Void> loader) {
-
-        }
-        private void load(){
-            LoaderManager lm = getLoaderManager();
-            lm.restartLoader(BAR_LOADER,null,this).forceLoad();
-        }
-    }*/

@@ -224,8 +224,6 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
     @Override
     public void onLoadFinished(Loader<Void> loader, Void data) {
             Log.d(TAG,"AM I DONE");
-//        name.setText("testing");
-//        price.setText("another test");
         if(results!=null){
             name.setText(results.getItemName());
             price.setText(results.getAvg_price());

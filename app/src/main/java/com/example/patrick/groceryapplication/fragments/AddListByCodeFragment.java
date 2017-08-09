@@ -149,8 +149,6 @@ public class AddListByCodeFragment extends DialogFragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String name=dataSnapshot.getValue(String.class);
-//                HashMap<String, String> users=new HashMap<>();
-//                users.put(firebaseUid,name);
 
                 userReference.child("groupLists").push().setValue(pushKey);
                 groupRef.child("users").child(firebaseUid).setValue(name);

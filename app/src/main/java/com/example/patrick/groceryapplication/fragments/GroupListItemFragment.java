@@ -191,8 +191,7 @@ public class GroupListItemFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-//            int pos=getAdapterPosition();
-//            mItemClick.onItemClickListener(pos,groupLists.get(pos));
+
         }
     }
 }
