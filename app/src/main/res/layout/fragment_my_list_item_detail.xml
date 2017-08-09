@@ -88,6 +88,13 @@
         android:text="update item"
         android:id="@+id/update_button"
         />
-
+    <Button
+        android:layout_gravity="center"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:text="delete item"
+        android:id="@+id/delete_button"
+        android:background="#F00"
+        android:textColor="#FFF"/>
 
 </LinearLayout>

@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,22 +11,18 @@
         android:layout_height="200dp"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
+        android:clickable="true"
         android:id="@+id/item_detail_picture"
         android:src="@drawable/ic_camera_enhance_black_24dp"
         tools:src="@drawable/duck"/>
 
-    <Button
-        android:id="@+id/update_picture"
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="30sp"
         android:padding="10dp"
-        android:text="dust"
+
         android:inputType="text"
         android:labelFor="@id/item_detail_picture"
         android:layout_gravity="center"
@@ -62,7 +58,7 @@
             android:inputType="text"
             android:labelFor="@id/update_price"
             android:textSize="20sp"
-            android:text="vervrev"
+
             />
 
     </LinearLayout>
@@ -86,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="text"
-            android:text="quantity"
+
             android:labelFor="@id/update_quantity"
             android:textSize="20sp"
             />
@@ -100,5 +96,4 @@
         android:layout_gravity="center"
         android:text="update item" />
 
-
-</FrameLayout>
+</LinearLayout>

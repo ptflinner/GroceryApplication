@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.CursorJoiner;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,27 +14,21 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.database.Cursor;
 import android.widget.ImageView;
 
 import com.example.patrick.groceryapplication.R;
-import com.example.patrick.groceryapplication.utils.Contract;
 import com.example.patrick.groceryapplication.utils.DBHelper;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 
 public class UpdateMyListItem extends Fragment {
     private static final String TAG = "MyListItemDetailFragment";
@@ -46,13 +42,13 @@ public class UpdateMyListItem extends Fragment {
     private EditText editName;
     private EditText editPrice;
     private EditText editQuantity;
+    private Bundle extra;
+    static  final int REQUEST_IMAGE_CAPTURE = 1;
 
 
-    //public MyListItemDetailFragment(){}
-
-    public static MyListItemDetailFragment newInstance(long id){
+    public static UpdateMyListItem newInstance(long id){
         Bundle args = new Bundle();
-        MyListItemDetailFragment fragment = new MyListItemDetailFragment();
+        UpdateMyListItem fragment = new UpdateMyListItem();
         args.putLong("id", id);
         fragment.setArguments(args);
 
@@ -64,10 +60,13 @@ public class UpdateMyListItem extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_update_my_list_item, container, false);
 
         image = (ImageView) view.findViewById(R.id.item_detail_picture);
@@ -76,36 +75,33 @@ public class UpdateMyListItem extends Fragment {
         editPrice = (EditText) view.findViewById(R.id.update_price);
         editQuantity =(EditText) view.findViewById(R.id.update_quantity);
 
-        updateItem = (Button) view.findViewById(R.id.update_picture);
         selectImg = (Button) view.findViewById(R.id.update_item);
-
-//        selectImg.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View view) {
-//                selectImage();
-//            }
-//        });
+        image.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                selectImage();
+            }
+        });
         return view;
     }
 
     public void selectImage(){
         final CharSequence[] options = {"Take Photo","Choose from Gallery", "Cancel"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(context.getApplicationContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setTitle("Add Photo");
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-           if(options[i].equals("Take Photo")){
-               Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-               File file = new File(android.os.Environment.getExternalStorageDirectory(),"temp.jpg");
-               intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-                startActivityForResult(intent,1);
-                }else if (options[i].equals("Choose From Gallery")) {
-                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+           if(options[0].equals("Take Photo")){
+               Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+               startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }else if (options[1].equals("Choose From Gallery")) {
+                    Intent intent = new Intent(Intent.ACTION_PICK);
+                    intent.setType("image/*");
                     startActivityForResult(intent,2);
                 }
-                else if(options[i].equals("Cancel")){
+                else if(options[2].equals("Cancel")){
                dialogInterface.dismiss();
            }
            }
@@ -115,47 +111,10 @@ public class UpdateMyListItem extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK){
-            if (requestCode == 1){
-                File file = new File((Environment.getExternalStorageDirectory().toString()));
-                for(File temp : file.listFiles()){
-                    if (temp.getName().equals("temp.jpg")){
-                        file = temp;
-                        break;
-                    }
-                }
-                try {
-                    Bitmap bitmap;
-                    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-                    bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                    image.setImageBitmap(bitmap);
-                    String path = android.os.Environment.getExternalStorageState() + File.separator + "Phoenix"
-                            + File.separator + "default";
-                    file.delete();
-                    OutputStream outfile = null;
-                    File ile = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
-                    try {
-                        outfile = new FileOutputStream(file);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG,85,outfile);
-                        outfile.flush();
-                        outfile.close();
-                    } catch (FileNotFoundException e){
-                        e.printStackTrace();
-                    } catch (IOException a) {
-                        a.printStackTrace();
-                    } catch (Exception b){
-                        b.printStackTrace();
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        } else if (requestCode == 2){
-            Uri selectImage = data.getData();
-            String[] filePath = {MediaStore.Images.Media.DATA};
-            //Cursor c = getContentResolver().query();
-        }
+        if(requestCode == REQUEST_IMAGE_CAPTURE && requestCode == Activity.RESULT_OK)
+            extra = data.getExtras();
+            Bitmap bitmap = (Bitmap) extra.get("data");
+            image.setImageBitmap(bitmap);
     }
 
     public Cursor getItemDetails(SQLiteDatabase db){
@@ -176,11 +135,6 @@ public class UpdateMyListItem extends Fragment {
 
 
 
-        cursor.moveToFirst();
-        String price = String.format("$%,.2f", cursor.getDouble(cursor.getColumnIndex(Contract.TABLE_ITEM.COLUMN_NAME_PRICE)));
-        itemName.setText(cursor.getString(cursor.getColumnIndex(Contract.TABLE_ITEM.COLUMN_NAME_ITEM_NAME)));
-        itemPrice.setText(price);
-        itemQuantity.setText("x" + cursor.getInt(cursor.getColumnIndex(Contract.TABLE_ITEM.COLUMN_NAME_QUANTITY)));
 
     }
 
@@ -190,4 +144,5 @@ public class UpdateMyListItem extends Fragment {
         if(db != null) db.close();
         if(cursor != null) cursor.close();
     }
+
 }

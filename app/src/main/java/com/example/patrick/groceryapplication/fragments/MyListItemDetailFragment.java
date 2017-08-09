@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.example.patrick.groceryapplication.R;
 import com.example.patrick.groceryapplication.utils.Contract;
 import com.example.patrick.groceryapplication.utils.DBHelper;
+import com.example.patrick.groceryapplication.utils.SQLiteUtils;
 
 /**
  * Created by Barry on 8/4/2017.
@@ -32,9 +34,7 @@ public class MyListItemDetailFragment extends Fragment{
     private TextView itemPrice;
     private TextView itemQuantity;
     private Button updateButton;
-
-
-
+    private Button deleteButton;
     public MyListItemDetailFragment(){}
 
     public static MyListItemDetailFragment newInstance(long id){
@@ -52,7 +52,6 @@ public class MyListItemDetailFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_list_item_detail, container, false);
@@ -62,23 +61,34 @@ public class MyListItemDetailFragment extends Fragment{
         itemPrice = (TextView) view.findViewById(R.id.item_detail_price);
         itemQuantity = (TextView) view.findViewById(R.id.item_detail_quantity);
         updateButton = (Button) view.findViewById(R.id.update_button);
+        deleteButton = (Button) view.findViewById(R.id.delete_button);
 
-        updateButton.setOnClickListener(new View.OnClickListener() {
+
+        updateButton.setOnClickListener(new View.OnClickListener(){
+
             @Override
-            public void onClick(View view) {
-
+            public void onClick(View v) {
+                //update fragment click listener
                 Fragment updateItem = UpdateMyListItem.newInstance(getItemId());
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.frame_layout, updateItem);
                 transaction.addToBackStack(null);
                 transaction.commit();
+
             }
         });
 
-    return view;
-    }
+        deleteButton.setOnClickListener(new View.OnClickListener(){
 
-    public Cursor getItemDetails(SQLiteDatabase db){
+            @Override
+            public void onClick(View v) {
+                SQLiteUtils.removeItem(db, getItemId());
+                getFragmentManager().popBackStackImmediate();
+            }
+        });
+
+        return view;
+    }public Cursor getItemDetails(SQLiteDatabase db){
         String[] selectionArgs = {String.valueOf(getItemId())};
         String query = "select items._id, items.name, items.price, items.quantity" +
                 " from items " +
