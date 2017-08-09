@@ -18,6 +18,7 @@ public class AddPersonalList extends DialogFragment {
     private EditText title;
     private Spinner categoriesSpinner;
     private Button add;
+    private Button cancel;
     private final String TAG = "AddPersonalList";
     public static final int REQUEST_CODE = 1;
 
@@ -32,7 +33,7 @@ public class AddPersonalList extends DialogFragment {
         title = (EditText) view.findViewById(R.id.title);
         categoriesSpinner = (Spinner) view.findViewById(R.id.categories_spinner);
         add = (Button) view.findViewById(R.id.add);
-
+        cancel=(Button) view.findViewById(R.id.cancel_button);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.list_categories_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -52,6 +53,12 @@ public class AddPersonalList extends DialogFragment {
                 getTargetFragment().onActivityResult(
                         getTargetRequestCode(), REQUEST_CODE, intent);
 
+                AddPersonalList.this.dismiss();
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 AddPersonalList.this.dismiss();
             }
         });

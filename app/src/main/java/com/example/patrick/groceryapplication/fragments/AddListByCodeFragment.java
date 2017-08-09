@@ -28,7 +28,7 @@ public class AddListByCodeFragment extends DialogFragment {
     private EditText listID;
     private Button addButton;
     private final String TAG="CodeFragment";
-
+    private Button cancel;
     public static int REQUEST_CODE=346;
 
     public AddListByCodeFragment() {
@@ -60,11 +60,17 @@ public class AddListByCodeFragment extends DialogFragment {
 
         listID=(EditText) view.findViewById(R.id.add_code_edit_text);
         addButton=(Button) view.findViewById(R.id.add_code_button);
-
+        cancel=(Button) view.findViewById(R.id.cancel_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 firebaseCheck();
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddListByCodeFragment.this.dismiss();
             }
         });
         // Inflate the layout for this fragment
