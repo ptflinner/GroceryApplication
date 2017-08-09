@@ -42,6 +42,7 @@ import java.util.HashMap;
  */
 
 public class ItemFragment extends DialogFragment implements LoaderManager.LoaderCallbacks<Void> {
+
     private EditText name;
     private EditText quantity;
     private EditText price;
@@ -59,6 +60,8 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
     private Button gallery;
     private static final int GALLERY_INTENT = 2;
     private StorageReference mStorage;
+    private Button cancel;
+
     public static final int REQUEST_CODE = 349;
     private static final int BAR_LOADER = 1;
     public final static String SEARCH_QUERY_EXTRA = "query";
@@ -82,11 +85,11 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
         price = (EditText) view.findViewById(R.id.item_price);
         store = (EditText) view.findViewById(R.id.item_store);
         camera = (EditText) view.findViewById(R.id.item_picture);
-
+        cancel= (Button) view.findViewById(R.id.cancel_button);
         item_spinner = (Spinner) view.findViewById(R.id.categories_item_spinner);
         //userSpinner = (Spinner) view.findViewById(R.id.user_spinner);
 
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(this.getActivity(), R.array.categories_array1, android.R.layout.simple_spinner_item);
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(this.getActivity(), R.array.categories_array, android.R.layout.simple_spinner_item);
         item_spinner.setAdapter(adapter);
         mStorage = FirebaseStorage.getInstance().getReference();
         //opens up your gallery to choose a picture to be uploaded to the firebase database
@@ -133,7 +136,12 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
                 ItemFragment.this.dismiss();
             }
         });
-
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ItemFragment.this.dismiss();
+            }
+        });
         return view;
     }
     //function for the scanner to scan barcodes
@@ -195,7 +203,6 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
             //Runs internet refresh off the UI thread
             @Override
             public Void loadInBackground() {
-                //URL url= NetworkUtils.makeUrl("0f0cb14a14b7134d22586414523c975d");
                 URL url = NetworkUtils.makeUrl(content);
                 try {
                     Log.d(TAG, url + "");
@@ -216,10 +223,11 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
     @Override
     public void onLoadFinished(Loader<Void> loader, Void data) {
         Log.d(TAG, "AM I DONE");
-//        name.setText("testing");
-//        price.setText("another test");
-        name.setText(results.getItemName());
-        price.setText(results.getAvg_price());
+        if(results!=null){
+            name.setText(results.getItemName());
+            price.setText(results.getAvg_price());
+        }
+
     }
 
     @Override
@@ -232,53 +240,3 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
         lm.restartLoader(BAR_LOADER, null, this).forceLoad();
     }
 }
-
-
-/*        @Override
-        public Loader<Void> onCreateLoader(int d, Bundle args){
-            return new AsyncTaskLoader<Void>(this.getActivity()) {
-
-                //Loader starts and shows that the screen is refreshing by enabling progressbar
-                @Override
-                protected void onStartLoading() {
-
-                    super.onStartLoading();
-                }
-
-                //Runs internet refresh off the UI thread
-                @Override
-                public Void loadInBackground() {
-                    URL url= NetworkUtils.makeUrl(content);
-                    try{
-                        Log.d(TAG,url+"");
-                        String jsonBarcode=NetworkUtils.getResponseFromHttpUrl(url);
-                        results= JsonUtils.parseJson(jsonBarcode);
-                    }
-                    catch (IOException e){
-                        Log.d(TAG,"IO EXCEPTOIN OCCURRED");
-                        e.printStackTrace();
-                    }
-                    catch (JSONException e){
-                        Log.d(TAG,"JSON EXCEPTION OCCURRED");
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
-            };
-        }
-
-        @Override
-        public void onLoadFinished(Loader<Void> loader, Void data) {
-            name.setText(results.getItemName());
-            price.setText(results.getAvg_price());
-        }
-
-        @Override
-        public void onLoaderReset(Loader<Void> loader) {
-
-        }
-        private void load(){
-            LoaderManager lm = getLoaderManager();
-            lm.restartLoader(BAR_LOADER,null,this).forceLoad();
-        }
-    }*/

@@ -35,8 +35,25 @@ dependencies {
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
     compile 'com.firebase:firebase-jobdispatcher:0.5.2'
     compile 'com.firebaseui:firebase-ui-database:1.2.0'
+<<<<<<< HEAD
     compile 'com.google.firebase:firebase-storage:11.0.2'
+=======
+    compile 'com.google.firebase:firebase-messaging:11.0.2'
+>>>>>>> master
     testCompile 'junit:junit:4.12'
+
 }
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+
+
+>>>>>>> master
 apply plugin: 'com.google.gms.google-services'

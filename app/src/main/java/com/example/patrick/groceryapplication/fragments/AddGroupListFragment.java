@@ -20,6 +20,7 @@ public class AddGroupListFragment extends DialogFragment {
     private Spinner categoriesSpinner;
     private Button add;
     private Button addByCode;
+    private Button cancel;
 
     private final String TAG = "AddGroupListFragment";
     public  static final int REQUEST_CODE=245;
@@ -37,7 +38,7 @@ public class AddGroupListFragment extends DialogFragment {
         categoriesSpinner = (Spinner) view.findViewById(R.id.categories_spinner);
         add = (Button) view.findViewById(R.id.add);
         addByCode=(Button) view.findViewById(R.id.add_code_transfer_button);
-
+        cancel=(Button) view.findViewById(R.id.cancel_button);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.list_categories_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -74,15 +75,14 @@ public class AddGroupListFragment extends DialogFragment {
                 AddGroupListFragment.this.dismiss();
             }
         });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddGroupListFragment.this.dismiss();
+            }
+        });
         return view;
     }
-//
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//
-//        getTargetFragment().onActivityResult(
-//                getTargetRequestCode(), REQUEST_CODE, data);
-//        AddGroupListFragment.this.dismiss();
-//    }
 }
 

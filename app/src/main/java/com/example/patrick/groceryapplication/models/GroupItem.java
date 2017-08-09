@@ -23,11 +23,11 @@ public class GroupItem {
         this.provider="";
     }
 
-    public GroupItem(String name, String category, String count, String description,String provider) {
+    public GroupItem(String name, String category, String count, String price,String provider) {
         this.name = name;
         this.category = category;
         this.count = count;
-        this.price = description;
+        this.price = price;
         this.provider=provider;
     }
     public GroupItem(String name, String category, String count, String description,String provider, Bitmap image) {
@@ -63,11 +63,11 @@ public class GroupItem {
         this.count = count;
     }
 
-    public String getDescription() {
+    public String getPrice() {
         return price;
     }
 
-    public void setDescription(String description) {
+    public void setPrice(String description) {
         this.price = description;
     }
 
@@ -85,14 +85,6 @@ public class GroupItem {
 
     public void setImage(Bitmap image) {
         this.image = image;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
     }
 
     public String getImageName() {

@@ -34,7 +34,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
+
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,6 +57,11 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         helper = new DBHelper(this);
         db = helper.getWritableDatabase();
+
+        //Subscribe the client app to the featured grocery list topic
+        FirebaseMessaging.getInstance().subscribeToTopic("featured_grocery_list");
+        Log.d(TAG, "The Firebase token is " + FirebaseInstanceId.getInstance().getToken());
+
     }
 
     @Override
@@ -72,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()

@@ -9,18 +9,27 @@ public class Item {
     private String count;
     private String description;
     //private Bitmap image;
+    private String price;
+
     public Item() {
         this.name="";
         this.category="";
         this.count="";
-        this.description="";
+        this.price="";
     }
 
-    public Item(String name, String category, String count, String description) {
+    public Item(String name, String category, String count, String price) {
         this.name = name;
         this.category = category;
         this.count = count;
-        this.description = description;
+        this.price = price;
+    }
+
+    public Item(String name){
+        this.name = name;
+        this.category="";
+        this.count="";
+        this.price="";
     }
 /*    public Item(String name, String category, String count, String description,Bitmap image) {
         this.name = name;
@@ -54,12 +63,12 @@ public class Item {
         this.count = count;
     }
 
-    public String getDescription() {
-        return description;
+    public String getPrice() {
+        return price;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPrice(String description) {
+        this.price = description;
     }
 /*    public Bitmap getImage() {
         return image;

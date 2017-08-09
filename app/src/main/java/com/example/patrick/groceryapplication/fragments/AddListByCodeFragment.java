@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.patrick.groceryapplication.R;
+import com.example.patrick.groceryapplication.models.AdminHolder;
 import com.example.patrick.groceryapplication.models.GroupList;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -26,7 +28,7 @@ public class AddListByCodeFragment extends DialogFragment {
     private EditText listID;
     private Button addButton;
     private final String TAG="CodeFragment";
-
+    private Button cancel;
     public static int REQUEST_CODE=346;
 
     public AddListByCodeFragment() {
@@ -58,29 +60,85 @@ public class AddListByCodeFragment extends DialogFragment {
 
         listID=(EditText) view.findViewById(R.id.add_code_edit_text);
         addButton=(Button) view.findViewById(R.id.add_code_button);
-
+        cancel=(Button) view.findViewById(R.id.cancel_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-//                Intent intent = new Intent();
-//                Bundle args=new Bundle();
-//                args.putString("key",key);
-//
-//                intent.putExtra("args",args);
-//                getTargetFragment().onActivityResult(
-//                        getTargetRequestCode(), REQUEST_CODE, intent);
-
-                FirebaseDatabase fdb=FirebaseDatabase.getInstance();
-                firebaseGroupAdd(fdb);
-
+                firebaseCheck();
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 AddListByCodeFragment.this.dismiss();
             }
         });
         // Inflate the layout for this fragment
         return view;
     }
-    public void firebaseGroupAdd(FirebaseDatabase fdb){
+
+    private void firebaseCheck(){
+        String key=listID.getText().toString();
+        DatabaseReference listRef=(FirebaseDatabase.getInstance().getReference("groupList").child(key));
+
+        listRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    firebaseNew();
+                }
+                else {
+                    String toast="Database Doesn't Exist";
+                    Toast.makeText(getActivity(),toast, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void firebaseNew(){
+        final String key=listID.getText().toString();
+        DatabaseReference listRef=(FirebaseDatabase.getInstance().getReference("userList")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()))
+                .child("groupLists");
+
+        final AdminHolder holder=new AdminHolder(true);
+        listRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean check=false;
+                for(DataSnapshot post:dataSnapshot.getChildren()){
+                    Log.d(TAG,"Is New Funcion:"+post.getValue().toString());
+                    Log.d(TAG,"Is New Funcion:"+key);
+                    if(post.getValue().toString().equals(key)){
+                        check=true;
+                        break;
+                    }
+                }
+                if(!check){
+                    FirebaseDatabase fdb=FirebaseDatabase.getInstance();
+                    firebaseGroupAdd(fdb);
+
+                    AddListByCodeFragment.this.dismiss();
+                }
+                else{
+                    String toast="Database Already in your list";
+                    Toast.makeText(getActivity(),toast, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        Log.d(TAG,"ADMIN HOLDER"+holder.isAdmin());
+    }
+    private void firebaseGroupAdd(FirebaseDatabase fdb){
         final String pushKey=listID.getText().toString();
         final DatabaseReference groupRef = fdb.getReference("groupList").child(pushKey);
         final String firebaseUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -91,8 +149,6 @@ public class AddListByCodeFragment extends DialogFragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String name=dataSnapshot.getValue(String.class);
-//                HashMap<String, String> users=new HashMap<>();
-//                users.put(firebaseUid,name);
 
                 userReference.child("groupLists").push().setValue(pushKey);
                 groupRef.child("users").child(firebaseUid).setValue(name);
@@ -103,6 +159,9 @@ public class AddListByCodeFragment extends DialogFragment {
                 Log.d(TAG,"BROKE BITCH");
             }
         });
+    }
+
+    private class CallBackClass{
 
     }
 }

@@ -75,13 +75,14 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
     private HashMap<String,String> usersWithPermission;
     private final String TAG = "itemFragment";
     private String toast;
-    private String content;//8/6
     private ImageView itemImage;
     private ProgressDialog progress;
     private static final int CAMERA_REQUEST_CODE =2;
 
     //private static final int GALLERY_INTENT = 2;
     private StorageReference mStorage;
+    private String content;
+    private Button cancel;
     private static final int BAR_LOADER=1;
     public static final int REQUEST_CODE=123;
     BarCodeItems results;
@@ -145,13 +146,13 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
         quantity = (EditText) view.findViewById(R.id.itemQuantity);
         price = (EditText) view.findViewById(R.id.item_price);
         store = (EditText) view.findViewById(R.id.item_store);
-        //camera = (EditText) view.findViewById(R.id.item_picture);
-        imageHolder = (ImageView) view.findViewById(R.id.item_picture) ;
+        imageHolder = (ImageView) view.findViewById(R.id.item_picture);
         progress = new ProgressDialog(getActivity());
+        cancel = (Button) view.findViewById(R.id.cancel_button);
         item_spinner = (Spinner) view.findViewById(R.id.categories_item_spinner);
         userSpinner=(Spinner) view.findViewById(R.id.user_spinner);
 
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(this.getActivity(),R.array.categories_array1,android.R.layout.simple_spinner_item);
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(this.getActivity(),R.array.categories_array,android.R.layout.simple_spinner_item);
         item_spinner.setAdapter(adapter);
         //show the memebers of the current group list you are on
         DatabaseReference userRef=(FirebaseDatabase.getInstance().getReference("groupList").child(getGroupKey()).child("users"));
@@ -229,6 +230,12 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
             }
         });
 
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddGroupListItemFragment.this.dismiss();
+            }
+        });
         return view;
     }
 //setting up the barcode scanner
@@ -328,10 +335,11 @@ public class AddGroupListItemFragment extends DialogFragment implements LoaderMa
     @Override
     public void onLoadFinished(Loader<Void> loader, Void data) {
             Log.d(TAG,"AM I DONE");
-//        name.setText("testing");
-//        price.setText("another test");
-        name.setText(results.getItemName());
-        price.setText(results.getAvg_price());
+        if(results!=null){
+            name.setText(results.getItemName());
+            price.setText(results.getAvg_price());
+        }
+
     }
 
     @Override

@@ -2,6 +2,9 @@ package com.example.patrick.groceryapplication.fragments;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -9,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,9 +50,10 @@ public class GroupListItemFragment extends Fragment {
         createAdapter();
     }
 
-    public static GroupListItemFragment newInstance(String groupKey) {
+    public static GroupListItemFragment newInstance(String groupKey,boolean admin) {
         Bundle args = new Bundle();
         args.putString("key",groupKey);
+        args.putBoolean("admin",admin);
         GroupListItemFragment fragment = new GroupListItemFragment();
         fragment.setArguments(args);
         return fragment;
@@ -56,6 +61,7 @@ public class GroupListItemFragment extends Fragment {
 
     public String getGroupKey(){return getArguments().getString("key");}
 
+    public Boolean getAdminRights(){return getArguments().getBoolean("admin");}
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -103,11 +109,50 @@ public class GroupListItemFragment extends Fragment {
 
                     }
                 });
-                viewHolder.bind(model,position);
+                viewHolder.bind(viewHolder,model,position);
             }
         };
         itemListRecyclerView.setAdapter(mItemListAdapter);
+
+        Log.d(TAG,"Admin: "+getAdminRights());
+        if(getAdminRights()){
+            //Allows for items to be deleted by swiping
+            new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+                @Override
+                public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                    int id = (int)viewHolder.itemView.getTag();
+                    String itemKey=mItemListAdapter.getRef(id).getKey();
+                    itemRef.child(itemKey).removeValue();
+                    createAdapter();
+                    Log.d(TAG, "passing id: " + itemKey);
+                }
+
+                @Override
+                public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                    View itemView=viewHolder.itemView;
+
+                    Paint p = new Paint();
+                    p.setColor(getResources().getColor(R.color.colorAccent));
+                    if (dX > 0) {
+                        c.drawRect((float) itemView.getLeft(), (float) itemView.getTop(), dX,
+                                (float) itemView.getBottom(), p);
+                    } else {
+                        c.drawRect((float) itemView.getRight() + dX, (float) itemView.getTop(),
+                                (float) itemView.getRight(), (float) itemView.getBottom(), p);
+                    }
+
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                }
+            }).attachToRecyclerView(itemListRecyclerView);
+        }
     }
+
 
     public void firebaseGroupAdd(FirebaseDatabase fdb,GroupItem item){
         DatabaseReference itemRef = fdb.getReference("groupList").child(getGroupKey()).child("items");
@@ -131,24 +176,27 @@ public class GroupListItemFragment extends Fragment {
     public static class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         View mView;
         private TextView itemName;
+        private TextView itemQuantity;
 
         public ItemHolder(View itemView) {
             super(itemView);
             this.mView=itemView;
             itemName=(TextView) itemView.findViewById(R.id.group_item_name);
+            itemQuantity=(TextView) itemView.findViewById(R.id.group_item_quantity);
             itemView.setOnClickListener(this);
 
         }
 
-        public void bind(Item item, int position){
+        public void bind(ItemHolder holder,Item item, int position){
             Log.d(TAG,"LIST NAME:"+item.getName());
             itemName.setText(item.getName());
+            itemQuantity.setText("$"+item.getCount());
+            holder.itemView.setTag(position);
         }
 
         @Override
         public void onClick(View view) {
-//            int pos=getAdapterPosition();
-//            mItemClick.onItemClickListener(pos,groupLists.get(pos));
+
         }
     }
 }

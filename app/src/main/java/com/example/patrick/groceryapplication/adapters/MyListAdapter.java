@@ -88,5 +88,14 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ItemHolder
         }
     }
 
+    public void swapCursor(Cursor newCursor){
+        if (cursor != null) cursor.close();
+        cursor = newCursor;
+        if (newCursor != null) {
+            // Force the RecyclerView to refresh
+            this.notifyDataSetChanged();
+        }
+    }
+
 }
 

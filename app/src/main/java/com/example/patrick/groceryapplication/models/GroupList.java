@@ -13,6 +13,8 @@ public class GroupList {
 
     private String name = "";
     private String category = "";
+    private String admin="";
+    private String dateOfEvent="";
     private HashMap<String,Item> items;
     private HashMap<String,String> users;
 
@@ -24,6 +26,8 @@ public class GroupList {
         this.category = category;
         this.items = new HashMap<>();
         this.users =new HashMap<>();
+        this.admin="";
+        this.dateOfEvent="";
     }
 
     public String getName() {
@@ -56,5 +60,22 @@ public class GroupList {
 
     public void setUsers(HashMap<String, String> users) {
         this.users = users;
+    }
+
+    public String getAdmin() {
+
+        return admin;
+    }
+
+    public void setAdmin(String admin) {
+        this.admin = admin;
+    }
+
+    public String getDateOfEvent() {
+        return dateOfEvent;
+    }
+
+    public void setDateOfEvent(String dateOfEvent) {
+        this.dateOfEvent = dateOfEvent;
     }
 }

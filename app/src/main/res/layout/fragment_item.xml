@@ -44,14 +44,14 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:hint="price placeholder"/>
-        <EditText
+ <!--       <EditText
             android:id="@+id/item_store"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:hint="store placeholder"/>
-        <!-- picture -->
-        <EditText
+
+     -->   <!-- picture -->
+       <EditText
             android:id="@+id/item_picture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,7 +71,6 @@
             android:id="@+id/add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
             android:text="Add" />
         <Button
             android:id="@+id/gallery_image"
@@ -79,6 +78,12 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="upload image from gallery" />
+
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"/>
         <TextureView
             android:id="@+id/scan_format"
             android:layout_width="wrap_content"

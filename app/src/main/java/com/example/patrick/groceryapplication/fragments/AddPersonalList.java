@@ -18,16 +18,22 @@ public class AddPersonalList extends DialogFragment {
     private EditText title;
     private Spinner categoriesSpinner;
     private Button add;
-    private final String TAG = "AddGroupListFragment";
-    public  static final int REQUEST_CODE=245;
+    private Button cancel;
+    private final String TAG = "AddPersonalList";
+    public static final int REQUEST_CODE = 1;
+
+
+    public interface OnDialogCloseListener{
+        void closeDialog(String title, String categoriesSpinner);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
-        View view = inflater.inflate(R.layout.fragment_add_group_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_personal_list, container, false);
         title = (EditText) view.findViewById(R.id.title);
         categoriesSpinner = (Spinner) view.findViewById(R.id.categories_spinner);
         add = (Button) view.findViewById(R.id.add);
-
+        cancel=(Button) view.findViewById(R.id.cancel_button);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.list_categories_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -36,18 +42,23 @@ public class AddPersonalList extends DialogFragment {
         add.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent();
                 Bundle args=new Bundle();
                 Log.d(TAG,"TITLE: "+title.getText().toString());
                 Log.d(TAG,"CAT: "+categoriesSpinner.getSelectedItem().toString());
                 args.putString("title",title.getText().toString());
-                args.putString("cat",categoriesSpinner.getSelectedItem().toString());
+                args.putString("category",categoriesSpinner.getSelectedItem().toString());
 
                 intent.putExtra("args",args);
                 getTargetFragment().onActivityResult(
                         getTargetRequestCode(), REQUEST_CODE, intent);
 
+                AddPersonalList.this.dismiss();
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 AddPersonalList.this.dismiss();
             }
         });

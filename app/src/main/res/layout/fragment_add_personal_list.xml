@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragments.AddGroupListFragment"
+    tools:context=".fragments.AddPersonalList"
     android:padding="15dp">
 
     <TextView
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textSize="20sp"
-        android:text="@string/add_group"/>
+        android:text="@string/add_personal"/>
 
     <EditText
         android:layout_margin="10dp"
@@ -36,7 +36,7 @@
             android:id="@+id/categories_spinner"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="end"
             />
     </LinearLayout>
     <LinearLayout
@@ -50,12 +50,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="@string/add" />
-        <Button
-            android:id="@+id/add_code_transfer_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/use_code" />
         <Button
             android:layout_marginTop="10dp"
             android:id="@+id/cancel_button"
