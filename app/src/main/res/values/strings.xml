@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Shopping Lists</string>
+    <string name="app_name">Shopping For All</string>
     <string name="title_activity_login">Sign in</string>
     <!-- Strings related to login -->
     <string name="signed_out">Signed Out</string>
@@ -62,5 +62,7 @@
     <string name="add_group">Add Group List</string>
     <string name="add_personal">Add Personal List</string>
     <string name="insert_title">Insert Title</string>
+    <string name="item_name">Temp</string>
+    <string name="provider">Bringer:</string>
 </resources>
 
