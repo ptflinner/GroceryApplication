@@ -197,8 +197,11 @@ public class ItemFragment extends DialogFragment implements LoaderManager.Loader
         Log.d(TAG, "AM I DONE");
 //        name.setText("testing");
 //        price.setText("another test");
-        name.setText(results.getItemName());
-        price.setText(results.getAvg_price());
+        if(results!=null){
+            name.setText(results.getItemName());
+            price.setText(results.getAvg_price());
+        }
+
     }
 
     @Override
