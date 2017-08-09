@@ -15,14 +15,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".LoginActivity">
+            android:name=".LoginActivity"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <service
             android:name=".jobs.FirebaseJob"
@@ -30,7 +33,8 @@
             android:exported="false">
             <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
         </service>
-
+        <meta-data android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyAxujyewFWNgcGq-wwhW8iywu8fYZjBeVE"/>
     </application>
 
 </manifest>

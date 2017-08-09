@@ -36,6 +36,7 @@ dependencies {
     compile 'com.firebase:firebase-jobdispatcher:0.5.2'
     compile 'com.firebaseui:firebase-ui-database:1.2.0'
     testCompile 'junit:junit:4.12'
+
 }
 
 

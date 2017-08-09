@@ -44,15 +44,15 @@ public class SQLiteUtils {
     }
 
     //update item by grabbing its id and updating the items properties and its assigned id
-    public int updateItem(SQLiteDatabase db, String name, int quantity, double price, String status, String picture,String category, long id){
-        Log.d(TAG, " - Updating item: " + id + name + quantity + price + picture + category + status + db);
+    public static int updateItem(SQLiteDatabase db, String name, int quantity, double price, int status, String picture, String category, long id){
+        Log.d(TAG, " - Updating item: " + id + name + quantity + price + picture + status + db);
         ContentValues value = new ContentValues();
         value.put(Contract.TABLE_ITEM.COLUMN_NAME_ITEM_NAME, name);
         value.put(Contract.TABLE_ITEM.COLUMN_NAME_QUANTITY, quantity);
         value.put(Contract.TABLE_ITEM.COLUMN_NAME_PRICE, price);
-        value.put(Contract.TABLE_ITEM.COLUMN_NAME_CATEGORY,category);
         value.put(Contract.TABLE_ITEM.COLUMN_NAME_PICTURE, picture);
         value.put(Contract.TABLE_ITEM.COLUMN_NAME_PURCHASE_STATUS, status);
+        value.put(Contract.TABLE_ITEM.COLUMN_NAME_CATEGORY, category);
         return db.update(Contract.TABLE_ITEM.TABLE_NAME, value, Contract.TABLE_ITEM._ID + "=" + id,null);
     }
 
@@ -95,7 +95,7 @@ public class SQLiteUtils {
      */
     public static boolean removeItem(SQLiteDatabase db,long id){
         Log.d(TAG, " - Deleting item with id:" + id + db);
-        db.delete(Contract.TABLE_COMPLETED_LIST.TABLE_NAME, Contract.TABLE_COMPLETED_LIST.COLUMN_NAME_ITEM_ID + "=" + id, null);
+        db.delete(Contract.TABLE_COMPLETED_LIST.TABLE_NAME, Contract.TABLE_COMPLETED_LIST.COLUMN_NAME_ITEM_ID+ "=" + id, null);
         return db.delete(Contract.TABLE_ITEM.TABLE_NAME, Contract.TABLE_ITEM._ID + "=" + id, null) >= 0;
     }
     public static boolean removeList(SQLiteDatabase db, long id){
