@@ -61,6 +61,8 @@ public class MyListItemAdapter extends RecyclerView.Adapter<MyListItemAdapter.Gr
         ImageView image;
         TextView name;
         TextView quantity;
+        TextView price;
+        TextView category;
         CheckBox checkBox;
 
         long id;
@@ -71,6 +73,8 @@ public class MyListItemAdapter extends RecyclerView.Adapter<MyListItemAdapter.Gr
             name = (TextView) view.findViewById(R.id.grocery_name);
             quantity = (TextView) view.findViewById(R.id.grocery_quantity);
             checkBox = (CheckBox) view.findViewById(R.id.checkBox);
+            price = (TextView) view.findViewById(R.id.grocery_price);
+//            category = (TextView) view.findViewById(R.id.grocery_category);
             view.setOnClickListener(this);
 
         }
@@ -80,7 +84,10 @@ public class MyListItemAdapter extends RecyclerView.Adapter<MyListItemAdapter.Gr
 
             id = cursor.getLong(cursor.getColumnIndex(Contract.TABLE_ITEM.COLUMN_NAME_ID));
             name.setText(cursor.getString(cursor.getColumnIndex(Contract.TABLE_ITEM.COLUMN_NAME_ITEM_NAME)));
-            quantity.setText(cursor.getInt(cursor.getColumnIndex(Contract.TABLE_ITEM.COLUMN_NAME_QUANTITY))+"");
+            quantity.setText("Quantity: x" + cursor.getInt(cursor.getColumnIndex(Contract.TABLE_ITEM.COLUMN_NAME_QUANTITY)));
+            String priceFormat = String.format("Price: $%,.2f", cursor.getDouble(cursor.getColumnIndex(Contract.TABLE_ITEM.COLUMN_NAME_PRICE)));
+            price.setText(priceFormat);
+//            category.setText(cursor.getString(cursor.getColumnIndex(Contract.TABLE_ITEM.COLUMN_NAME_CATEGORY)));
             //image code is supposed to be here
             holder.itemView.setTag(id);
 

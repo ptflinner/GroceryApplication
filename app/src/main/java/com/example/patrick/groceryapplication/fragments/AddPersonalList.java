@@ -46,7 +46,7 @@ public class AddPersonalList extends DialogFragment {
                 Log.d(TAG,"TITLE: "+title.getText().toString());
                 Log.d(TAG,"CAT: "+categoriesSpinner.getSelectedItem().toString());
                 args.putString("title",title.getText().toString());
-                args.putString("cat",categoriesSpinner.getSelectedItem().toString());
+                args.putString("category",categoriesSpinner.getSelectedItem().toString());
 
                 intent.putExtra("args",args);
                 getTargetFragment().onActivityResult(
